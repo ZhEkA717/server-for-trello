@@ -1,28 +1,38 @@
 # simple-crud-api
 
-Приложение представляет из себя простейший CRUD API для работы с объектами User, имеющими формат
+Приложение представляет из себя простейший CRUD API для работы с объектами Board, имеющими формат
 
 ```
-id — уникальный идентфикатор (string, uuid)
-username — имя (string, required)
-age — возраст (number, required)
-hobbies — список хобби (array of strings or empty array, required)
+idBoard — уникальный идентфикатор доски (string, uuid)
+nameBoard — имя доски (string, required)
+descriptionBoard — описание доски (number, required)
+columns — список колонок доски (array of strings or empty array, required)
+    - idСolumn — уникальный идентфикатор колонки (string, uuid)
+    - nameColumn — имя колонки (string, required)
+    - descriptionСolumn — описание колонки (number, required)
+    - tasks — список задач колонки (array of strings or empty array, required)
+        - idTask — уникальный идентфикатор задачи (string, uuid)
+        - nameTask — имя задачи (string, required)
+        - descriptionTask — описание задачи (number, required)
 ```
 
 ## Endpoints
 
-- **GET** `/api/users` получить всех юзеров;
-- **GET** `/api/users/${usersID}` получить юзера по айди;
-- **POST** `/api/users` создать юзера и добавить в database;
-- **PUT** `/api/users/{usersID}` обновить существующего юзера;
-- **DELETE** `/api/users/${usersID}` удалить существующего юзера.
+- **GET** `/api/board` получить все доски;
+- **GET** `/api/board/${boardID}` not completed;
+- **POST** `/api/board` создать доску и добавить в database;
+- **POST** `/api/column/${boardID}` создать колонку в доске с айди;
+- **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
+- **PUT** `/api/users/{boardID}` not completed;
+- **DELETE** `/api/users/${boardID}` not completed.
 
 ## Example of valid request body:
 ```
 {
-    "username": "Elon Musk",
-    "age": 55,
-    "hobbies": ["programming","spending money"]
+    "nameBoard": "trello",
+    "descriptionBoard": "description trello",
+    "idBoard": "bd679581-f3de-4b88-8718-4999b9672a84",
+    "columns": []
 }
 ```
 ## Установка приложения
@@ -47,20 +57,10 @@ npm run start:dev
 ```
 npm run start:prod
 ```
-Приложение прослушивает порт, указанный в .env (4200 по умолчанию). Вы можете указать другой (изменить SERVER_PORT=4200 в файле .env). 
+Приложение прослушивает порт, указанный в .env (5000 по умолчанию). Вы можете указать другой (изменить SERVER_PORT=5000 в файле .env). 
 Проверять работу приложения удобно с помощью Postman. Его можно установить себе на компьютер или использовать расширение для Chrome.
 
 ## Тестирование
 ```
 npm run test
-```
-
-Реализовано 3 сценария: 
-1. Работа с 1 элементом данных
-2. Проверка ошибок
-3. Работа с массивом данных
-
-## Scaling
-```
-npm run start:multi
 ```
