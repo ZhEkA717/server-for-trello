@@ -1,4 +1,4 @@
-# simple-crud-api
+# server-for-trello
 
 Приложение представляет из себя простейший CRUD API для работы с объектами Board, имеющими формат
 
