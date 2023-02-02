@@ -2,7 +2,7 @@ import { NotFoundError } from "../Errors/CustomErrors";
 import { HandleError } from "../Errors/handler.error";
 import { RouterCallbackFunc } from "../Server/Server.types";
 import { BOARD_URL } from "../utils/constants";
-import { createNewBoard } from "./Board.service";
+import { createNewBoard, removeBoard } from "./Board.service";
 import { getAllB } from "./User.service";
 
 export const getAllBoards: RouterCallbackFunc = (req, res) => {
@@ -32,4 +32,16 @@ export const createBoard: RouterCallbackFunc = async (req, res) => {
             HandleError(req, res, err);
         }
     })
+}
+
+export const deleteBoard: RouterCallbackFunc = async (req, res) => {
+    try {
+        const url = req.url;
+        const userId = url?.substring(`/${BOARD_URL}`.length);
+        removeBoard(userId as string);
+        res.writeHead(204, { 'Content-Type': 'application/json' });
+        res.end();
+    } catch (err) {
+        HandleError(req, res, err);
+    }
 }

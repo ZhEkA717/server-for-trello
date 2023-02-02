@@ -1,4 +1,6 @@
-import { v4 } from 'uuid';
+import { v4, validate as validateUUID } from 'uuid';
+import { CrashDataBaseError, InvalidUUIDError, NotExistBoardError } from '../Errors/CustomErrors';
+import { IBoard } from './Board.model';
 import { getAllB } from './User.service';
 
 export const createNewBoard = (board: any): Promise<any> => {
@@ -10,3 +12,24 @@ export const createNewBoard = (board: any): Promise<any> => {
         resolve(newBoard)
     })
 }
+
+const searchBoard = (id: string): IBoard | undefined => {
+    if (!validateUUID(id)) throw new InvalidUUIDError(id);
+    const dataBase = getAllB();
+
+    const correctBoard = dataBase.filter(board => board.idBoard == id);
+
+    if (correctBoard.length < 1) throw new NotExistBoardError(id);
+    if (correctBoard.length > 1) throw new CrashDataBaseError();
+    if (correctBoard.length === 1) return correctBoard[0];
+}
+
+export const removeBoard = (id: string): void => {
+    const existingBoard: IBoard | undefined = searchBoard(id);
+
+    if (existingBoard) {
+        const dataBase = getAllB();
+        const index: number = dataBase.indexOf(existingBoard);
+        dataBase.splice(index, 1);
+    }
+};
