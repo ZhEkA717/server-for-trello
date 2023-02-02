@@ -23,6 +23,11 @@ let dataBaseBoards = [
                         nameTask: "create HTTP.CreateServer",
                         descriptionTask: "specify port 3000, create get, post-requests(URL discuss with team)",
                         idTask: "89942407-f5ca-488f-9e4a-09b3e3e6f0b0"
+                    },
+                    {
+                        "nameTask": "updating.......",
+                        "descriptionTask": "updating.......",
+                        "idTask": "1ca9c510-7110-45b5-90dc-adf5adf5d72c"
                     }
                 ]
             },
@@ -66,12 +71,11 @@ const searchTask = (id:string) => {
     let correctTask;
     dataBaseBoards.forEach(board=>{
         board.columns.forEach(column=>{
-            column.tasks.forEach((task,i)=>{
+            column.tasks.forEach((task)=>{
                 if(task.idTask === id) correctTask = task;
             });
         })
     })
-    console.log(correctTask);
     if (!correctTask) throw new NotExistUserError(id);
     return correctTask;
 }
@@ -207,4 +211,4 @@ const updateTaskById = (id: string, task: ITask) => {
     dataBaseBoards[indexBoard].columns[indexColumn].tasks[indexTask] = {...taskNeedUpdate, ...task};
 };
 
-export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,searchTasks,searchColumn,searchColumns,updateColumnById, deleteTaskByIDS, updateTaskById };
+export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,searchTask, searchTasks,searchColumn,searchColumns,updateColumnById, deleteTaskByIDS, updateTaskById };

@@ -5,12 +5,12 @@ import { createUser,createColumn,createTask,
          updateUser,updateColumn,updateTask, 
          getUserByID, getAllUsers, 
          getColumnByID, getAllColumsByID,
-         getAllTasksByIDS } from '../services/User.router';
+         getTaskByID,getAllTasksByIDS } from '../services/User.router';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/handler.error';
 import { BASE_URL } from '../utils/constants';
-import { BOARD_URL, COLUMN_URL,COLUMN_URL_id, TASK_URL } from '../utils/constants';
+import { BOARD_URL, COLUMN_URL,COLUMN_URL_id, TASK_URL, TASK_URL_id } from '../utils/constants';
 import { createBoard, getAllBoards, deleteBoard, updateBoard } from '../services/board/Board.router';
 
 
@@ -22,7 +22,7 @@ const SERVER_BOARDS = {
     PUT: updateBoard
 }
 const SERVER_COLUMNS = {
-    GET: getColumnByID,
+    GET: getAllColumsByID,
     POST: createColumn,
     DELETE: deleteColumn,
     PUT: updateColumn
@@ -40,15 +40,17 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
         const url: string | undefined = req.url;
         try {
             if(url?.startsWith(BOARD_URL)) {
-                await SERVER_BOARDS[method](req, res)
+                await SERVER_BOARDS[method](req, res);
             }
             
             if(url?.startsWith(COLUMN_URL)) {
-                if(url?.startsWith(COLUMN_URL_id)) await SERVER_COLUMNS[method](req, res)
-                else await getAllColumsByID(req, res);
+                if(method==="GET" && url?.startsWith(COLUMN_URL_id)) await getColumnByID(req, res)
+                else await SERVER_COLUMNS[method](req, res);
             }
+
             if(url?.startsWith(TASK_URL)) {
-                await SERVER_TASKS[method](req, res)
+                if(method==="GET" && url?.startsWith(TASK_URL_id)) getTaskByID(req,res)
+                else await SERVER_TASKS[method](req, res);
             }
         } catch (err) {
             HandleError(req, res, err);

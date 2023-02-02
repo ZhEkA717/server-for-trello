@@ -38,6 +38,7 @@ columns — список колонок доски (array of strings or empty ar
     - **DELETE** `/api/column/${columnID}` удаляет колонку по idж
 ### Task
     - **GET** `/api/task/${boardID}/${columnID}` получить все задачи в доске в колонке по айди доски и колонки;
+    - **GET** `/api/task/${taskID}` получить задачу по id;
     - **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
     - **PUT** `/api/task/${taskID}` обновить задачу по айди;
     - **DELETE** `/api/column/${taskID}` удаляет задачу по id;
