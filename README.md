@@ -19,18 +19,16 @@ columns — список колонок доски (array of strings or empty ar
 ## Endpoints
 
 - **GET** `/api/board` получить все доски;
-- **GET** `/api/column/${boardID}` получить все колонки в доске по айди доски;
-- **GET** `/api/board/${boardID}` not completed;
-
 - **POST** `/api/board` создать доску и добавить в database;
-- **POST** `/api/column/${boardID}` создать колонку в доске с айди;
-- **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
-
 - **PUT** `/api/board/{boardID}` обновляет доску по айди;
-- **PUT** `/api/column/{columnID}` обновляет колонку по айди;
+- **DELETE** `/api/board/${boardID}` удаляет доску по id;
 
-- **DELETE** `/api/board/${boardID}` удаляет доску по id
+- **GET** `/api/column/${boardID}` получить все колонки в доске по айди доски;
+- **POST** `/api/column/${boardID}` создать колонку в доске с айди;
+- **PUT** `/api/column/{columnID}` обновляет колонку по айди;
 - **DELETE** `/api/column/${columnID}` удаляет колонку по id
+
+- **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
 
 ## Example of valid request body:
 ```
