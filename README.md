@@ -2,19 +2,27 @@
 
 Приложение представляет из себя простейший CRUD API для работы с объектами Board, имеющими формат
 
+### Board
 ```
 idBoard — уникальный идентфикатор доски (string, uuid)
 nameBoard — имя доски (string, required)
 descriptionBoard — описание доски (number, required)
 columns — список колонок доски (array of strings or empty array, required)
-    - idСolumn — уникальный идентфикатор колонки (string, uuid)
-    - nameColumn — имя колонки (string, required)
-    - descriptionСolumn — описание колонки (number, required)
-    - tasks — список задач колонки (array of strings or empty array, required)
-        - idTask — уникальный идентфикатор задачи (string, uuid)
-        - nameTask — имя задачи (string, required)
-        - descriptionTask — описание задачи (number, required)
 ```
+### Column
+```
+- idСolumn — уникальный идентфикатор колонки (string, uuid)
+- nameColumn — имя колонки (string, required)
+- descriptionСolumn — описание колонки (number, required)
+- tasks — список задач колонки (array of strings or empty array, required)
+```
+### Task
+```
+- idTask — уникальный идентфикатор задачи (string, uuid)
+- nameTask — имя задачи (string, required)
+- descriptionTask — описание задачи (number, required)
+```
+
 
 ## Endpoints
 ### Board
