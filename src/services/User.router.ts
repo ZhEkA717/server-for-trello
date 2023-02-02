@@ -1,4 +1,4 @@
-import { getAll, create,createNewColumn,createNewTask, remove, update, searchUser, deleteColumnByID,updateColumnById } from "./User.service";
+import { getAll, create,createNewColumn,createNewTask, remove, update, searchUser,searchColumns, deleteColumnByID,updateColumnById } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
 import { HandleError } from "../Errors/handler.error";
 import { BASE_URL, BOARD_URL, COLUMN_URL, TASK_URL } from "../utils/constants";
@@ -11,6 +11,29 @@ const getAllUsers: RouterCallbackFunc = async (req, res) => {
             res.setHeader("Content-Type", "application/json");
             res.statusCode = 200;
             res.end(JSON.stringify(users));
+        } catch (err) {
+            HandleError(req, res, err);
+        }
+};
+const getUserByID: RouterCallbackFunc = async (req, res) => {
+    try {
+        const url = req.url;
+        const userId = url?.substring(`/${BASE_URL}`.length);
+        const currentUser = searchUser(userId as string);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(currentUser));
+    } catch (err) {
+        HandleError(req, res, err);
+    }
+}
+const getAllColumsByID: RouterCallbackFunc = async (req, res) => {
+        try {
+            const url = req.url;
+            const columnId = url?.substring(`/${COLUMN_URL}`.length);
+            const columns = searchColumns(columnId as string);
+            res.setHeader("Content-Type", "application/json");
+            res.statusCode = 200;
+            res.end(JSON.stringify(columns));
         } catch (err) {
             HandleError(req, res, err);
         }
@@ -128,17 +151,7 @@ const updateColumn: RouterCallbackFunc = async (req, res) => {
     })
 }
 
-const getUserByID: RouterCallbackFunc = async (req, res) => {
-    try {
-        const url = req.url;
-        const userId = url?.substring(`/${BASE_URL}`.length);
-        const currentUser = searchUser(userId as string);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(currentUser));
-    } catch (err) {
-        HandleError(req, res, err);
-    }
-}
 
-export { getAllUsers, createUser, createColumn,createTask, deleteUser,deleteColumn, updateUser,updateColumn, getUserByID }
+
+export { getAllUsers,getAllColumsByID, createUser, createColumn,createTask, deleteUser,deleteColumn, updateUser,updateColumn, getUserByID }
 

@@ -1,6 +1,6 @@
 import http from 'http';
 import { envConfig } from '../common/config';
-import { createUser,createColumn,createTask, deleteUser,deleteColumn, updateUser,updateColumn, getUserByID, getAllUsers } from '../services/User.router';
+import { createUser,createColumn,createTask, deleteUser,deleteColumn, updateUser,updateColumn, getUserByID, getAllUsers, getAllColumsByID } from '../services/User.router';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/handler.error';
@@ -17,7 +17,7 @@ const SERVER_BOARDS = {
     PUT: updateBoard
 }
 const SERVER_COLUMNS = {
-    GET: getUserByID,
+    GET: getAllColumsByID,
     POST: createColumn,
     DELETE: deleteColumn,
     PUT: updateColumn

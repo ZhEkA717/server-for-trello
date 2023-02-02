@@ -56,6 +56,10 @@ const searchColumn = (id: string) => {
     if (!correctColumn) throw new NotExistUserError(id);
     return correctColumn;
 }
+const searchColumns = (id:string) => {
+    if (!validateUUID(id)) throw new InvalidUUIDError(id);
+    return dataBaseBoards.find(board=>board.idBoard === id)?.columns;
+}
 const searchBoardWhichExistColumn = (id: string) => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
     const correctBoard = dataBaseBoards.filter(board=>{
@@ -140,4 +144,4 @@ const updateColumnById = (id: string, column: IColumn) => {
     dataBaseBoards[indexBoard].columns[indexColumn] = {...columnNeedUpdate, ...column }
 };
 
-export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,updateColumnById };
+export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,searchColumns,updateColumnById };

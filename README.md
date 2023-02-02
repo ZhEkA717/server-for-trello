@@ -19,6 +19,7 @@ columns — список колонок доски (array of strings or empty ar
 ## Endpoints
 
 - **GET** `/api/board` получить все доски;
+- **GET** `/api/column/${boardID}` получить все колонки в доске по айди доски;
 - **GET** `/api/board/${boardID}` not completed;
 
 - **POST** `/api/board` создать доску и добавить в database;
