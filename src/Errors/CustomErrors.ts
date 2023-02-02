@@ -1,5 +1,11 @@
 import { ERROR_MESSAGES } from "./error.messages";
 
+export enum BoardValidationError {
+    nameBoard = 'name of board',
+    descriptionBoard = 'description of board',
+    columns = 'columns in board'
+}
+
 export class BaseError {
     message: string;
     code: number;
@@ -38,7 +44,7 @@ export class NotExistUserError extends BaseError {
 
 export class NotExistBoardError extends BaseError {
     constructor(id: string) {
-        super(`Board with UserID = ${id} is not found`, 404)
+        super(`Board with BoardID = ${id} is not found`, 404)
     }
 }
 
@@ -65,6 +71,26 @@ export class BadRequestError extends BaseError {
                 break;
             case 'hobbiesArray':
                 super(`${ERROR_MESSAGES.BAD_REQUEST}\nhobbies should include only string`, 400);
+                break;
+        }
+
+    }
+}
+
+export class BoardBadRequestError extends BaseError {
+    constructor(option: BoardValidationError | 'field') {
+        switch (option) {
+            case 'field':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400);
+                break;
+            case BoardValidationError.nameBoard:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${BoardValidationError.nameBoard} must be a string`, 400);
+                break;
+            case BoardValidationError.descriptionBoard:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${BoardValidationError.descriptionBoard} must be a string`, 400);
+                break;
+            case BoardValidationError.columns:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${BoardValidationError.columns} must be a array`, 400);
                 break;
         }
 
