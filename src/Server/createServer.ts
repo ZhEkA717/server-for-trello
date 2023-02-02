@@ -2,7 +2,7 @@ import http from 'http';
 import { envConfig } from '../common/config';
 import { createUser,createColumn,createTask,
          deleteUser,deleteColumn,deleteTask,
-         updateUser,updateColumn, 
+         updateUser,updateColumn,updateTask, 
          getUserByID, getAllUsers, getAllColumsByID,getAllTasksByIDS } from '../services/User.router';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
@@ -29,7 +29,7 @@ const SERVER_TASKS = {
     GET: getAllTasksByIDS,
     POST: createTask,
     DELETE: deleteTask,
-    PUT: updateUser
+    PUT: updateTask
 }
 
 export const createServer = (port = envConfig.SERVER_PORT) => {

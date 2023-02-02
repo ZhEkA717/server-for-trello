@@ -10,6 +10,10 @@ export enum ColumnValidationError {
     descriptionColumn = 'description of column',
     tasks = 'tasks in column'
 }
+export enum TaskValidationError {
+    nameTask = 'name of task',
+    descriptionTask = 'description of task',
+}
 
 export class BaseError {
     message: string;
@@ -118,5 +122,21 @@ export class ColumnBadRequestError extends BaseError {
                 break;
         }
 
+    }
+}
+
+export class TaskBadRequestError extends BaseError {
+    constructor(option: TaskValidationError | 'field') {
+        switch (option) {
+            case 'field':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400);
+                break;
+            case TaskValidationError.nameTask:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${TaskValidationError.nameTask} must be a string`, 400);
+                break;
+            case TaskValidationError.descriptionTask:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${TaskValidationError.descriptionTask} must be a string`, 400);
+                break;
+        }
     }
 }

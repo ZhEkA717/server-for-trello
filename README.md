@@ -20,18 +20,18 @@ columns — список колонок доски (array of strings or empty ar
 ### Board
     - **GET** `/api/board` получить все доски;
     - **POST** `/api/board` создать доску и добавить в database;
-    - **PUT** `/api/board/{boardID}` обновляет доску по айди;
+    - **PUT** `/api/board/{boardID}` обновить доску по айди;
     - **DELETE** `/api/board/${boardID}` удаляет доску по id;
 ### Column
     - **GET** `/api/column/${boardID}` получить все колонки в доске по айди доски;
     - **POST** `/api/column/${boardID}` создать колонку в доске с айди;
-    - **PUT** `/api/column/{columnID}` обновляет колонку по айди;
-    - **DELETE** `/api/column/${columnID}` удаляет колонку по id
+    - **PUT** `/api/column/{columnID}` обновить колонку по айди;
+    - **DELETE** `/api/column/${columnID}` удаляет колонку по idж
 ### Task
-    - **GET** `/api/task/${boardID}/${columnID}` получить все задачи в доске в колонке по айди доски и колонки
+    - **GET** `/api/task/${boardID}/${columnID}` получить все задачи в доске в колонке по айди доски и колонки;
     - **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
-    - **PUT** `/api/task/${boardID}/${columnID}` not completed;
-    - **DELETE** `/api/column/${taskID}` удаляет задачу по id
+    - **PUT** `/api/task/${taskID}` обновить задачу по айди;
+    - **DELETE** `/api/column/${taskID}` удаляет задачу по id;
 
 ## Example of valid request body:
 ```

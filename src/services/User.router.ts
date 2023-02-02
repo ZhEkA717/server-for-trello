@@ -1,4 +1,4 @@
-import { getAll, create,createNewColumn,createNewTask, remove, update, searchUser,searchColumns,searchTasks, deleteColumnByID,updateColumnById,deleteTaskByIDS } from "./User.service";
+import { getAll, create,createNewColumn,createNewTask, remove, update, searchUser,searchColumns,searchTasks, deleteColumnByID,updateColumnById,deleteTaskByIDS,updateTaskById } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
 import { HandleError } from "../Errors/handler.error";
 import { BASE_URL, BOARD_URL, COLUMN_URL, TASK_URL } from "../utils/constants";
@@ -175,8 +175,25 @@ const updateColumn: RouterCallbackFunc = async (req, res) => {
         }
     })
 }
+const updateTask: RouterCallbackFunc = async (req, res) => {
+    let data = '';
+    req.on('data', (chunk) => (data += chunk));
+    req.on('end', async () => {
+        let taskData;
+        try {
+            taskData = JSON.parse(data);
+            const url = req.url;
+            const taskId = url?.substring(`/${TASK_URL}`.length);
+            await updateTaskById(taskId as string, taskData);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(taskData));
+        } catch (err) {
+            HandleError(req, res, err);
+        }
+    })
+}
 
 
 
-export { getAllUsers,getAllColumsByID,getAllTasksByIDS, createUser, createColumn,createTask, deleteUser,deleteColumn,deleteTask, updateUser,updateColumn, getUserByID }
+export { getAllUsers,getAllColumsByID,getAllTasksByIDS, createUser, createColumn,createTask, deleteUser,deleteColumn,deleteTask, updateUser,updateColumn,updateTask, getUserByID }
 

@@ -4,7 +4,7 @@ import { IColumn } from './column/Column.model';
 import { ITask } from './task/Task.model';
 import { v4, validate as validateUUID } from 'uuid';
 import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../Errors/CustomErrors';
-import { userValidate, columndValidate } from '../utils/user.validate';
+import { userValidate, columnValidate, taskValidate } from '../utils/user.validate';
 
 let dataBase: IUser[] = []
 
@@ -187,13 +187,24 @@ const update = (id: string, user: IUser) => {
     dataBase[index] = { ...dataBase[index], ...user };
 };
 const updateColumnById = (id: string, column: IColumn) => {
-    columndValidate(column);
+    columnValidate(column);
     const existingColumn = searchColumn(id);
     const existingBoard = searchBoardWhichExistColumn(id);
     const indexBoard = dataBaseBoards.indexOf(existingBoard as IBoard);
     const indexColumn = existingBoard.columns.indexOf(existingColumn as IColumn);
     const columnNeedUpdate = dataBaseBoards[indexBoard].columns[indexColumn];
-    dataBaseBoards[indexBoard].columns[indexColumn] = {...columnNeedUpdate, ...column }
+    dataBaseBoards[indexBoard].columns[indexColumn] = {...columnNeedUpdate, ...column };
+};
+const updateTaskById = (id: string, task: ITask) => {
+    taskValidate(task);
+    const existingTask = searchTask(id);
+    const existingBoard = searchBoardWhichExistTask(id);
+    const indexBoard = dataBaseBoards.indexOf(existingBoard as IBoard);
+    const existingColumn = searchColumnWhichExistTask(id,indexBoard);
+    const indexColumn = existingBoard.columns.indexOf(existingColumn as IColumn);
+    const indexTask = existingColumn.tasks.indexOf(existingTask as ITask);
+    const taskNeedUpdate = dataBaseBoards[indexBoard].columns[indexColumn].tasks[indexTask];
+    dataBaseBoards[indexBoard].columns[indexColumn].tasks[indexTask] = {...taskNeedUpdate, ...task};
 };
 
-export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,searchTasks,searchColumns,updateColumnById, deleteTaskByIDS };
+export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,searchTasks,searchColumns,updateColumnById, deleteTaskByIDS, updateTaskById };

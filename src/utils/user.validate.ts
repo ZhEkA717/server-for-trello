@@ -1,7 +1,7 @@
-import { BadRequestError, ColumnBadRequestError, ColumnValidationError } from "../Errors/CustomErrors";
+import { BadRequestError, ColumnBadRequestError, ColumnValidationError,TaskBadRequestError, TaskValidationError } from "../Errors/CustomErrors";
 import { IUser } from "../services/User.model";
 import { IColumn } from "../services/column/Column.model";
-
+import { ITask } from "../services/task/Task.model"; 
 
 const userValidate = (user: IUser) => {
     const requiredFields = ['username', 'age', 'hobbies'].sort();
@@ -18,13 +18,21 @@ const userValidate = (user: IUser) => {
 }
 
 
-export const columndValidate = (column: IColumn) => {
+export const columnValidate = (column: IColumn) => {
     const requiredFields = ['nameColumn', 'descriptionColumn', 'tasks'].sort();
-    const boardFields = Object.keys(column).sort();
-    if (JSON.stringify(requiredFields) !== JSON.stringify(boardFields)) throw new BadRequestError('field');
+    const columnFields = Object.keys(column).sort();
+    if (JSON.stringify(requiredFields) !== JSON.stringify(columnFields)) throw new BadRequestError('field');
 
     if (typeof column.nameColumn !== 'string') throw new ColumnBadRequestError(ColumnValidationError.nameColumn);
     if (typeof column.descriptionColumn !== 'string') throw new ColumnBadRequestError(ColumnValidationError.descriptionColumn);
     if (!Array.isArray(column.tasks)) throw new ColumnBadRequestError(ColumnValidationError.tasks);
+}
+export const taskValidate = (task: ITask) => {
+    const requiredFields = ['nameTask', 'descriptionTask'].sort();
+    const taskFields = Object.keys(task).sort();
+    if (JSON.stringify(requiredFields) !== JSON.stringify(taskFields)) throw new BadRequestError('field');
+
+    if (typeof task.nameTask !== 'string') throw new TaskBadRequestError(TaskValidationError.nameTask);
+    if (typeof task.descriptionTask !== 'string') throw new TaskBadRequestError(TaskValidationError.descriptionTask);
 }
 export { userValidate }
