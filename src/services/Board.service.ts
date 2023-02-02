@@ -1,5 +1,6 @@
 import { v4, validate as validateUUID } from 'uuid';
 import { CrashDataBaseError, InvalidUUIDError, NotExistBoardError } from '../Errors/CustomErrors';
+import { boardValidate } from '../utils/board.validate';
 import { IBoard } from './Board.model';
 import { getAllB } from './User.service';
 
@@ -31,5 +32,15 @@ export const removeBoard = (id: string): void => {
         const dataBase = getAllB();
         const index: number = dataBase.indexOf(existingBoard);
         dataBase.splice(index, 1);
+    }
+};
+
+export const updateBoardById = (id: string, board: IBoard) => {
+    boardValidate(board);
+    const existingBoard: IBoard | undefined = searchBoard(id);
+    if (existingBoard) {
+        const dataBase: IBoard[] = getAllB();
+        const index = dataBase.indexOf(existingBoard);
+        dataBase[index] = { ...dataBase[index], ...board };
     }
 };

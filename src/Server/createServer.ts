@@ -6,7 +6,7 @@ import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/handler.error';
 import { BASE_URL } from '../utils/constants';
 import { BOARD_URL, COLUMN_URL, TASK_URL } from '../utils/constants';
-import { createBoard, getAllBoards, deleteBoard } from '../services/Board.router';
+import { createBoard, getAllBoards, deleteBoard, updateBoard } from '../services/Board.router';
 
 const SERVER_ROUTES = {
     GET: getUserByID,
@@ -19,7 +19,7 @@ const SERVER_BOARDS = {
     GET: getAllBoards,
     POST: createBoard,
     DELETE: deleteBoard,
-    PUT: updateUser
+    PUT: updateBoard
 }
 const SERVER_COLUMNS = {
     GET: getUserByID,
