@@ -1,6 +1,7 @@
 import { IUser } from '../services/User.model';
-import { IColumn } from './column/Column.model';
 import { IBoard } from './board/Board.model'; 
+import { IColumn } from './column/Column.model';
+import { ITask } from './task/Task.model';
 import { v4, validate as validateUUID } from 'uuid';
 import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../Errors/CustomErrors';
 import { userValidate, columndValidate } from '../utils/user.validate';
@@ -60,6 +61,20 @@ const searchColumns = (id:string) => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
     return dataBaseBoards.find(board=>board.idBoard === id)?.columns;
 }
+const searchTask = (id:string) => {
+    if (!validateUUID(id)) throw new InvalidUUIDError(id);
+    let correctTask;
+    dataBaseBoards.forEach(board=>{
+        board.columns.forEach(column=>{
+            column.tasks.forEach((task,i)=>{
+                if(task.idTask === id) correctTask = task;
+            });
+        })
+    })
+    console.log(correctTask);
+    if (!correctTask) throw new NotExistUserError(id);
+    return correctTask;
+}
 const searchTasks = (idBoard:string, idColumn:string) => {
     if (!validateUUID(idBoard)) throw new InvalidUUIDError(idBoard);
     if (!validateUUID(idColumn)) throw new InvalidUUIDError(idColumn);
@@ -75,6 +90,26 @@ const searchBoardWhichExistColumn = (id: string) => {
     if (correctBoard.length < 1) throw new NotExistUserError(id);
     if (correctBoard.length > 1) throw new CrashDataBaseError();
     return correctBoard[0];
+}
+const searchBoardWhichExistTask = (id: string) => {
+    if (!validateUUID(id)) throw new InvalidUUIDError(id);
+    const correctBoard = dataBaseBoards.filter(board=>{
+        return board.columns.filter(column=>{
+            column.tasks.find(task=> task.idTask === id);
+        })
+    })
+    if (correctBoard.length < 1) throw new NotExistUserError(id);
+    if (correctBoard.length > 1) throw new CrashDataBaseError();
+    return correctBoard[0];
+}
+const searchColumnWhichExistTask = (id: string, indexBoard:number) => {
+    if (!validateUUID(id)) throw new InvalidUUIDError(id);
+    const correctColums = dataBaseBoards[indexBoard].columns.filter(column=>{
+        return column.tasks.find(task=>task.idTask === id);
+    })
+    if (correctColums.length < 1) throw new NotExistUserError(id);
+    if (correctColums.length > 1) throw new CrashDataBaseError();
+    return correctColums[0];
 }
 
 const getAll = () => dataBase;
@@ -134,6 +169,16 @@ const deleteColumnByID = (id: string) => {
 
     dataBaseBoards[indexBoard].columns.splice(indexColumn,1);
 };
+const deleteTaskByIDS = (id:string) => {
+    const existingTask = searchTask(id);
+    const existingBoard = searchBoardWhichExistTask(id);
+    const indexBoard = dataBaseBoards.indexOf(existingBoard as IBoard);
+    const existingColumn = searchColumnWhichExistTask(id,indexBoard);
+    const indexColumn = existingBoard.columns.indexOf(existingColumn as IColumn);
+    const indexTask = existingColumn.tasks.indexOf(existingTask as ITask);
+
+    dataBaseBoards[indexBoard].columns[indexColumn].tasks.splice(indexTask,1);
+};
 
 const update = (id: string, user: IUser) => {
     userValidate(user);
@@ -151,4 +196,4 @@ const updateColumnById = (id: string, column: IColumn) => {
     dataBaseBoards[indexBoard].columns[indexColumn] = {...columnNeedUpdate, ...column }
 };
 
-export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,searchTasks,searchColumns,updateColumnById };
+export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,searchTasks,searchColumns,updateColumnById, deleteTaskByIDS };
