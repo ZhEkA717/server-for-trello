@@ -36,6 +36,12 @@ export class NotExistUserError extends BaseError {
     }
 }
 
+export class NotExistBoardError extends BaseError {
+    constructor(id: string) {
+        super(`Board with UserID = ${id} is not found`, 404)
+    }
+}
+
 export class CrashDataBaseError extends BaseError {
     constructor() {
         super(`Data base is corrupted\n. Please reload the App`, 400)
