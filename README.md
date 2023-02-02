@@ -32,6 +32,7 @@ columns — список колонок доски (array of strings or empty ar
     - **DELETE** `/api/board/${boardID}` удаляет доску по id;
 ### Column
     - **GET** `/api/column/${boardID}` получить все колонки в доске по айди доски;
+    - **GET** `/api/column/id/${columnID}` получить колонку по айди;
     - **POST** `/api/column/${boardID}` создать колонку в доске с айди;
     - **PUT** `/api/column/{columnID}` обновить колонку по айди;
     - **DELETE** `/api/column/${columnID}` удаляет колонку по idж

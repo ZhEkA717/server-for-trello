@@ -3,12 +3,14 @@ import { envConfig } from '../common/config';
 import { createUser,createColumn,createTask,
          deleteUser,deleteColumn,deleteTask,
          updateUser,updateColumn,updateTask, 
-         getUserByID, getAllUsers, getAllColumsByID,getAllTasksByIDS } from '../services/User.router';
+         getUserByID, getAllUsers, 
+         getColumnByID, getAllColumsByID,
+         getAllTasksByIDS } from '../services/User.router';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/handler.error';
 import { BASE_URL } from '../utils/constants';
-import { BOARD_URL, COLUMN_URL, TASK_URL } from '../utils/constants';
+import { BOARD_URL, COLUMN_URL,COLUMN_URL_id, TASK_URL } from '../utils/constants';
 import { createBoard, getAllBoards, deleteBoard, updateBoard } from '../services/board/Board.router';
 
 
@@ -20,7 +22,7 @@ const SERVER_BOARDS = {
     PUT: updateBoard
 }
 const SERVER_COLUMNS = {
-    GET: getAllColumsByID,
+    GET: getColumnByID,
     POST: createColumn,
     DELETE: deleteColumn,
     PUT: updateColumn
@@ -40,8 +42,10 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
             if(url?.startsWith(BOARD_URL)) {
                 await SERVER_BOARDS[method](req, res)
             }
+            
             if(url?.startsWith(COLUMN_URL)) {
-                await SERVER_COLUMNS[method](req, res)
+                if(url?.startsWith(COLUMN_URL_id)) await SERVER_COLUMNS[method](req, res)
+                else await getAllColumsByID(req, res);
             }
             if(url?.startsWith(TASK_URL)) {
                 await SERVER_TASKS[method](req, res)
@@ -69,6 +73,6 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
 //     else {
 //         await SERVER_ROUTES[method](req, res)
 //     };
-// }else {
+// } else {
 //     throw new NotFoundError();
 // }

@@ -207,4 +207,4 @@ const updateTaskById = (id: string, task: ITask) => {
     dataBaseBoards[indexBoard].columns[indexColumn].tasks[indexTask] = {...taskNeedUpdate, ...task};
 };
 
-export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,searchTasks,searchColumns,updateColumnById, deleteTaskByIDS, updateTaskById };
+export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,searchTasks,searchColumn,searchColumns,updateColumnById, deleteTaskByIDS, updateTaskById };

@@ -1,7 +1,9 @@
-import { getAll, create,createNewColumn,createNewTask, remove, update, searchUser,searchColumns,searchTasks, deleteColumnByID,updateColumnById,deleteTaskByIDS,updateTaskById } from "./User.service";
+import { getAll, create,createNewColumn,createNewTask, remove, 
+    update, searchUser,searchColumns,searchTasks,searchColumn, deleteColumnByID,
+    updateColumnById,deleteTaskByIDS,updateTaskById } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
 import { HandleError } from "../Errors/handler.error";
-import { BASE_URL, BOARD_URL, COLUMN_URL, TASK_URL } from "../utils/constants";
+import { BASE_URL, BOARD_URL, COLUMN_URL,COLUMN_URL_id, TASK_URL } from "../utils/constants";
 import { NotFoundError } from "../Errors/CustomErrors";
 // import { deleteColumnByID } from "./column/Column.service";
 
@@ -22,6 +24,17 @@ const getUserByID: RouterCallbackFunc = async (req, res) => {
         const currentUser = searchUser(userId as string);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(currentUser));
+    } catch (err) {
+        HandleError(req, res, err);
+    }
+}
+const getColumnByID: RouterCallbackFunc = async (req, res) => {
+    try {
+        const url = req.url;
+        const columnId = url?.substring(`/${COLUMN_URL_id}`.length);
+        const currentCollumn = searchColumn(columnId as string);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(currentCollumn));
     } catch (err) {
         HandleError(req, res, err);
     }
@@ -195,5 +208,5 @@ const updateTask: RouterCallbackFunc = async (req, res) => {
 
 
 
-export { getAllUsers,getAllColumsByID,getAllTasksByIDS, createUser, createColumn,createTask, deleteUser,deleteColumn,deleteTask, updateUser,updateColumn,updateTask, getUserByID }
+export { getAllUsers,getColumnByID,getAllColumsByID,getAllTasksByIDS, createUser, createColumn,createTask, deleteUser,deleteColumn,deleteTask, updateUser,updateColumn,updateTask, getUserByID }
 
