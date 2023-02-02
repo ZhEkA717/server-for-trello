@@ -1,4 +1,4 @@
-import { getAll, create,createNewColumn,createNewTask, remove, update, searchUser, deleteColumnByID } from "./User.service";
+import { getAll, create,createNewColumn,createNewTask, remove, update, searchUser, deleteColumnByID,updateColumnById } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
 import { HandleError } from "../Errors/handler.error";
 import { BASE_URL, BOARD_URL, COLUMN_URL, TASK_URL } from "../utils/constants";
@@ -34,6 +34,7 @@ const createUser: RouterCallbackFunc = async (req, res) => {
 }
 
 const createColumn: RouterCallbackFunc = async (req, res) => {
+    // if (req.url !== COLUMN_URL) throw new NotFoundError();
     let data = '';
     req.on('data', (chunk) => (data += chunk))
         .on('end', async () => {
@@ -49,6 +50,7 @@ const createColumn: RouterCallbackFunc = async (req, res) => {
         }
     })
 }
+
 const createTask: RouterCallbackFunc = async (req, res) => {
     let data = '';
     req.on('data', (chunk) => (data += chunk))
@@ -67,24 +69,6 @@ const createTask: RouterCallbackFunc = async (req, res) => {
         }
     })
 }
-// const create_column: RouterCallbackFunc = async (req, res) => {
-//     if (req.url !== BOARD_URL) throw new NotFoundError();
-//     let data = '';
-//     req.on('data', (chunk) => (data += chunk))
-//         .on('end', async () => {
-//         let boardData;
-//         try {
-//             boardData = JSON.parse(data);
-//             const newBoard = await createBoard(boardData);
-//             console.log(newBoard);
-//             res.writeHead(200, { 'Content-Type': 'application/json' });
-//             res.end(JSON.stringify(newBoard));
-//         } catch (err) {
-//             HandleError(req, res, err);
-//         }
-//     })
-// }
-
 const deleteUser: RouterCallbackFunc = async (req, res) => {
     try {
         const url = req.url;
@@ -125,6 +109,23 @@ const updateUser: RouterCallbackFunc = async (req, res) => {
         }
     })
 }
+const updateColumn: RouterCallbackFunc = async (req, res) => {
+    let data = '';
+    req.on('data', (chunk) => (data += chunk));
+    req.on('end', async () => {
+        let columnData;
+        try {
+            columnData = JSON.parse(data);
+            const url = req.url;
+            const columnId = url?.substring(`/${COLUMN_URL}`.length);
+            await updateColumnById(columnId as string, columnData);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(columnData));
+        } catch (err) {
+            HandleError(req, res, err);
+        }
+    })
+}
 
 const getUserByID: RouterCallbackFunc = async (req, res) => {
     try {
@@ -138,5 +139,5 @@ const getUserByID: RouterCallbackFunc = async (req, res) => {
     }
 }
 
-export { getAllUsers, createUser, createColumn,createTask, deleteUser,deleteColumn, updateUser, getUserByID }
+export { getAllUsers, createUser, createColumn,createTask, deleteUser,deleteColumn, updateUser,updateColumn, getUserByID }
 

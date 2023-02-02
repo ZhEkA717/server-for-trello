@@ -1,19 +1,21 @@
 import { IUser } from '../services/User.model';
+import { IColumn } from './column/Column.model';
+import { IBoard } from './board/Board.model'; 
 import { v4, validate as validateUUID } from 'uuid';
 import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../Errors/CustomErrors';
-import { userValidate } from '../utils/user.validate';
+import { userValidate, columndValidate } from '../utils/user.validate';
 
 let dataBase: IUser[] = []
 
 let dataBaseBoards = [
     {
-        nameBoard: "doska",
-        descriptionBoard: "description doska",
+        nameBoard: "trello",
+        descriptionBoard: "creating app trello",
         idBoard: "9e67fcee-8b69-40cd-a335-5c506655cf9c",
         columns: [
             {
-                nameColumn: "column",
-                descriptionColumn: "description column",
+                nameColumn: "need to do",
+                descriptionColumn: "what need to do week#1",
                 idColumn: "082ad0bd-700f-4a80-9106-d57ccbe66424",
                 tasks: [
                     {
@@ -29,8 +31,8 @@ let dataBaseBoards = [
                 ]
             },
             {
-                nameColumn: "column2222",
-                descriptionColumn: "description column2222",
+                nameColumn: "in process",
+                descriptionColumn: "who perform a task",
                 idColumn: "35553eba-b2bb-4af4-a860-8fc71ceda6c8",
                 tasks: []
             },
@@ -116,8 +118,8 @@ const remove = (id: string) => {
 const deleteColumnByID = (id: string) => {
     const existingColumn = searchColumn(id);
     const existingBoard = searchBoardWhichExistColumn(id);
-    const indexBoard = dataBaseBoards.indexOf(existingBoard as any);
-    const indexColumn = existingBoard.columns.indexOf(existingColumn as any);
+    const indexBoard = dataBaseBoards.indexOf(existingBoard as IBoard);
+    const indexColumn = existingBoard.columns.indexOf(existingColumn as IColumn);
 
     dataBaseBoards[indexBoard].columns.splice(indexColumn,1);
 };
@@ -128,5 +130,14 @@ const update = (id: string, user: IUser) => {
     const index = dataBase.indexOf(existingUser as IUser);
     dataBase[index] = { ...dataBase[index], ...user };
 };
+const updateColumnById = (id: string, column: IColumn) => {
+    columndValidate(column);
+    const existingColumn = searchColumn(id);
+    const existingBoard = searchBoardWhichExistColumn(id);
+    const indexBoard = dataBaseBoards.indexOf(existingBoard as IBoard);
+    const indexColumn = existingBoard.columns.indexOf(existingColumn as IColumn);
+    const columnNeedUpdate = dataBaseBoards[indexBoard].columns[indexColumn];
+    dataBaseBoards[indexBoard].columns[indexColumn] = {...columnNeedUpdate, ...column }
+};
 
-export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser };
+export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,updateColumnById };

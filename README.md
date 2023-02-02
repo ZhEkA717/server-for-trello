@@ -20,20 +20,49 @@ columns — список колонок доски (array of strings or empty ar
 
 - **GET** `/api/board` получить все доски;
 - **GET** `/api/board/${boardID}` not completed;
+
 - **POST** `/api/board` создать доску и добавить в database;
 - **POST** `/api/column/${boardID}` создать колонку в доске с айди;
 - **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
-- **PUT** `/api/users/{boardID}` not completed;
+
+- **PUT** `/api/board/{boardID}` обновляет доску по айди;
+- **PUT** `/api/column/{columnID}` обновляет колонку по айди;
+
 - **DELETE** `/api/board/${boardID}` удаляет доску по id
+- **DELETE** `/api/column/${columnID}` удаляет колонку по id
 
 ## Example of valid request body:
 ```
-{
-    "nameBoard": "trello",
-    "descriptionBoard": "description trello",
-    "idBoard": "bd679581-f3de-4b88-8718-4999b9672a84",
-    "columns": []
-}
+    {
+        nameBoard: "trello",
+        descriptionBoard: "creating app trello",
+        idBoard: "9e67fcee-8b69-40cd-a335-5c506655cf9c",
+        columns: [
+            {
+                nameColumn: "need to do",
+                descriptionColumn: "what need to do week#1",
+                idColumn: "082ad0bd-700f-4a80-9106-d57ccbe66424",
+                tasks: [
+                    {
+                        "idTask": "1",
+                        "nameTask": "task1",
+                        "descriptionTask": "description task1"
+                    },
+                    {
+                        "idTask": "2",
+                        "nameTask": "task2",
+                        "descriptionTask": "description task2"
+                    }
+                ]
+            },
+            {
+                nameColumn: "in process",
+                descriptionColumn: "who perform a task",
+                idColumn: "35553eba-b2bb-4af4-a860-8fc71ceda6c8",
+                tasks: []
+            },
+        ]
+    }
 ```
 ## Установка приложения
 
