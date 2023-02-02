@@ -1,11 +1,12 @@
 import http from 'http';
 import { envConfig } from '../common/config';
-import { getAllUsers,getAllBoards, createUser,createBoard,createColumn,createTask, deleteUser, updateUser, getUserByID } from '../services/User.router';
+import { createUser,createColumn,createTask, deleteUser, updateUser, getUserByID } from '../services/User.router';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/handler.error';
 import { BASE_URL } from '../utils/constants';
 import { BOARD_URL, COLUMN_URL, TASK_URL } from '../utils/constants';
+import { createBoard, getAllBoards } from '../services/Board.router';
 
 const SERVER_ROUTES = {
     GET: getUserByID,

@@ -52,14 +52,7 @@ const create = (user: IUser): Promise<IUser> => {
         resolve(newUser)
     })
 }
-const createNewBoard = (board: any): Promise<any> => {
-    return new Promise((resolve) => {
-        const idBoard = v4();
-        const newBoard = { ...board, idBoard, columns:[] };
-        dataBaseBoards.push(newBoard);
-        resolve(newBoard)
-    })
-}
+
 const createNewColumn = (column: any, idBoard:string|undefined): Promise<any> => {
     return new Promise((resolve) => {
         const board = dataBaseBoards.find(board=>board.idBoard === idBoard);
@@ -104,4 +97,4 @@ const update = (id: string, user: IUser) => {
     dataBase[index] = { ...dataBase[index], ...user };
 };
 
-export { getAll,getAllB, create, createNewBoard,createNewColumn,createNewTask, remove, update, searchUser };
+export { getAll,getAllB, create, createNewColumn,createNewTask, remove, update, searchUser };

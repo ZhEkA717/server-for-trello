@@ -1,4 +1,4 @@
-import { getAll,getAllB, create,createNewBoard,createNewColumn,createNewTask, remove, update, searchUser } from "./User.service";
+import { getAll, create,createNewColumn,createNewTask, remove, update, searchUser } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
 import { HandleError } from "../Errors/handler.error";
 import { BASE_URL, BOARD_URL, COLUMN_URL, TASK_URL } from "../utils/constants";
@@ -13,17 +13,6 @@ const getAllUsers: RouterCallbackFunc = async (req, res) => {
         } catch (err) {
             HandleError(req, res, err);
         }
-};
-
-const getAllBoards: RouterCallbackFunc = async (req, res) => {
-    try {
-        const boards = await getAllB();
-        res.setHeader("Content-Type", "application/json");
-        res.statusCode = 200;
-        res.end(JSON.stringify(boards));
-    } catch (err) {
-        HandleError(req, res, err);
-    }
 };
 
 const createUser: RouterCallbackFunc = async (req, res) => {
@@ -42,23 +31,7 @@ const createUser: RouterCallbackFunc = async (req, res) => {
         }
     })
 }
-const createBoard: RouterCallbackFunc = async (req, res) => {
-    if (req.url !== BOARD_URL) throw new NotFoundError();
-    let data = '';
-    req.on('data', (chunk) => (data += chunk))
-        .on('end', async () => {
-        let boardData;
-        try {
-            boardData = JSON.parse(data);
-            const newBoard = await createNewBoard(boardData);
-            console.log(newBoard);
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(newBoard));
-        } catch (err) {
-            HandleError(req, res, err);
-        }
-    })
-}
+
 const createColumn: RouterCallbackFunc = async (req, res) => {
     let data = '';
     req.on('data', (chunk) => (data += chunk))
@@ -153,5 +126,5 @@ const getUserByID: RouterCallbackFunc = async (req, res) => {
     }
 }
 
-export { getAllUsers,getAllBoards, createUser,createBoard,createColumn,createTask, deleteUser, updateUser, getUserByID }
+export { getAllUsers, createUser, createColumn,createTask, deleteUser, updateUser, getUserByID }
 
