@@ -34,7 +34,7 @@ const createUser: RouterCallbackFunc = async (req, res) => {
 }
 
 const createColumn: RouterCallbackFunc = async (req, res) => {
-    // if (req.url !== COLUMN_URL) throw new NotFoundError();
+    if (!req.url?.startsWith(COLUMN_URL)) throw new NotFoundError();
     let data = '';
     req.on('data', (chunk) => (data += chunk))
         .on('end', async () => {
@@ -52,6 +52,7 @@ const createColumn: RouterCallbackFunc = async (req, res) => {
 }
 
 const createTask: RouterCallbackFunc = async (req, res) => {
+    if (!req.url?.startsWith(TASK_URL)) throw new NotFoundError();
     let data = '';
     req.on('data', (chunk) => (data += chunk))
         .on('end', async () => {
