@@ -24,7 +24,7 @@ columns — список колонок доски (array of strings or empty ar
 - **POST** `/api/column/${boardID}` создать колонку в доске с айди;
 - **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
 - **PUT** `/api/users/{boardID}` not completed;
-- **DELETE** `/api/users/${boardID}` not completed.
+- **DELETE** `/api/board/${boardID}` удаляет доску по id
 
 ## Example of valid request body:
 ```

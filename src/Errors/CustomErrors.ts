@@ -5,6 +5,11 @@ export enum BoardValidationError {
     descriptionBoard = 'description of board',
     columns = 'columns in board'
 }
+export enum ColumnValidationError {
+    nameColumn = 'name of column',
+    descriptionColumn = 'description of column',
+    tasks = 'tasks in column'
+}
 
 export class BaseError {
     message: string;
@@ -91,6 +96,25 @@ export class BoardBadRequestError extends BaseError {
                 break;
             case BoardValidationError.columns:
                 super(`${ERROR_MESSAGES.BAD_REQUEST}\n${BoardValidationError.columns} must be a array`, 400);
+                break;
+        }
+
+    }
+}
+export class ColumnBadRequestError extends BaseError {
+    constructor(option: ColumnValidationError | 'field') {
+        switch (option) {
+            case 'field':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400);
+                break;
+            case ColumnValidationError.nameColumn:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${ColumnValidationError.nameColumn} must be a string`, 400);
+                break;
+            case ColumnValidationError.descriptionColumn:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${ColumnValidationError.descriptionColumn} must be a string`, 400);
+                break;
+            case ColumnValidationError.tasks:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${ColumnValidationError.tasks} must be a array`, 400);
                 break;
         }
 

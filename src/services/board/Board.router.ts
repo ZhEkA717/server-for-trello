@@ -1,9 +1,9 @@
-import { NotFoundError } from "../Errors/CustomErrors";
-import { HandleError } from "../Errors/handler.error";
-import { RouterCallbackFunc } from "../Server/Server.types";
-import { BOARD_URL } from "../utils/constants";
+import { NotFoundError } from "../../Errors/CustomErrors";
+import { HandleError } from "../../Errors/handler.error";
+import { RouterCallbackFunc } from "../../Server/Server.types";
+import { BOARD_URL } from "../../utils/constants";
 import { createNewBoard, removeBoard, updateBoardById } from "./Board.service";
-import { getAllB } from "./User.service";
+import { getAllB } from "../User.service";
 
 export const getAllBoards: RouterCallbackFunc = (req, res) => {
     try {
