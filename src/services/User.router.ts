@@ -1,4 +1,4 @@
-import { getAll, create,createNewColumn,createNewTask, remove, update, searchUser,searchColumns, deleteColumnByID,updateColumnById } from "./User.service";
+import { getAll, create,createNewColumn,createNewTask, remove, update, searchUser,searchColumns,searchTasks, deleteColumnByID,updateColumnById } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
 import { HandleError } from "../Errors/handler.error";
 import { BASE_URL, BOARD_URL, COLUMN_URL, TASK_URL } from "../utils/constants";
@@ -29,11 +29,25 @@ const getUserByID: RouterCallbackFunc = async (req, res) => {
 const getAllColumsByID: RouterCallbackFunc = async (req, res) => {
         try {
             const url = req.url;
-            const columnId = url?.substring(`/${COLUMN_URL}`.length);
-            const columns = searchColumns(columnId as string);
+            const boardId = url?.substring(`/${COLUMN_URL}`.length);
+            const columns = searchColumns(boardId as string);
             res.setHeader("Content-Type", "application/json");
             res.statusCode = 200;
             res.end(JSON.stringify(columns));
+        } catch (err) {
+            HandleError(req, res, err);
+        }
+};
+const getAllTasksByIDS: RouterCallbackFunc = async (req, res) => {
+        try {
+            const url = req.url;
+            const urlArr:any = url?.split('/');
+            const boardId = urlArr[urlArr.length -2];
+            const columnId = urlArr[urlArr.length -1];
+            const tasks = searchTasks(boardId as string,columnId as string);
+            res.setHeader("Content-Type", "application/json");
+            res.statusCode = 200;
+            res.end(JSON.stringify(tasks));
         } catch (err) {
             HandleError(req, res, err);
         }
@@ -153,5 +167,5 @@ const updateColumn: RouterCallbackFunc = async (req, res) => {
 
 
 
-export { getAllUsers,getAllColumsByID, createUser, createColumn,createTask, deleteUser,deleteColumn, updateUser,updateColumn, getUserByID }
+export { getAllUsers,getAllColumsByID,getAllTasksByIDS, createUser, createColumn,createTask, deleteUser,deleteColumn, updateUser,updateColumn, getUserByID }
 

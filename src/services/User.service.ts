@@ -19,14 +19,9 @@ let dataBaseBoards = [
                 idColumn: "082ad0bd-700f-4a80-9106-d57ccbe66424",
                 tasks: [
                     {
-                        "idTask": "1",
-                        "nameTask": "task1",
-                        "descriptionTask": "description task1"
-                    },
-                    {
-                        "idTask": "2",
-                        "nameTask": "task2",
-                        "descriptionTask": "description task2"
+                        nameTask: "create HTTP.CreateServer",
+                        descriptionTask: "specify port 3000, create get, post-requests(URL discuss with team)",
+                        idTask: "89942407-f5ca-488f-9e4a-09b3e3e6f0b0"
                     }
                 ]
             },
@@ -34,12 +29,17 @@ let dataBaseBoards = [
                 nameColumn: "in process",
                 descriptionColumn: "who perform a task",
                 idColumn: "35553eba-b2bb-4af4-a860-8fc71ceda6c8",
-                tasks: []
-            },
+                tasks: [
+                    {
+                        nameTask: "create repository",
+                        descriptionTask: "create private repo, add collaboration, set up branch of deploy",
+                        idTask: "ef4d6c08-4984-454d-a30e-30f5efdb736c"
+                    }
+                ]
+            }
         ]
     }
 ]
-
 const searchUser = (id: string) => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
     const correctUser = dataBase.filter(user => user.id == id);
@@ -59,6 +59,13 @@ const searchColumn = (id: string) => {
 const searchColumns = (id:string) => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
     return dataBaseBoards.find(board=>board.idBoard === id)?.columns;
+}
+const searchTasks = (idBoard:string, idColumn:string) => {
+    if (!validateUUID(idBoard)) throw new InvalidUUIDError(idBoard);
+    if (!validateUUID(idColumn)) throw new InvalidUUIDError(idColumn);
+    return dataBaseBoards.find(board=>board.idBoard === idBoard)
+        ?.columns.find(column=>column.idColumn === idColumn)
+        ?.tasks;
 }
 const searchBoardWhichExistColumn = (id: string) => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
@@ -144,4 +151,4 @@ const updateColumnById = (id: string, column: IColumn) => {
     dataBaseBoards[indexBoard].columns[indexColumn] = {...columnNeedUpdate, ...column }
 };
 
-export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,searchColumns,updateColumnById };
+export { getAll,getAllB, create, createNewColumn,createNewTask, remove,deleteColumnByID, update, searchUser,searchTasks,searchColumns,updateColumnById };

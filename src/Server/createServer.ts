@@ -1,6 +1,6 @@
 import http from 'http';
 import { envConfig } from '../common/config';
-import { createUser,createColumn,createTask, deleteUser,deleteColumn, updateUser,updateColumn, getUserByID, getAllUsers, getAllColumsByID } from '../services/User.router';
+import { createUser,createColumn,createTask, deleteUser,deleteColumn, updateUser,updateColumn, getUserByID, getAllUsers, getAllColumsByID,getAllTasksByIDS } from '../services/User.router';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/handler.error';
@@ -23,7 +23,7 @@ const SERVER_COLUMNS = {
     PUT: updateColumn
 }
 const SERVER_TASKS = {
-    GET: getUserByID,
+    GET: getAllTasksByIDS,
     POST: createTask,
     DELETE: deleteUser,
     PUT: updateUser

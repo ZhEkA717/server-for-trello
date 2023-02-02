@@ -28,6 +28,7 @@ columns — список колонок доски (array of strings or empty ar
 - **PUT** `/api/column/{columnID}` обновляет колонку по айди;
 - **DELETE** `/api/column/${columnID}` удаляет колонку по id
 
+- **GET** `/api/task/${boardID}/${columnID}` получить все задачи в доске в колонке по айди доски и колонки
 - **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
 
 ## Example of valid request body:
@@ -43,14 +44,9 @@ columns — список колонок доски (array of strings or empty ar
                 idColumn: "082ad0bd-700f-4a80-9106-d57ccbe66424",
                 tasks: [
                     {
-                        "idTask": "1",
-                        "nameTask": "task1",
-                        "descriptionTask": "description task1"
-                    },
-                    {
-                        "idTask": "2",
-                        "nameTask": "task2",
-                        "descriptionTask": "description task2"
+                        nameTask: "create HTTP.CreateServer",
+                        descriptionTask: "specify port 3000, create get, post-requests(URL discuss with team)",
+                        idTask: "89942407-f5ca-488f-9e4a-09b3e3e6f0b0"
                     }
                 ]
             },
@@ -58,8 +54,14 @@ columns — список колонок доски (array of strings or empty ar
                 nameColumn: "in process",
                 descriptionColumn: "who perform a task",
                 idColumn: "35553eba-b2bb-4af4-a860-8fc71ceda6c8",
-                tasks: []
-            },
+                tasks: [
+                    {
+                        nameTask: "create repository",
+                        descriptionTask: "create private repo, add collaboration, set up branch of deploy",
+                        idTask: "ef4d6c08-4984-454d-a30e-30f5efdb736c"
+                    }
+                ]
+            }
         ]
     }
 ```
