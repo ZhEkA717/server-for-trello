@@ -3,7 +3,7 @@ import { HandleError } from "../../Errors/handler.error";
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { BOARD_URL } from "../../utils/constants";
 import { createNewBoard, removeBoard, updateBoardById, searchBoard } from "./Board.service";
-import { getAllB } from "../User.service";
+import { getAllB } from "../../utils/constants";
 
 export const getAllBoards: RouterCallbackFunc = (req, res) => {
     try {

@@ -3,12 +3,10 @@ import { ERROR_MESSAGES } from "./error.messages";
 export enum BoardValidationError {
     nameBoard = 'name of board',
     descriptionBoard = 'description of board',
-    columns = 'columns in board'
 }
 export enum ColumnValidationError {
     nameColumn = 'name of column',
     descriptionColumn = 'description of column',
-    tasks = 'tasks in column'
 }
 export enum TaskValidationError {
     nameTask = 'name of task',
@@ -98,9 +96,6 @@ export class BoardBadRequestError extends BaseError {
             case BoardValidationError.descriptionBoard:
                 super(`${ERROR_MESSAGES.BAD_REQUEST}\n${BoardValidationError.descriptionBoard} must be a string`, 400);
                 break;
-            case BoardValidationError.columns:
-                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${BoardValidationError.columns} must be a array`, 400);
-                break;
         }
 
     }
@@ -116,9 +111,6 @@ export class ColumnBadRequestError extends BaseError {
                 break;
             case ColumnValidationError.descriptionColumn:
                 super(`${ERROR_MESSAGES.BAD_REQUEST}\n${ColumnValidationError.descriptionColumn} must be a string`, 400);
-                break;
-            case ColumnValidationError.tasks:
-                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${ColumnValidationError.tasks} must be a array`, 400);
                 break;
         }
 
