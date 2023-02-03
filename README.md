@@ -45,6 +45,24 @@ columns — список колонок доски (array of strings or empty ar
     - **PUT** `/api/task/move/${taskID}` переместить задачу в новую колонку;
     - **DELETE** `/api/task/${taskID}` удаляет задачу по id;
 
+### Task MOVE
+---
+- URL
+
+    /task/move/:id
+
+- Method
+
+    `PUT`
+
+- Data parameters:
+```typescript
+    {
+        toColumnId: string,
+        newPosition: number,
+    }
+```
+---
 ## Example of valid request body:
 ```
     {
