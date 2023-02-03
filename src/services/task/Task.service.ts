@@ -30,25 +30,39 @@ export const searchTasks = (idBoard:string, idColumn:string) => {
         ?.tasks;
 }
 
-const searchBoardWhichExistTask = (id: string) => {
-    if (!validateUUID(id)) throw new InvalidUUIDError(id);
-    const correctBoard = dataBaseBoards.filter(board=>{
-        return board.columns.filter(column=>{
-            column.tasks.find(task=> task.idTask === id);
+// const searchBoardWhichExistTask = (id: string) => {
+//     if (!validateUUID(id)) throw new InvalidUUIDError(id);
+//     const correctBoard = dataBaseBoards.filter(board=>{
+//         return board.columns.filter(column=>{
+//             column.tasks.find(task=> task.idTask === id);
+//         })
+//     })
+//     if (correctBoard.length < 1) throw new NotExistUserError(id);
+//     if (correctBoard.length > 1) throw new CrashDataBaseError();
+//     return correctBoard[0];
+// }
+const searchBoardWhichExistTask = (id:string) => {
+    let correctBoard:any; 
+    dataBaseBoards.forEach(board=>{
+        board.columns.forEach(column=>{
+          column.tasks.forEach(task=>{
+            if(task.idTask === id) correctBoard = board;
+          });
         })
     })
-    if (correctBoard.length < 1) throw new NotExistUserError(id);
-    if (correctBoard.length > 1) throw new CrashDataBaseError();
-    return correctBoard[0];
+    if (!correctBoard) throw new NotExistUserError(id);
+    return correctBoard;
 }
 const searchColumnWhichExistTask = (id: string, indexBoard:number) => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
-    const correctColums = dataBaseBoards[indexBoard].columns.filter(column=>{
-        return column.tasks.find(task=>task.idTask === id);
+    let correctColums:any; 
+    dataBaseBoards[indexBoard].columns.forEach(column=>{
+        column.tasks.find(task=>{
+            if(task.idTask === id) correctColums = column;
+        });
     })
-    if (correctColums.length < 1) throw new NotExistUserError(id);
-    if (correctColums.length > 1) throw new CrashDataBaseError();
-    return correctColums[0];
+    if (!correctColums) throw new NotExistUserError(id);
+    return correctColums;
 }
 
 export const createNewTask = (task: any, idBoard:string|undefined, idColumn:string|undefined): Promise<any> => {

@@ -41,6 +41,6 @@ let dataBaseBoards = [
                 ]
             }
         ]
-    }
+    },
 ]
 export const getAllB = ():IBoard[] => dataBaseBoards;

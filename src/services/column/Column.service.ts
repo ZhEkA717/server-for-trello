@@ -26,12 +26,14 @@ export const searchColumns = (id:string) => {
 
 const searchBoardWhichExistColumn = (id: string) => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
-    const correctBoard = dataBaseBoards.filter(board=>{
-        return board.columns.find(column=>column.idColumn === id)
+    let correctBoard:any;
+    dataBaseBoards.forEach(board=>{
+        board.columns.forEach(column=>{
+            if(column.idColumn === id) correctBoard = board;
+        })
     })
-    if (correctBoard.length < 1) throw new NotExistUserError(id);
-    if (correctBoard.length > 1) throw new CrashDataBaseError();
-    return correctBoard[0];
+    if (!correctBoard) throw new NotExistUserError(id);
+    return correctBoard;
 }
 
 export const createNewColumn = (column: any, idBoard:string|undefined): Promise<any> => {
