@@ -5,6 +5,8 @@ import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../../E
 import { columnValidate } from '../../utils/column.validate';
 import { getAllB } from '../../utils/constants';
 import { moveColumnInBoard } from '../board/Board.service';
+import { ITask } from '../task/Task.model';
+
 
 const dataBaseBoards = getAllB();
 

@@ -26,24 +26,24 @@ columns — список колонок доски (array of strings or empty ar
 
 ## Endpoints
 ### Board
-    - **GET** `/api/board` получить все доски;
-    - **GET** `/api/board/${boardID}` получить доску по id;
-    - **POST** `/api/board` создать доску и добавить в database;
-    - **PUT** `/api/board/{boardID}` обновить доску по айди;
-    - **DELETE** `/api/board/${boardID}` удаляет доску по id;
+- **GET** `/api/board` получить все доски;
+- **GET** `/api/board/${boardID}` получить доску по id;
+- **POST** `/api/board` создать доску и добавить в database;
+- **PUT** `/api/board/{boardID}` обновить доску по айди;
+- **DELETE** `/api/board/${boardID}` удаляет доску по id;
 ### Column
-    - **GET** `/api/column/${boardID}` получить все колонки в доске по айди доски;
-    - **GET** `/api/column/id/${columnID}` получить колонку по айди;
-    - **POST** `/api/column/${boardID}` создать колонку в доске с айди;
-    - **PUT** `/api/column/{columnID}` обновить колонку по айди;
-    - **PUT** `/api/column/move/{columnID}` переместить колонку в новоу место в текущей доске или в другую доску;
-    - **DELETE** `/api/column/${columnID}` удаляет колонку по idж
+- **GET** `/api/column/${boardID}` получить все колонки в доске по айди доски;
+- **GET** `/api/column/id/${columnID}` получить колонку по айди;
+- **POST** `/api/column/${boardID}` создать колонку в доске с айди;
+- **PUT** `/api/column/{columnID}` обновить колонку по айди;
+- **DELETE** `/api/column/${columnID}` удаляет колонку по idж
 ### Task
-    - **GET** `/api/task/${boardID}/${columnID}` получить все задачи в доске в колонке по айди доски и колонки;
-    - **GET** `/api/task/id/${taskID}` получить задачу по id;
-    - **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
-    - **PUT** `/api/task/${taskID}` обновить задачу по айди;
-    - **DELETE** `/api/task/${taskID}` удаляет задачу по id;
+- **GET** `/api/task/${boardID}/${columnID}` получить все задачи в доске в колонке по айди доски и колонки;
+- **GET** `/api/task/id/${taskID}` получить задачу по id;
+- **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
+- **PUT** `/api/task/${taskID}` обновить задачу по айди;
+- **PUT** `/api/task/move/${taskID}` переместить задачу в новую колонку;
+- **DELETE** `/api/task/${taskID}` удаляет задачу по id;
 
 ### Column MOVE
 ---
@@ -54,12 +54,29 @@ columns — список колонок доски (array of strings or empty ar
 - Method
 
     `PUT`
-
+    
 - Data parameters:
 ```typescript
     {
         toBoardId: string,
         newPosition: number
+    }
+
+### Task MOVE
+---
+- URL
+
+    /task/move/:id
+
+- Method
+
+    `PUT`
+
+- Data parameters:
+```typescript
+    {
+        toColumnId: string,
+        newPosition: number,
     }
 ```
 ---
