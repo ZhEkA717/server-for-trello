@@ -2,7 +2,7 @@ import { v4, validate as validateUUID } from 'uuid';
 import { CrashDataBaseError, InvalidUUIDError, NotExistBoardError } from '../../Errors/CustomErrors';
 import { boardValidate } from '../../utils/board.validate';
 import { IBoard } from './Board.model';
-import { getAllB } from '../User.service';
+import { getAllB } from '../../utils/constants';
 
 export const createNewBoard = (board: any): Promise<any> => {
     return new Promise((resolve) => {
