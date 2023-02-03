@@ -1,5 +1,18 @@
 import { ERROR_MESSAGES } from "./error.messages";
 
+export enum BoardValidationError {
+    nameBoard = 'name of board',
+    descriptionBoard = 'description of board',
+}
+export enum ColumnValidationError {
+    nameColumn = 'name of column',
+    descriptionColumn = 'description of column',
+}
+export enum TaskValidationError {
+    nameTask = 'name of task',
+    descriptionTask = 'description of task',
+}
+
 export class BaseError {
     message: string;
     code: number;
@@ -36,6 +49,12 @@ export class NotExistUserError extends BaseError {
     }
 }
 
+export class NotExistBoardError extends BaseError {
+    constructor(id: string) {
+        super(`Board with BoardID = ${id} is not found`, 404)
+    }
+}
+
 export class CrashDataBaseError extends BaseError {
     constructor() {
         super(`Data base is corrupted\n. Please reload the App`, 400)
@@ -62,5 +81,54 @@ export class BadRequestError extends BaseError {
                 break;
         }
 
+    }
+}
+
+export class BoardBadRequestError extends BaseError {
+    constructor(option: BoardValidationError | 'field') {
+        switch (option) {
+            case 'field':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400);
+                break;
+            case BoardValidationError.nameBoard:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${BoardValidationError.nameBoard} must be a string`, 400);
+                break;
+            case BoardValidationError.descriptionBoard:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${BoardValidationError.descriptionBoard} must be a string`, 400);
+                break;
+        }
+
+    }
+}
+export class ColumnBadRequestError extends BaseError {
+    constructor(option: ColumnValidationError | 'field') {
+        switch (option) {
+            case 'field':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400);
+                break;
+            case ColumnValidationError.nameColumn:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${ColumnValidationError.nameColumn} must be a string`, 400);
+                break;
+            case ColumnValidationError.descriptionColumn:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${ColumnValidationError.descriptionColumn} must be a string`, 400);
+                break;
+        }
+
+    }
+}
+
+export class TaskBadRequestError extends BaseError {
+    constructor(option: TaskValidationError | 'field') {
+        switch (option) {
+            case 'field':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400);
+                break;
+            case TaskValidationError.nameTask:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${TaskValidationError.nameTask} must be a string`, 400);
+                break;
+            case TaskValidationError.descriptionTask:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${TaskValidationError.descriptionTask} must be a string`, 400);
+                break;
+        }
     }
 }
