@@ -3,6 +3,7 @@ import { CrashDataBaseError, InvalidUUIDError, NotExistBoardError } from '../../
 import { boardValidate } from '../../utils/board.validate';
 import { IBoard } from './Board.model';
 import { getAllB } from '../../utils/constants';
+import { IColumn } from '../column/Column.model';
 
 export const createNewBoard = (board: any): Promise<any> => {
     return new Promise((resolve) => {
@@ -44,3 +45,18 @@ export const updateBoardById = (id: string, board: IBoard) => {
         dataBase[index] = { ...dataBase[index], ...board };
     }
 };
+
+export const moveColumnInBoard = (
+    columnToMove: IColumn,
+    newPlaceData: {
+        toBoardId: string,
+        newPosition: number
+    }
+): void => {
+    const { toBoardId, newPosition } = newPlaceData;
+    const toBoard: IBoard | undefined = searchBoard(toBoardId);
+
+    if (toBoard) toBoard.columns.splice(newPosition, 0, columnToMove);
+    
+    
+}
