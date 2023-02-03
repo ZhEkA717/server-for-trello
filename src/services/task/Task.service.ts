@@ -5,7 +5,7 @@ import { v4, validate as validateUUID } from 'uuid';
 import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../../Errors/CustomErrors';
 import { taskValidate } from '../../utils/task.validate';
 import { getAllB } from '../../utils/constants';
-import { searchColumn } from '../column/Column.service';
+import { moveTaskInColumn, searchColumn } from '../column/Column.service';
 
 const dataBaseBoards = getAllB();
 
@@ -114,10 +114,8 @@ export const moveTaskToNewColumn = (
         newPosition: number,
     }
 ): void => {
-    const { toColumnId, newPosition } = newPlaceData;
     const taskToMove: ITask = searchTask(taskId);
-    const toColumn: IColumn = searchColumn(toColumnId);
 
     deleteTaskByIDS(taskId);
-    toColumn.tasks.splice(newPosition, 0, taskToMove);
+    moveTaskInColumn(taskToMove, newPlaceData);
 }
