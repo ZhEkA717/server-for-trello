@@ -36,6 +36,7 @@ columns — список колонок доски (array of strings or empty ar
     - **GET** `/api/column/id/${columnID}` получить колонку по айди;
     - **POST** `/api/column/${boardID}` создать колонку в доске с айди;
     - **PUT** `/api/column/{columnID}` обновить колонку по айди;
+    - **PUT** `/api/column/move/{columnID}` переместить колонку в новоу место в текущей доске или в другую доску;
     - **DELETE** `/api/column/${columnID}` удаляет колонку по idж
 ### Task
     - **GET** `/api/task/${boardID}/${columnID}` получить все задачи в доске в колонке по айди доски и колонки;
@@ -44,6 +45,24 @@ columns — список колонок доски (array of strings or empty ar
     - **PUT** `/api/task/${taskID}` обновить задачу по айди;
     - **DELETE** `/api/task/${taskID}` удаляет задачу по id;
 
+### Column MOVE
+---
+- URL
+
+    /column/move/:id
+
+- Method
+
+    `PUT`
+
+- Data parameters:
+```typescript
+    {
+        toBoardId: string,
+        newPosition: number
+    }
+```
+---
 ## Example of valid request body:
 ```
     {
