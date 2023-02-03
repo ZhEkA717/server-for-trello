@@ -12,7 +12,9 @@ export const searchColumn = (id: string) => {
     let correctColumn;
     
     dataBaseBoards.forEach(board => {
-        correctColumn = board.columns.find(column => column.idColumn === id);
+        board.columns.forEach(column => {
+            if(column.idColumn === id) correctColumn = column;
+        });
     });
     if (!correctColumn) throw new NotExistUserError(id);
     return correctColumn;
