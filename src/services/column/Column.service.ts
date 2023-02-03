@@ -84,3 +84,17 @@ export const moveColumnToNewPlace = (
     deleteColumnByID(columnId);
     moveColumnInBoard(columnToMove, newPlaceData);
 }
+
+export const moveTaskInColumn = (
+    taskToMove: ITask,
+    newPlaceData: {
+        toColumnId: string,
+        newPosition: number,
+    }
+) => {
+    const { toColumnId, newPosition } = newPlaceData;
+    const toColumn: IColumn = searchColumn(toColumnId);
+
+    toColumn.tasks.splice(newPosition, 0, taskToMove);
+}
+
