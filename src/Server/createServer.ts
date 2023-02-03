@@ -10,13 +10,13 @@ import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/handler.error';
 import { BASE_URL } from '../utils/constants';
-import { BOARD_URL, COLUMN_URL,COLUMN_URL_id, TASK_URL, TASK_URL_id } from '../utils/constants';
-import { createBoard, getAllBoards, deleteBoard, updateBoard } from '../services/board/Board.router';
+import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, TASK_URL, TASK_URL_ID } from '../utils/constants';
+import { createBoard,getBoardByID, getAllBoards, deleteBoard, updateBoard } from '../services/board/Board.router';
 
 
 
 const SERVER_BOARDS = {
-    GET: getAllBoards,
+    GET: getBoardByID,
     POST: createBoard,
     DELETE: deleteBoard,
     PUT: updateBoard
@@ -39,18 +39,17 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
         const method = req.method as MethodType;
         const url: string | undefined = req.url;
         try {
-            if(url?.startsWith(BOARD_URL)) {
-                await SERVER_BOARDS[method](req, res);
-            }
-            
-            if(url?.startsWith(COLUMN_URL)) {
-                if(method==="GET" && url?.startsWith(COLUMN_URL_id)) await getColumnByID(req, res)
+            if (url?.startsWith(BOARD_URL)) {
+                if (method === "GET" && url === BOARD_URL) await getAllBoards(req, res)
+                else await SERVER_BOARDS[method](req, res);
+            } else if (url?.startsWith(COLUMN_URL)) {
+                if (method === "GET" && url?.startsWith(COLUMN_URL_ID)) await getColumnByID(req, res)
                 else await SERVER_COLUMNS[method](req, res);
-            }
-
-            if(url?.startsWith(TASK_URL)) {
-                if(method==="GET" && url?.startsWith(TASK_URL_id)) getTaskByID(req,res)
+            } else if (url?.startsWith(TASK_URL)) {
+                if (method === "GET" && url?.startsWith(TASK_URL_ID)) getTaskByID(req, res)
                 else await SERVER_TASKS[method](req, res);
+            }else{
+                throw new NotFoundError();
             }
         } catch (err) {
             HandleError(req, res, err);
@@ -61,20 +60,3 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
     });
     return server;
 }
-
-
-// const SERVER_ROUTES = {
-//     GET: getUserByID,
-//     POST: createUser,
-//     DELETE: deleteUser,
-//     PUT: updateUser
-// }
-
-// if (url?.startsWith(BASE_URL)) {
-//     if (method === 'GET' && url === BASE_URL) await getAllUsers(req, res);
-//     else {
-//         await SERVER_ROUTES[method](req, res)
-//     };
-// } else {
-//     throw new NotFoundError();
-// }

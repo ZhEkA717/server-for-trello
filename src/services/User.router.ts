@@ -3,7 +3,7 @@ import { getAll, create,createNewColumn,createNewTask, remove,
     updateColumnById,deleteTaskByIDS,updateTaskById, searchTask } from "./User.service";
 import { RouterCallbackFunc } from "../Server/Server.types";
 import { HandleError } from "../Errors/handler.error";
-import { BASE_URL, BOARD_URL, COLUMN_URL,COLUMN_URL_id, TASK_URL, TASK_URL_id } from "../utils/constants";
+import { BASE_URL, BOARD_URL, COLUMN_URL,COLUMN_URL_ID, TASK_URL, TASK_URL_ID } from "../utils/constants";
 import { NotFoundError } from "../Errors/CustomErrors";
 // import { deleteColumnByID } from "./column/Column.service";
 
@@ -31,7 +31,7 @@ const getUserByID: RouterCallbackFunc = async (req, res) => {
 const getColumnByID: RouterCallbackFunc = async (req, res) => {
     try {
         const url = req.url;
-        const columnId = url?.substring(`/${COLUMN_URL_id}`.length);
+        const columnId = url?.substring(`/${COLUMN_URL_ID}`.length);
         const currentCollumn = searchColumn(columnId as string);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(currentCollumn));
@@ -42,7 +42,7 @@ const getColumnByID: RouterCallbackFunc = async (req, res) => {
 const getTaskByID: RouterCallbackFunc = async (req, res) => {
     try {
         const url = req.url;
-        const taskId = url?.substring(`/${TASK_URL_id}`.length);
+        const taskId = url?.substring(`/${TASK_URL_ID}`.length);
         const currentTask = searchTask(taskId as string);
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(currentTask));

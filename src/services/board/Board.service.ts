@@ -14,7 +14,7 @@ export const createNewBoard = (board: any): Promise<any> => {
     })
 }
 
-const searchBoard = (id: string): IBoard | undefined => {
+export const searchBoard = (id: string): IBoard | undefined => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
     const dataBase = getAllB();
 
