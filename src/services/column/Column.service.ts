@@ -4,6 +4,7 @@ import { v4, validate as validateUUID } from 'uuid';
 import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../../Errors/CustomErrors';
 import { columnValidate } from '../../utils/column.validate';
 import { getAllB } from '../../utils/constants';
+import { moveColumnInBoard } from '../board/Board.service';
 
 const dataBaseBoards = getAllB();
 
@@ -69,4 +70,15 @@ export const updateColumnById = (id: string, column: IColumn) => {
     dataBaseBoards[indexBoard].columns[indexColumn] = {...columnNeedUpdate, ...column };
 };
 
+export const moveColumnToNewPlace = (
+    columnId: string,
+    newPlaceData: {
+        toBoardId: string,
+        newPosition: number
+    }
+): void => {
+    const columnToMove: IColumn = searchColumn(columnId);
 
+    deleteColumnByID(columnId);
+    moveColumnInBoard(columnToMove, newPlaceData);
+}

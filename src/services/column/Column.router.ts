@@ -1,7 +1,7 @@
-import { createNewColumn,deleteColumnByID,updateColumnById,  searchColumns,searchColumn, } from "./Column.service";
+import { createNewColumn,deleteColumnByID,updateColumnById,  searchColumns,searchColumn, moveColumnToNewPlace } from "./Column.service";
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { HandleError } from "../../Errors/Handler.error";
-import { COLUMN_URL,COLUMN_URL_ID, } from "../../utils/constants";
+import { COLUMN_URL, COLUMN_URL_ID, COLUMN_URL_MOVE } from "../../utils/constants";
 import { NotFoundError } from "../../Errors/CustomErrors";
 
 
@@ -77,3 +77,23 @@ export const updateColumn: RouterCallbackFunc = async (req, res) => {
         }
     })
 }
+
+export const moveColumnToBoard: RouterCallbackFunc = async (req, res) => {
+    let data = '';
+    req.on('data', (chunk) => (data += chunk));
+    req.on('end', async () => {
+        let columnData;
+        try {
+            columnData = JSON.parse(data);
+            const url = req.url;
+            const taskId = url?.substring(`/${COLUMN_URL_MOVE}`.length);
+
+            moveColumnToNewPlace(taskId as string, columnData);
+
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(columnData));
+        } catch (err) {
+            HandleError(req, res, err);
+        }
+    })
+};
