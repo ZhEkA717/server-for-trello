@@ -1,5 +1,5 @@
-import { BadRequestError, BoardBadRequestError, BoardValidationError } from "../Errors/CustomErrors";
-import { IBoard } from "../services/Board.model";
+import { BoardBadRequestError, BoardValidationError } from "../Errors/CustomErrors";
+import { IBoard } from "../services/board/Board.model";
 
 export const boardValidate = (board: IBoard) => {
     const { nameBoard, descriptionBoard } = board;

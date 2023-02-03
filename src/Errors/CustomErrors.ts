@@ -3,7 +3,14 @@ import { ERROR_MESSAGES } from "./error.messages";
 export enum BoardValidationError {
     nameBoard = 'name of board',
     descriptionBoard = 'description of board',
-    columns = 'columns in board'
+}
+export enum ColumnValidationError {
+    nameColumn = 'name of column',
+    descriptionColumn = 'description of column',
+}
+export enum TaskValidationError {
+    nameTask = 'name of task',
+    descriptionTask = 'description of task',
 }
 
 export class BaseError {
@@ -89,10 +96,39 @@ export class BoardBadRequestError extends BaseError {
             case BoardValidationError.descriptionBoard:
                 super(`${ERROR_MESSAGES.BAD_REQUEST}\n${BoardValidationError.descriptionBoard} must be a string`, 400);
                 break;
-            case BoardValidationError.columns:
-                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${BoardValidationError.columns} must be a array`, 400);
+        }
+
+    }
+}
+export class ColumnBadRequestError extends BaseError {
+    constructor(option: ColumnValidationError | 'field') {
+        switch (option) {
+            case 'field':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400);
+                break;
+            case ColumnValidationError.nameColumn:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${ColumnValidationError.nameColumn} must be a string`, 400);
+                break;
+            case ColumnValidationError.descriptionColumn:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${ColumnValidationError.descriptionColumn} must be a string`, 400);
                 break;
         }
 
+    }
+}
+
+export class TaskBadRequestError extends BaseError {
+    constructor(option: TaskValidationError | 'field') {
+        switch (option) {
+            case 'field':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400);
+                break;
+            case TaskValidationError.nameTask:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${TaskValidationError.nameTask} must be a string`, 400);
+                break;
+            case TaskValidationError.descriptionTask:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${TaskValidationError.descriptionTask} must be a string`, 400);
+                break;
+        }
     }
 }

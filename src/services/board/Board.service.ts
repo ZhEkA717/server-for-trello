@@ -1,8 +1,8 @@
 import { v4, validate as validateUUID } from 'uuid';
-import { CrashDataBaseError, InvalidUUIDError, NotExistBoardError } from '../Errors/CustomErrors';
-import { boardValidate } from '../utils/board.validate';
+import { CrashDataBaseError, InvalidUUIDError, NotExistBoardError } from '../../Errors/CustomErrors';
+import { boardValidate } from '../../utils/board.validate';
 import { IBoard } from './Board.model';
-import { getAllB } from './User.service';
+import { getAllB } from '../../utils/constants';
 
 export const createNewBoard = (board: any): Promise<any> => {
     return new Promise((resolve) => {
@@ -14,7 +14,7 @@ export const createNewBoard = (board: any): Promise<any> => {
     })
 }
 
-const searchBoard = (id: string): IBoard | undefined => {
+export const searchBoard = (id: string): IBoard | undefined => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
     const dataBase = getAllB();
 
