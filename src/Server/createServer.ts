@@ -3,10 +3,10 @@ import { envConfig } from '../common/config';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/handler.error';
-import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, TASK_URL, TASK_URL_ID } from '../utils/constants';
+import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from '../utils/constants';
 import { createBoard,getBoardByID, getAllBoards, deleteBoard, updateBoard } from '../services/board/Board.router';
 import { createColumn, deleteColumn, updateColumn, getAllColumsByID,getColumnByID } from '../services/column/Column.router';
-import { createTask, deleteTask, updateTask, getAllTasksByIDS, getTaskByID} from '../services/task/Task.router';
+import { createTask, deleteTask, updateTask, getAllTasksByIDS, getTaskByID, moveTaskToColumn} from '../services/task/Task.router';
 
 const SERVER_BOARDS = {
     GET: getBoardByID,
@@ -31,15 +31,17 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
     const server = http.createServer(async (req, res) => {
         const method = req.method as MethodType;
         const url: string | undefined = req.url;
+
         try {
             if (url?.startsWith(BOARD_URL)) {
-                if (method === "GET" && url === BOARD_URL) await getAllBoards(req, res)
+                if (method === "GET" && url === BOARD_URL) await getAllBoards(req, res);
                 else await SERVER_BOARDS[method](req, res);
             } else if (url?.startsWith(COLUMN_URL)) {
-                if (method === "GET" && url?.startsWith(COLUMN_URL_ID)) await getColumnByID(req, res)
+                if (method === "GET" && url?.startsWith(COLUMN_URL_ID)) await getColumnByID(req, res);
                 else await SERVER_COLUMNS[method](req, res);
             } else if (url?.startsWith(TASK_URL)) {
-                if (method === "GET" && url?.startsWith(TASK_URL_ID)) getTaskByID(req, res)
+                if (method === "GET" && url?.startsWith(TASK_URL_ID)) getTaskByID(req, res);
+                if (method === "PUT" && url?.startsWith(TASK_URL_MOVE)) moveTaskToColumn(req, res);
                 else await SERVER_TASKS[method](req, res);
             }else{
                 throw new NotFoundError();
@@ -48,8 +50,10 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
             HandleError(req, res, err);
         }
     })
+
     server.listen(port, () => {
         console.log(`Server running at port ${port}`)
     });
+
     return server;
 }

@@ -42,6 +42,7 @@ columns — список колонок доски (array of strings or empty ar
     - **GET** `/api/task/id/${taskID}` получить задачу по id;
     - **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
     - **PUT** `/api/task/${taskID}` обновить задачу по айди;
+    - **PUT** `/api/task/move/${taskID}` переместить задачу в новую колонку;
     - **DELETE** `/api/task/${taskID}` удаляет задачу по id;
 
 ## Example of valid request body:
