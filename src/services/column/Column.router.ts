@@ -3,6 +3,7 @@ import { RouterCallbackFunc } from "../../Server/Server.types";
 import { HandleError } from "../../Errors/Handler.error";
 import { COLUMN_URL, COLUMN_URL_ID, COLUMN_URL_MOVE } from "../../utils/constants";
 import { NotFoundError } from "../../Errors/CustomErrors";
+import { commonJSONResponseHeaders } from "../../utils/network";
 
 
 export const getColumnByID: RouterCallbackFunc = async (req, res) => {
@@ -10,7 +11,7 @@ export const getColumnByID: RouterCallbackFunc = async (req, res) => {
         const url = req.url;
         const columnId = url?.substring(`/${COLUMN_URL_ID}`.length);
         const currentCollumn = searchColumn(columnId as string);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(currentCollumn));
     } catch (err) {
         HandleError(req, res, err);
@@ -22,8 +23,7 @@ export const getAllColumsByID: RouterCallbackFunc = async (req, res) => {
             const url = req.url;
             const boardId = url?.substring(`/${COLUMN_URL}`.length);
             const columns = searchColumns(boardId as string);
-            res.setHeader("Content-Type", "application/json");
-            res.statusCode = 200;
+            res.writeHead(200, commonJSONResponseHeaders);
             res.end(JSON.stringify(columns));
         } catch (err) {
             HandleError(req, res, err);
@@ -40,7 +40,7 @@ export const createColumn: RouterCallbackFunc = async (req, res) => {
         try {
             columnData = JSON.parse(data);
             const newColumn = await createNewColumn(columnData,boardId);
-            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.writeHead(200, commonJSONResponseHeaders);
             res.end(JSON.stringify(newColumn));
         } catch (err) {
             HandleError(req, res, err);
@@ -53,7 +53,7 @@ export const deleteColumn: RouterCallbackFunc = async (req, res) => {
         const url = req.url;
         const columnId = url?.substring(`/${COLUMN_URL}`.length);
         await deleteColumnByID(columnId as string);
-        res.writeHead(204, { 'Content-Type': 'application/json' });
+        res.writeHead(204, commonJSONResponseHeaders);
         res.end();
     } catch (err) {
         HandleError(req, res, err);
@@ -70,7 +70,7 @@ export const updateColumn: RouterCallbackFunc = async (req, res) => {
             const url = req.url;
             const columnId = url?.substring(`/${COLUMN_URL}`.length);
             await updateColumnById(columnId as string, columnData);
-            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.writeHead(200, commonJSONResponseHeaders);
             res.end(JSON.stringify(columnData));
         } catch (err) {
             HandleError(req, res, err);
@@ -90,7 +90,7 @@ export const moveColumnToBoard: RouterCallbackFunc = async (req, res) => {
 
             moveColumnToNewPlace(taskId as string, columnData);
 
-            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.writeHead(200, commonJSONResponseHeaders);
             res.end(JSON.stringify(columnData));
         } catch (err) {
             HandleError(req, res, err);
