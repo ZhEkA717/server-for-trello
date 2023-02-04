@@ -3,13 +3,14 @@ import { RouterCallbackFunc } from "../../Server/Server.types";
 import { HandleError } from "../../Errors/handler.error";
 import { TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from "../../utils/constants";
 import { NotFoundError } from "../../Errors/CustomErrors";
+import { commonJSONResponseHeaders } from "../../utils/network";
 
 export const getTaskByID: RouterCallbackFunc = async (req, res) => {
     try {
         const url = req.url;
         const taskId = url?.substring(`/${TASK_URL_ID}`.length);
         const currentTask = searchTask(taskId as string);
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(currentTask));
     } catch (err) {
         HandleError(req, res, err);
@@ -23,8 +24,7 @@ export const getAllTasksByIDS: RouterCallbackFunc = async (req, res) => {
             const boardId = urlArr[urlArr.length -2];
             const columnId = urlArr[urlArr.length -1];
             const tasks = searchTasks(boardId as string,columnId as string);
-            res.setHeader("Content-Type", "application/json");
-            res.statusCode = 200;
+            res.writeHead(200, commonJSONResponseHeaders);
             res.end(JSON.stringify(tasks));
         } catch (err) {
             HandleError(req, res, err);
@@ -43,7 +43,7 @@ export const createTask: RouterCallbackFunc = async (req, res) => {
         try {
             taskData = JSON.parse(data);
             const newTask = await createNewTask(taskData,boardId,columnId);
-            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.writeHead(200, commonJSONResponseHeaders);
             res.end(JSON.stringify(newTask));
         } catch (err) {
             HandleError(req, res, err);
@@ -56,7 +56,7 @@ export const deleteTask: RouterCallbackFunc = async (req, res) => {
         const url = req.url;
         const taskId = url?.substring(`/${TASK_URL}`.length);
         await deleteTaskByIDS(taskId as string);
-        res.writeHead(204, { 'Content-Type': 'application/json' });
+        res.writeHead(204, commonJSONResponseHeaders);
         res.end();
     } catch (err) {
         HandleError(req, res, err);
@@ -73,7 +73,7 @@ export const updateTask: RouterCallbackFunc = async (req, res) => {
             const url = req.url;
             const taskId = url?.substring(`/${TASK_URL}`.length);
             await updateTaskById(taskId as string, taskData);
-            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.writeHead(200, commonJSONResponseHeaders);
             res.end(JSON.stringify(taskData));
         } catch (err) {
             HandleError(req, res, err);
@@ -93,7 +93,7 @@ export const moveTaskToColumn: RouterCallbackFunc = async (req, res) => {
 
             moveTaskToNewColumn(taskId as string, taskData);
 
-            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.writeHead(200, commonJSONResponseHeaders);
             res.end(JSON.stringify(taskData));
         } catch (err) {
             HandleError(req, res, err);
