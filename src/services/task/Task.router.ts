@@ -1,4 +1,5 @@
 import { createNewTask, deleteTaskByIDS, updateTaskById, searchTask,searchTasks, moveTaskToNewColumn, createNewTaskInColumn } from "./Task.service";
+import { validate as validateUUID } from 'uuid';
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { HandleError } from "../../Errors/handler.error";
 import { TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from "../../utils/constants";
@@ -40,7 +41,11 @@ export const createTask: RouterCallbackFunc = async (req, res) => {
         if (!req.url) throw new NotFoundError();
 
         const urlArr: string[] = req.url.split('/');
-        const [firstId, secondId] = urlArr;
+        const ids: string[] = urlArr.filter(validateUUID);
+
+        if (ids.length > 2 || ids.length < 1) throw new NotFoundError();
+
+        const [firstId, secondId] = ids;
 
         const columnId = secondId ? secondId : firstId;
         const boardId = secondId ? firstId : undefined;
