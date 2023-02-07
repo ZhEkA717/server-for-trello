@@ -1,6 +1,7 @@
 export interface IBoard {
     idBoard: string;
     nameBoard: string;
+    dateBoard:string;
     descriptionBoard: string;
     columns: {
         idColumn: string;
