@@ -10,7 +10,9 @@ export const TASK_URL_MOVE: string = '/api/task/move';
 let dataBaseBoards = [
     {
         nameBoard: "trello",
+        dateBoard:'07.02.2023',
         descriptionBoard: "creating app trello",
+        isChosen: true,
         idBoard: "9e67fcee-8b69-40cd-a335-5c506655cf9c",
         columns: [
             {
