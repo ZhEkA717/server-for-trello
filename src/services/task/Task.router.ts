@@ -1,4 +1,5 @@
-import { createNewTask,deleteTaskByIDS,updateTaskById, searchTask,searchTasks, moveTaskToNewColumn } from "./Task.service";
+import { createNewTask, deleteTaskByIDS, updateTaskById, searchTask,searchTasks, moveTaskToNewColumn, createNewTaskInColumn } from "./Task.service";
+import { validate as validateUUID } from 'uuid';
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { HandleError } from "../../Errors/handler.error";
 import { TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from "../../utils/constants";
@@ -37,12 +38,28 @@ export const createTask: RouterCallbackFunc = async (req, res) => {
     req.on('data', (chunk) => (data += chunk))
         .on('end', async () => {
         let taskData;
-        const urlArr:any = req.url?.split('/');
-        const boardId = urlArr[urlArr.length-2];
-        const columnId = urlArr[urlArr.length-1];
+        if (!req.url) throw new NotFoundError();
+
+        const urlArr: string[] = req.url.split('/');
+        const ids: string[] = urlArr.filter(validateUUID);
+
+        if (ids.length > 2 || ids.length < 1) throw new NotFoundError();
+
+        const [firstId, secondId] = ids;
+
+        const columnId = secondId ? secondId : firstId;
+        const boardId = secondId ? firstId : undefined;
+
         try {
             taskData = JSON.parse(data);
-            const newTask = await createNewTask(taskData,boardId,columnId);
+
+            let newTask;
+            if (boardId) {
+                newTask = await createNewTask(taskData, boardId, columnId);
+            } else {
+                newTask = await createNewTaskInColumn(taskData, columnId);
+            }
+
             res.writeHead(200, commonJSONResponseHeaders);
             res.end(JSON.stringify(newTask));
         } catch (err) {

@@ -26,6 +26,15 @@ export const searchBoard = (id: string): IBoard | undefined => {
     if (correctBoard.length === 1) return correctBoard[0];
 }
 
+export const searchBoardByColumnID = (columnId: string): IBoard | undefined => {
+    if (!validateUUID(columnId)) throw new InvalidUUIDError(columnId);
+    const dataBase = getAllB();
+
+    return dataBase.find((board: IBoard) => (
+        board.columns.some((column: IColumn) => column.idColumn === columnId)
+    ));
+}
+
 export const removeBoard = (id: string): void => {
     const existingBoard: IBoard | undefined = searchBoard(id);
 

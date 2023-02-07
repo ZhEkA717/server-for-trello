@@ -1,11 +1,12 @@
 import { IBoard } from '../board/Board.model'; 
 import { IColumn } from '../column/Column.model';
-import { ITask } from './Task.model';
+import { ICreateTask, ITask } from './Task.model';
 import { v4, validate as validateUUID } from 'uuid';
 import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../../Errors/CustomErrors';
 import { taskValidate } from '../../utils/task.validate';
 import { getAllB } from '../../utils/constants';
 import { moveTaskInColumn, searchColumn } from '../column/Column.service';
+import { searchBoardByColumnID } from '../board/Board.service';
 
 const dataBaseBoards = getAllB();
 
@@ -31,17 +32,6 @@ export const searchTasks = (idBoard:string, idColumn:string) => {
         ?.tasks;
 }
 
-// const searchBoardWhichExistTask = (id: string) => {
-//     if (!validateUUID(id)) throw new InvalidUUIDError(id);
-//     const correctBoard = dataBaseBoards.filter(board=>{
-//         return board.columns.filter(column=>{
-//             column.tasks.find(task=> task.idTask === id);
-//         })
-//     })
-//     if (correctBoard.length < 1) throw new NotExistUserError(id);
-//     if (correctBoard.length > 1) throw new CrashDataBaseError();
-//     return correctBoard[0];
-// }
 const searchBoardWhichExistTask = (id:string) => {
     let correctBoard:any; 
     dataBaseBoards.forEach(board=>{
@@ -66,7 +56,7 @@ const searchColumnWhichExistTask = (id: string, indexBoard:number) => {
     return correctColums;
 }
 
-export const createNewTask = (task: any, idBoard:string|undefined, idColumn:string|undefined): Promise<any> => {
+export const createNewTask = (task: ICreateTask, idBoard: string|undefined, idColumn: string|undefined): Promise<any> => {
     return new Promise((resolve) => {
         const board = dataBaseBoards.find(board=>board.idBoard === idBoard);
         const column = board?.columns.find(column=>column.idColumn === idColumn);;
@@ -81,6 +71,32 @@ export const createNewTask = (task: any, idBoard:string|undefined, idColumn:stri
             }
         });
         resolve(newTask);
+    })
+}
+
+export const createNewTaskInColumn = (task: ICreateTask, idColumn: string): Promise<ITask> => {
+    return new Promise((resolve, reject) => {
+        const board: IBoard | undefined = searchBoardByColumnID(idColumn);
+
+        if (board) {
+            const column: IColumn | undefined = board.columns.find(column => column.idColumn === idColumn);
+            if (column) {
+
+                const idTask = v4();
+                const newTask = {
+                    ...task,
+                    idTask,
+                }
+                
+                column.tasks.push(newTask);
+                
+                resolve(newTask);
+            } else {
+                reject('Column not found');
+            }
+        } else {
+            reject('Board not found');
+        }
     })
 }
 

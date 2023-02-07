@@ -41,6 +41,7 @@ columns — список колонок доски (array of strings or empty ar
 - **GET** `/api/task/${boardID}/${columnID}` получить все задачи в доске в колонке по айди доски и колонки;
 - **GET** `/api/task/id/${taskID}` получить задачу по id;
 - **POST** `/api/task/${boardID}/${columnID}` создать задачу в колонке с айди в доске с айди;
+- **POST** `/api/task/${columnID}` создать задачу в колонке с айди;
 - **PUT** `/api/task/${taskID}` обновить задачу по айди;
 - **PUT** `/api/task/move/${taskID}` переместить задачу в новую колонку;
 - **DELETE** `/api/task/${taskID}` удаляет задачу по id;
@@ -61,7 +62,7 @@ columns — список колонок доски (array of strings or empty ar
         toBoardId: string,
         newPosition: number
     }
-
+```
 ### Task MOVE
 ---
 - URL
