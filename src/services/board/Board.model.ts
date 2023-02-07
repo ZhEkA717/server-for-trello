@@ -3,6 +3,7 @@ export interface IBoard {
     nameBoard: string;
     dateBoard:string;
     descriptionBoard: string;
+    isChosen: boolean;
     columns: {
         idColumn: string;
         nameColumn: string;
