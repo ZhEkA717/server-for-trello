@@ -9,23 +9,25 @@ import { createUser, getUser } from "./User.service";
 
 export const userRegistration: RouterCallbackFunc = async (req, res) => {
     let data = '';
-    req.on('data', (chunk) => data += chunk)
-    .on('end', async () => {
+    req.on('data', (chunk) => data += chunk);
+    req.on('end', async () => {
         try {
             const { firstName, lastName, email, password } = JSON.parse(data);
 
             if (!(email && password && firstName && lastName)) {
-                res.writeHead(400, 'All fields are required');
-                res.end();
+                const STATUS_MESSAGE = 'All fields are required';
+                res.writeHead(400, STATUS_MESSAGE);
+                res.end(STATUS_MESSAGE);
+                return;
             }
     
             const isUserExist: IUser | undefined = getUser(email);
             if (isUserExist) {
-                res.writeHead(409, "The User already exist")
-                res.end();
+                const STATUS_MESSAGE = 'The User already exist';
+                res.writeHead(409, STATUS_MESSAGE)
+                res.end(STATUS_MESSAGE);
+                return;
             }
-    
-            console.log('isUserExist', isUserExist)
     
             const encryptedPassword = await bcrypt.hash(password, 10);
           
@@ -52,5 +54,5 @@ export const userRegistration: RouterCallbackFunc = async (req, res) => {
         } catch (err) {
             HandleError(req, res, err);
         }
-    })
+    });
 };
