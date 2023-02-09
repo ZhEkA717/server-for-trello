@@ -1,3 +1,4 @@
+import { ServerResponse } from 'http';
 import { RouterCallbackFunc } from '../Server/Server.types';
 
 const CORSHeaders: { [header: string]: string } = {
@@ -18,4 +19,15 @@ export const preflightRequest: RouterCallbackFunc = (req, res) => {
         "Access-Control-Allow-Headers": "*"
     })
     res.end();
+}
+
+interface ISendResponse {
+    response: ServerResponse,
+    statusCode: number;
+    statusMessage: string;
+}
+export const sendResponse = (responseParams: ISendResponse): void => {
+    const { response, statusCode, statusMessage } = responseParams;
+    response.writeHead(statusCode, statusMessage)
+    response.end(statusMessage);
 }
