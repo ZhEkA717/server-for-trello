@@ -11,6 +11,7 @@ import { createColumn, deleteColumn, updateColumn, getAllColumsByID,getColumnByI
 import { createTask, deleteTask, updateTask, getAllTasksByIDS, getTaskByID, moveTaskToColumn } from '../services/task/Task.router';
 import { preflightRequest } from '../utils/network';
 import { userLogin, userRegistration } from '../services/user/User.router';
+import { auth } from '../middleware/auth';
 
 const SERVER_BOARDS = {
     GET: getBoardByID,
@@ -35,6 +36,7 @@ const app = connect();
 
 
 export const createServer = (port = envConfig.SERVER_PORT) => {
+    app.use(auth);
     app.use(
         async (req, res) => {
             const method = req.method as MethodType;
