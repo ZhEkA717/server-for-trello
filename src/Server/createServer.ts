@@ -9,6 +9,7 @@ import { createBoard,getBoardByID, getAllBoards, deleteBoard, updateBoard } from
 import { createColumn, deleteColumn, updateColumn, getAllColumsByID,getColumnByID, moveColumnToBoard } from '../services/column/Column.router';
 import { createTask, deleteTask, updateTask, getAllTasksByIDS, getTaskByID, moveTaskToColumn } from '../services/task/Task.router';
 import { preflightRequest } from '../utils/network';
+import { userRegistration } from '../services/user/User.router';
 
 const SERVER_BOARDS = {
     GET: getBoardByID,
@@ -48,7 +49,7 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
                 else if (method === "PUT" && url?.startsWith(TASK_URL_MOVE)) moveTaskToColumn(req, res);
                 else await SERVER_TASKS[method](req, res);
             } else if (url?.startsWith(REGISTER_URL)) {
-                
+                if (method === 'POST') userRegistration(req, res);
             } else {
                 throw new NotFoundError();
             }
