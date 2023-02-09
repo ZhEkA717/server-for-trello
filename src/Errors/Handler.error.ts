@@ -1,5 +1,5 @@
 import { RouterCallbackFunc } from "../Server/Server.types";
-import { BaseError, NotFoundError, ServerInternalError } from "./CustomErrors";
+import { BaseError, InvalidToken, NotFoundError, ServerInternalError } from "./CustomErrors";
 import { ERROR_MESSAGES } from "./error.messages";
 
 
@@ -19,6 +19,10 @@ const HandleError: RouterCallbackFunc = (req, res, err) => {
     else if (err instanceof NotFoundError) {
         res.statusCode = err.code;
         res.end(ERROR_MESSAGES.NOT_FOUND);
+    }
+    else if (err instanceof InvalidToken) {
+        res.statusCode = err.code;
+        res.end(ERROR_MESSAGES.INVALID_TOKEN);
     } else {
         const { code, message } = new ServerInternalError();
         res.statusCode = code;

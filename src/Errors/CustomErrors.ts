@@ -29,6 +29,12 @@ export class NotFoundError extends BaseError {
     }
 }
 
+export class InvalidToken extends BaseError {
+    constructor(message: string = ERROR_MESSAGES.INVALID_TOKEN) {
+        super(message, 401);
+    }
+}
+
 export class ServerInternalError extends BaseError {
     constructor(message: string = ERROR_MESSAGES.SERVER_INTERNAL) {
         super(message, 500);
