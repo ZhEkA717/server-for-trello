@@ -23,7 +23,7 @@ const Column_router_1 = require("../services/column/Column.router");
 const Task_router_1 = require("../services/task/Task.router");
 const network_1 = require("../utils/network");
 const User_router_1 = require("../services/user/User.router");
-const auth_1 = require("../middleware/auth");
+// import { auth } from '../middleware/auth';
 const SERVER_BOARDS = {
     GET: Board_router_1.getBoardByID,
     POST: Board_router_1.createBoard,
@@ -44,7 +44,7 @@ const SERVER_TASKS = {
 };
 const app = (0, connect_1.default)();
 const createServer = (port = config_1.envConfig.SERVER_PORT) => {
-    app.use(auth_1.auth);
+    // app.use(auth);
     app.use((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const method = req.method;
         const url = req.url;
