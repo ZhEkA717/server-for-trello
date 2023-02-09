@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createServer = void 0;
 const config_1 = require("../common/config");
 const CustomErrors_1 = require("../Errors/CustomErrors");
-const handler_error_1 = require("../Errors/handler.error");
+const HandlerError_1 = require("../Errors/HandlerError");
 const connect_1 = __importDefault(require("connect"));
 const constants_1 = require("../utils/constants");
 const Board_router_1 = require("../services/board/Board.router");
@@ -86,7 +86,7 @@ const createServer = (port = config_1.envConfig.SERVER_PORT) => {
             }
         }
         catch (err) {
-            (0, handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     }));
     const server = app.listen(port, () => {

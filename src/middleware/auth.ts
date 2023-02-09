@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import connect from 'connect';
 
 import { envConfig } from '../common/config';
-import { HandleError } from '../Errors/handler.error';
+import { HandleError } from '../Errors/HandlerError';
 import { IRequest } from '../Server/server.interface';
 import { sendResponse } from '../utils/network';
 import { InvalidToken } from '../Errors/CustomErrors';

@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.moveTaskToColumn = exports.updateTask = exports.deleteTask = exports.createTask = exports.getAllTasksByIDS = exports.getTaskByID = void 0;
 const Task_service_1 = require("./Task.service");
 const uuid_1 = require("uuid");
-const handler_error_1 = require("../../Errors/handler.error");
+const HandlerError_1 = require("../../Errors/HandlerError");
 const constants_1 = require("../../utils/constants");
 const CustomErrors_1 = require("../../Errors/CustomErrors");
 const network_1 = require("../../utils/network");
@@ -25,7 +25,7 @@ const getTaskByID = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.end(JSON.stringify(currentTask));
     }
     catch (err) {
-        (0, handler_error_1.HandleError)(req, res, err);
+        (0, HandlerError_1.HandleError)(req, res, err);
     }
 });
 exports.getTaskByID = getTaskByID;
@@ -40,7 +40,7 @@ const getAllTasksByIDS = (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.end(JSON.stringify(tasks));
     }
     catch (err) {
-        (0, handler_error_1.HandleError)(req, res, err);
+        (0, HandlerError_1.HandleError)(req, res, err);
     }
 });
 exports.getAllTasksByIDS = getAllTasksByIDS;
@@ -74,7 +74,7 @@ const createTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             res.end(JSON.stringify(newTask));
         }
         catch (err) {
-            (0, handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     }));
 });
@@ -88,7 +88,7 @@ const deleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.end();
     }
     catch (err) {
-        (0, handler_error_1.HandleError)(req, res, err);
+        (0, HandlerError_1.HandleError)(req, res, err);
     }
 });
 exports.deleteTask = deleteTask;
@@ -106,7 +106,7 @@ const updateTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             res.end(JSON.stringify(taskData));
         }
         catch (err) {
-            (0, handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     }));
 });
@@ -125,7 +125,7 @@ const moveTaskToColumn = (req, res) => __awaiter(void 0, void 0, void 0, functio
             res.end(JSON.stringify(taskData));
         }
         catch (err) {
-            (0, handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     }));
 });

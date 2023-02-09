@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.auth = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../common/config");
-const handler_error_1 = require("../Errors/handler.error");
+const HandlerError_1 = require("../Errors/HandlerError");
 const network_1 = require("../utils/network");
 const CustomErrors_1 = require("../Errors/CustomErrors");
 const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,7 +38,7 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
             });
         }
         catch (err) {
-            (0, handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     });
     return next();

@@ -16,7 +16,7 @@ exports.userLogin = exports.userRegistration = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../../common/config");
-const handler_error_1 = require("../../Errors/handler.error");
+const HandlerError_1 = require("../../Errors/HandlerError");
 const network_1 = require("../../utils/network");
 const User_service_1 = require("./User.service");
 const generateToken = (user) => (jsonwebtoken_1.default.sign({
@@ -56,7 +56,7 @@ const userRegistration = (req, res) => __awaiter(void 0, void 0, void 0, functio
             res.end(JSON.stringify(user));
         }
         catch (err) {
-            (0, handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     }));
 });
@@ -94,7 +94,7 @@ const userLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
         catch (err) {
-            (0, handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     }));
 });

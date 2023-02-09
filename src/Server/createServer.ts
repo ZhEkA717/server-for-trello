@@ -2,7 +2,7 @@ import http from 'http';
 import { envConfig } from '../common/config';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
-import { HandleError } from '../Errors/handler.error';
+import { HandleError } from '../Errors/HandlerError';
 import connect from 'connect';
 
 import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, COLUMN_URL_MOVE, LOGIN_URL, REGISTER_URL, TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from '../utils/constants';

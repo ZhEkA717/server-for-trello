@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBoard = exports.deleteBoard = exports.createBoard = exports.getBoardByID = exports.getAllBoards = void 0;
 const CustomErrors_1 = require("../../Errors/CustomErrors");
-const handler_error_1 = require("../../Errors/handler.error");
+const HandlerError_1 = require("../../Errors/HandlerError");
 const constants_1 = require("../../utils/constants");
 const Board_service_1 = require("./Board.service");
 const constants_2 = require("../../utils/constants");
@@ -23,7 +23,7 @@ const getAllBoards = (req, res) => {
         res.end(JSON.stringify(boards));
     }
     catch (err) {
-        (0, handler_error_1.HandleError)(req, res, err);
+        (0, HandlerError_1.HandleError)(req, res, err);
     }
 };
 exports.getAllBoards = getAllBoards;
@@ -36,7 +36,7 @@ const getBoardByID = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.end(JSON.stringify(currentBoard));
     }
     catch (err) {
-        (0, handler_error_1.HandleError)(req, res, err);
+        (0, HandlerError_1.HandleError)(req, res, err);
     }
 });
 exports.getBoardByID = getBoardByID;
@@ -54,7 +54,7 @@ const createBoard = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             res.end(JSON.stringify(newBoard));
         }
         catch (err) {
-            (0, handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     }));
 });
@@ -68,7 +68,7 @@ const deleteBoard = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.end();
     }
     catch (err) {
-        (0, handler_error_1.HandleError)(req, res, err);
+        (0, HandlerError_1.HandleError)(req, res, err);
     }
 });
 exports.deleteBoard = deleteBoard;
@@ -86,7 +86,7 @@ const updateBoard = (req, res) => {
             res.end(JSON.stringify(boardData));
         }
         catch (err) {
-            (0, handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     }));
 };

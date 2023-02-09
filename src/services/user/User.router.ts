@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { envConfig } from '../../common/config';
-import { HandleError } from "../../Errors/handler.error";
+import { HandleError } from "../../Errors/HandlerError";
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { commonJSONResponseHeaders, sendResponse } from '../../utils/network';
 import { IUser } from "./User.model";

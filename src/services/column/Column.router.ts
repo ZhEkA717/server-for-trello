@@ -1,6 +1,6 @@
 import { createNewColumn,deleteColumnByID,updateColumnById, searchColumns, searchColumn, moveColumnToNewPlace } from "./Column.service";
 import { RouterCallbackFunc } from "../../Server/Server.types";
-import { HandleError } from "../../Errors/Handler.error";
+import { HandleError } from "../../Errors/HandlerError";
 import { COLUMN_URL, COLUMN_URL_ID, COLUMN_URL_MOVE } from "../../utils/constants";
 import { NotFoundError } from "../../Errors/CustomErrors";
 import { commonJSONResponseHeaders } from "../../utils/network";

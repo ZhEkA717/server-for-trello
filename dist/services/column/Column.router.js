@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.moveColumnToBoard = exports.updateColumn = exports.deleteColumn = exports.createColumn = exports.getAllColumsByID = exports.getColumnByID = void 0;
 const Column_service_1 = require("./Column.service");
-const Handler_error_1 = require("../../Errors/Handler.error");
+const HandlerError_1 = require("../../Errors/HandlerError");
 const constants_1 = require("../../utils/constants");
 const CustomErrors_1 = require("../../Errors/CustomErrors");
 const network_1 = require("../../utils/network");
@@ -24,7 +24,7 @@ const getColumnByID = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.end(JSON.stringify(currentCollumn));
     }
     catch (err) {
-        (0, Handler_error_1.HandleError)(req, res, err);
+        (0, HandlerError_1.HandleError)(req, res, err);
     }
 });
 exports.getColumnByID = getColumnByID;
@@ -37,7 +37,7 @@ const getAllColumsByID = (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.end(JSON.stringify(columns));
     }
     catch (err) {
-        (0, Handler_error_1.HandleError)(req, res, err);
+        (0, HandlerError_1.HandleError)(req, res, err);
     }
 });
 exports.getAllColumsByID = getAllColumsByID;
@@ -58,7 +58,7 @@ const createColumn = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             res.end(JSON.stringify(newColumn));
         }
         catch (err) {
-            (0, Handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     }));
 });
@@ -72,7 +72,7 @@ const deleteColumn = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.end();
     }
     catch (err) {
-        (0, Handler_error_1.HandleError)(req, res, err);
+        (0, HandlerError_1.HandleError)(req, res, err);
     }
 });
 exports.deleteColumn = deleteColumn;
@@ -90,7 +90,7 @@ const updateColumn = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             res.end(JSON.stringify(columnData));
         }
         catch (err) {
-            (0, Handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     }));
 });
@@ -109,7 +109,7 @@ const moveColumnToBoard = (req, res) => __awaiter(void 0, void 0, void 0, functi
             res.end(JSON.stringify(columnData));
         }
         catch (err) {
-            (0, Handler_error_1.HandleError)(req, res, err);
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     }));
 });

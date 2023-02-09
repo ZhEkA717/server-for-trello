@@ -1,5 +1,5 @@
 import { NotFoundError } from "../../Errors/CustomErrors";
-import { HandleError } from "../../Errors/handler.error";
+import { HandleError } from "../../Errors/HandlerError";
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { BOARD_URL } from "../../utils/constants";
 import { createNewBoard, removeBoard, updateBoardById, searchBoard } from "./Board.service";

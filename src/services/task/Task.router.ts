@@ -1,7 +1,7 @@
 import { createNewTask, deleteTaskByIDS, updateTaskById, searchTask,searchTasks, moveTaskToNewColumn, createNewTaskInColumn } from "./Task.service";
 import { validate as validateUUID } from 'uuid';
 import { RouterCallbackFunc } from "../../Server/Server.types";
-import { HandleError } from "../../Errors/handler.error";
+import { HandleError } from "../../Errors/HandlerError";
 import { TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from "../../utils/constants";
 import { NotFoundError } from "../../Errors/CustomErrors";
 import { commonJSONResponseHeaders } from "../../utils/network";
