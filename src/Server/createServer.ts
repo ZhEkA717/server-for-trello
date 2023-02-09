@@ -4,7 +4,7 @@ import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/handler.error';
 
-import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, COLUMN_URL_MOVE, TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from '../utils/constants';
+import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, COLUMN_URL_MOVE, REGISTER_URL, TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from '../utils/constants';
 import { createBoard,getBoardByID, getAllBoards, deleteBoard, updateBoard } from '../services/board/Board.router';
 import { createColumn, deleteColumn, updateColumn, getAllColumsByID,getColumnByID, moveColumnToBoard } from '../services/column/Column.router';
 import { createTask, deleteTask, updateTask, getAllTasksByIDS, getTaskByID, moveTaskToColumn } from '../services/task/Task.router';
@@ -47,7 +47,9 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
                 if (method === "GET" && url?.startsWith(TASK_URL_ID)) getTaskByID(req, res);
                 else if (method === "PUT" && url?.startsWith(TASK_URL_MOVE)) moveTaskToColumn(req, res);
                 else await SERVER_TASKS[method](req, res);
-            }else{
+            } else if (url?.startsWith(REGISTER_URL)) {
+                
+            } else {
                 throw new NotFoundError();
             }
         } catch (err) {

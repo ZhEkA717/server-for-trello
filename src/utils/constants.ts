@@ -1,11 +1,17 @@
 import { IBoard } from "../services/board/Board.model";
+
 export const BOARD_URL: string = '/api/board';
+
 export const COLUMN_URL: string = '/api/column';
 export const COLUMN_URL_ID: string = '/api/column/id';
 export const COLUMN_URL_MOVE: string = '/api/column/move';
+
 export const TASK_URL: string = '/api/task';
 export const TASK_URL_ID: string = '/api/task/id';
 export const TASK_URL_MOVE: string = '/api/task/move';
+
+export const REGISTER_URL = '/api/register';
+export const LOGIN_URL = '/api/login';
 
 let dataBaseBoards = [
     {
