@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.moveColumnToBoard = exports.updateColumn = exports.deleteColumn = exports.createColumn = exports.getAllColumsByID = exports.getColumnByID = void 0;
 const Column_service_1 = require("./Column.service");
-const Handler_error_1 = require("../../Errors/Handler.error");
+const Handler_error_1 = require("../../Errors/handler.error");
 const constants_1 = require("../../utils/constants");
 const CustomErrors_1 = require("../../Errors/CustomErrors");
 const network_1 = require("../../utils/network");
