@@ -16,8 +16,8 @@ export const LOGIN_URL = '/api/login';
 
 let dataBaseBoards = [
     {
-        nameBoard: "trello",
-        dateBoard:'07.02.2023',
+        nameBoard: "Trello",
+        dateBoard: new Date('06.02.2023'),
         descriptionBoard: "creating app trello",
         isChosen: true,
         idBoard: "9e67fcee-8b69-40cd-a335-5c506655cf9c",

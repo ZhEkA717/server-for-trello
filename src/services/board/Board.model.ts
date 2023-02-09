@@ -1,7 +1,7 @@
 export interface IBoard {
     idBoard: string;
     nameBoard: string;
-    dateBoard:string;
+    dateBoard: Date;
     descriptionBoard: string;
     isChosen: boolean;
     columns: {
