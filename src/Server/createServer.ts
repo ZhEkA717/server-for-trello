@@ -4,12 +4,12 @@ import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/handler.error';
 
-import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, COLUMN_URL_MOVE, REGISTER_URL, TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from '../utils/constants';
+import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, COLUMN_URL_MOVE, LOGIN_URL, REGISTER_URL, TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from '../utils/constants';
 import { createBoard,getBoardByID, getAllBoards, deleteBoard, updateBoard } from '../services/board/Board.router';
 import { createColumn, deleteColumn, updateColumn, getAllColumsByID,getColumnByID, moveColumnToBoard } from '../services/column/Column.router';
 import { createTask, deleteTask, updateTask, getAllTasksByIDS, getTaskByID, moveTaskToColumn } from '../services/task/Task.router';
 import { preflightRequest } from '../utils/network';
-import { userRegistration } from '../services/user/User.router';
+import { userLogin, userRegistration } from '../services/user/User.router';
 
 const SERVER_BOARDS = {
     GET: getBoardByID,
@@ -50,6 +50,8 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
                 else await SERVER_TASKS[method](req, res);
             } else if (url?.startsWith(REGISTER_URL)) {
                 if (method === 'POST') userRegistration(req, res);
+            } else if (url?.startsWith(LOGIN_URL)) {
+                if (method === 'POST') userLogin(req, res);
             } else {
                 throw new NotFoundError();
             }
