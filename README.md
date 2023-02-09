@@ -80,6 +80,43 @@ columns — список колонок доски (array of strings or empty ar
         newPosition: number,
     }
 ```
+### Register user
+---
+- URL
+
+    /api/register
+
+- Method
+
+    `POST`
+    
+- Data parameters:
+```typescript
+    {
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+    }
+```
+
+### Login user
+---
+- URL
+
+    /api/login
+
+- Method
+
+    `POST`
+    
+- Data parameters:
+```typescript
+    {
+        email: string;
+        password: string;
+    }
+```
 ---
 ## Example of valid request body:
 ```

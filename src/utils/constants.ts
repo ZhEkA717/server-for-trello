@@ -1,11 +1,18 @@
 import { IBoard } from "../services/board/Board.model";
+import { IUser } from "../services/user/User.model";
+
 export const BOARD_URL: string = '/api/board';
+
 export const COLUMN_URL: string = '/api/column';
 export const COLUMN_URL_ID: string = '/api/column/id';
 export const COLUMN_URL_MOVE: string = '/api/column/move';
+
 export const TASK_URL: string = '/api/task';
 export const TASK_URL_ID: string = '/api/task/id';
 export const TASK_URL_MOVE: string = '/api/task/move';
+
+export const REGISTER_URL = '/api/register';
+export const LOGIN_URL = '/api/login';
 
 let dataBaseBoards = [
     {
@@ -47,4 +54,18 @@ let dataBaseBoards = [
         ]
     },
 ]
+
 export const getAllB = ():IBoard[] => dataBaseBoards;
+
+const dataBaseUsers: IUser[] = [
+    {
+        "id": "8e0bcefd-6af9-4383-a490-3a3f5897fcfd",
+        "firstName": "Elon",
+        "lastName": "Petrov",
+        "email": "Petrovich@tesla.com",
+        "password": "$2a$10$NTM4qFhQXNAuINEUgAciHend3tqXIBW6RIr1fgEoZRTXAgfS4O9ka",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4ZTBiY2VmZC02YWY5LTQzODMtYTQ5MC0zYTNmNTg5N2ZjZmQiLCJlbWFpbCI6IlBldHJvdmljaEB0ZXNsYS5jb20iLCJpYXQiOjE2NzU5NDMzNTMsImV4cCI6MTY3NjAyOTc1M30.wd_gb2oRqgQuYBlMda75hHAdtREflhbxqR5o0p-dbl4"
+    },
+];
+
+export const getUserDB = (): IUser[] => dataBaseUsers;
