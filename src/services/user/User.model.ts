@@ -6,6 +6,7 @@ export interface IUser {
     password: string;
     token?: string;
     accessLevel: AccessLevel;
+    gender: string;
 }
 
 export type IUserParams = Omit<IUser, 'id' | 'token'>;

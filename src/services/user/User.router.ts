@@ -34,9 +34,9 @@ export const userRegistration: RouterCallbackFunc = async (req, res) => {
     req.on('data', (chunk) => data += chunk);
     req.on('end', async () => {
         try {
-            const { firstName, lastName, email, password } = JSON.parse(data);
+            const { firstName, lastName, email, password, gender } = JSON.parse(data);
 
-            if (!(email && password && firstName && lastName)) {
+            if (!(email && password && firstName && lastName && gender)) {
                 const STATUS_MESSAGE = 'All fields are required';
                 res.writeHead(400, STATUS_MESSAGE);
                 res.end(STATUS_MESSAGE);
@@ -58,7 +58,8 @@ export const userRegistration: RouterCallbackFunc = async (req, res) => {
                 lastName,
                 email,
                 password: encryptedPassword,
-                accessLevel: AccessLevel.User
+                accessLevel: AccessLevel.User,
+                gender
             })
     
             user.token = generateToken(user);

@@ -11,7 +11,7 @@ export const getUser = (email: string): IUser | undefined => {
 export const getUserById = (id: string): IUser | undefined => dbUsers.find((user: IUser) => user.id === id);
 
 export const createUser = (userParams: IUserParams): IUser => {
-    const { firstName, lastName, email, password, accessLevel } = userParams;
+    const { firstName, lastName, email, password, accessLevel, gender } = userParams;
 
     const newUser = {
         id: v4(),
@@ -19,7 +19,8 @@ export const createUser = (userParams: IUserParams): IUser => {
         lastName,
         email: email.toLowerCase(),
         password,
-        accessLevel
+        accessLevel,
+        gender
     };
     dbUsers.push(newUser);
 
