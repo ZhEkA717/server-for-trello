@@ -99,6 +99,29 @@ columns — список колонок доски (array of strings or empty ar
         password: string;
     }
 ```
+- Returned value
+```typescript
+    {
+        id: string
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        token: string;
+        accessLevel: AccessLevel.User;
+    }
+
+    enum AccessLevel {
+        "Admin",
+        "User",
+        "Anonymous"
+    }
+```
+- Errors:
+
+    `400` - Not all required fields are filled
+    `409` - The User already exist
+
 
 ### Login user
 ---
@@ -117,6 +140,29 @@ columns — список колонок доски (array of strings or empty ar
         password: string;
     }
 ```
+- Returned value
+```typescript
+    {
+        id: string
+        firstName: string;
+        lastName: string;
+        email: string;
+        password: string;
+        token: string;
+        accessLevel: AccessLevel.User;
+    }
+
+    enum AccessLevel {
+        "Admin",
+        "User",
+        "Anonymous"
+    }
+```
+- Errors:
+
+    `400` - Not all required fields are filled
+    `401` - Invalid credentials
+
 ---
 ## Example of valid request body:
 ```
