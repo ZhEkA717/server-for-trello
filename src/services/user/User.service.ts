@@ -9,14 +9,15 @@ export const getUser = (email: string): IUser | undefined => {
 }
 
 export const createUser = (userParams: IUserParams): IUser => {
-    const { firstName, lastName, email, password } = userParams;
+    const { firstName, lastName, email, password, gender } = userParams;
 
     const newUser = {
         id: v4(),
         firstName,
         lastName,
         email,
-        password
+        password,
+        gender
     };
     dbUsers.push(newUser);
 
