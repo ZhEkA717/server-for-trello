@@ -94,7 +94,7 @@ export const userLogin: RouterCallbackFunc = async (req: IRequest, res: ServerRe
             ) {
                 sendResponse({
                     response: res,
-                    statusCode: 400,
+                    statusCode: 401,
                     statusMessage: 'Invalid credentials',
                 })
                 return;
