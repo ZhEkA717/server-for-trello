@@ -28,6 +28,6 @@ interface ISendResponse {
 }
 export const sendResponse = (responseParams: ISendResponse): void => {
     const { response, statusCode, statusMessage } = responseParams;
-    response.writeHead(statusCode, statusMessage)
-    response.end(statusMessage);
+    response.writeHead(statusCode, statusMessage, commonJSONResponseHeaders);
+    response.end(JSON.stringify(statusMessage));
 }
