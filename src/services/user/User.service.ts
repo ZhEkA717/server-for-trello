@@ -8,6 +8,8 @@ export const getUser = (email: string): IUser | undefined => {
     return dbUsers.find((user: IUser) => user.email === email.toLowerCase());
 }
 
+export const getUserById = (id: string): IUser | undefined => dbUsers.find((user: IUser) => user.id === id);
+
 export const createUser = (userParams: IUserParams): IUser => {
     const { firstName, lastName, email, password } = userParams;
 
