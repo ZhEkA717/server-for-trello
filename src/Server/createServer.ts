@@ -38,24 +38,12 @@ const app = connect();
 
 const addAuthorizationAndAuthentication = () => {
     const allAuthUsers: AccessLevel[] = [AccessLevel.User, AccessLevel.Admin];
-    
-    app.use(BOARD_URL, auth);
-    app.use(
-        BOARD_URL,
-        accessWithLevel(allAuthUsers),
-    );
+    const urls = [BOARD_URL, COLUMN_URL, TASK_URL];
 
-    app.use(COLUMN_URL, auth);
-    app.use(
-        COLUMN_URL,
-        accessWithLevel(allAuthUsers),
-    );
-
-    app.use(TASK_URL, auth);
-    app.use(
-        TASK_URL,
-        accessWithLevel(allAuthUsers),
-    );
+    urls.forEach((url) => {
+        app.use(url, auth);
+        app.use(url, accessWithLevel(allAuthUsers));
+    })
 }
 
 export const createServer = (port = envConfig.SERVER_PORT) => {
