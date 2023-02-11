@@ -1,11 +1,20 @@
 import bcrypt from 'bcryptjs';
+import { ServerResponse } from 'http';
 import jwt from 'jsonwebtoken';
 import { envConfig } from '../../common/config';
 import { HandleError } from "../../Errors/HandlerError";
+import { IRequest } from '../../Server/server.interface';
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { commonJSONResponseHeaders, sendResponse } from '../../utils/network';
 import { IUser } from "./User.model";
 import { createUser, getUser } from "./User.service";
+
+export interface UserTokenPayload {
+    userId: string;
+    email: string;
+    iat: number;
+    exp: number;
+}
 
 const generateToken = (user: IUser) => (
     jwt.sign(
@@ -61,7 +70,7 @@ export const userRegistration: RouterCallbackFunc = async (req, res) => {
     });
 };
 
-export const userLogin: RouterCallbackFunc = async (req, res) => {
+export const userLogin: RouterCallbackFunc = async (req: IRequest, res: ServerResponse) => {
     let data = '';
     req.on('data', (chunk) => data += chunk);
     req.on('end', async () => {

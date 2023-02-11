@@ -7,6 +7,13 @@ import { HandleError } from '../Errors/HandlerError';
 import { IRequest } from '../Server/server.interface';
 import { sendResponse } from '../utils/network';
 import { InvalidToken } from '../Errors/CustomErrors';
+import { IUser } from '../services/user/User.model';
+import { UserTokenPayload } from '../services/user/User.router';
+import { getUserById } from '../services/user/User.service';
+
+const getUserFromDecodedToken = (jwt: UserTokenPayload): IUser | undefined => (
+    getUserById(jwt.userId)
+);
 
 export const auth = async (req: IRequest, res: ServerResponse, next: connect.NextFunction) => {
     let data = '';
@@ -25,7 +32,8 @@ export const auth = async (req: IRequest, res: ServerResponse, next: connect.Nex
         try {
             jwt.verify(token, envConfig.TOKEN_KEY, (err, decoded) => {
                 if (err) throw new InvalidToken(err.message);
-
+                
+                req.user = getUserFromDecodedToken(decoded as UserTokenPayload);
                 return next();
             });
         } catch (err) {
