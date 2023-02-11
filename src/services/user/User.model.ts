@@ -5,6 +5,13 @@ export interface IUser {
     email: string;
     password: string;
     token?: string;
+    accessLevel: AccessLevel;
 }
 
 export type IUserParams = Omit<IUser, 'id' | 'token'>;
+
+export enum AccessLevel {
+    "Admin",
+    "User",
+    "Anonymous"
+}

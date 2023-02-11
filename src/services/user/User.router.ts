@@ -6,7 +6,7 @@ import { HandleError } from "../../Errors/HandlerError";
 import { IRequest } from '../../Server/server.interface';
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { commonJSONResponseHeaders, sendResponse } from '../../utils/network';
-import { IUser } from "./User.model";
+import { IUser, AccessLevel } from "./User.model";
 import { createUser, getUser } from "./User.service";
 
 export interface UserTokenPayload {
@@ -58,6 +58,7 @@ export const userRegistration: RouterCallbackFunc = async (req, res) => {
                 lastName,
                 email,
                 password: encryptedPassword,
+                accessLevel: AccessLevel.User
             })
     
             user.token = generateToken(user);
