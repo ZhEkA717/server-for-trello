@@ -103,3 +103,37 @@ export const userLogin: RouterCallbackFunc = async (req, res) => {
         }
     });
 }
+
+export const isUserExist: RouterCallbackFunc = async (req, res) => {
+    let data = '';
+    req.on('data', (chunk) => data += chunk);
+    req.on('end', async () => {
+        try {
+            const { email } = JSON.parse(data);
+
+            if (!email) {
+                const STATUS_MESSAGE = 'All fields are required';
+                return sendResponse({
+                    response: res,
+                    statusCode: 400,
+                    statusMessage: STATUS_MESSAGE,
+                });
+            }
+    
+            const isUserExist: IUser | undefined = getUser(email);
+            if (!isUserExist) {
+                const STATUS_MESSAGE = 'User does not exist';
+                return sendResponse({
+                    response: res,
+                    statusCode: 404,
+                    statusMessage: STATUS_MESSAGE,
+                });
+            }
+    
+            res.writeHead(200, commonJSONResponseHeaders);
+            res.end(JSON.stringify('User exists'));
+        } catch (err) {
+            HandleError(req, res, err);
+        }
+    });
+};

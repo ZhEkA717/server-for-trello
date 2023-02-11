@@ -14,6 +14,8 @@ export const TASK_URL_MOVE: string = '/api/task/move';
 export const REGISTER_URL = '/api/register';
 export const LOGIN_URL = '/api/login';
 
+export const USER_URL = '/api/user';
+
 let dataBaseBoards = [
     {
         nameBoard: "Trello",

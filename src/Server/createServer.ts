@@ -1,16 +1,15 @@
-import http from 'http';
 import { envConfig } from '../common/config';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/HandlerError';
 import connect from 'connect';
 
-import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, COLUMN_URL_MOVE, LOGIN_URL, REGISTER_URL, TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from '../utils/constants';
+import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, COLUMN_URL_MOVE, LOGIN_URL, REGISTER_URL, TASK_URL, TASK_URL_ID, TASK_URL_MOVE, USER_URL } from '../utils/constants';
 import { createBoard,getBoardByID, getAllBoards, deleteBoard, updateBoard } from '../services/board/Board.router';
 import { createColumn, deleteColumn, updateColumn, getAllColumsByID,getColumnByID, moveColumnToBoard } from '../services/column/Column.router';
 import { createTask, deleteTask, updateTask, getAllTasksByIDS, getTaskByID, moveTaskToColumn } from '../services/task/Task.router';
 import { preflightRequest } from '../utils/network';
-import { userLogin, userRegistration } from '../services/user/User.router';
+import { isUserExist, userLogin, userRegistration } from '../services/user/User.router';
 // import { auth } from '../middleware/auth';
 
 const SERVER_BOARDS = {
@@ -32,11 +31,17 @@ const SERVER_TASKS = {
     PUT: updateTask
 }
 
+const USER_TASKS = {
+    GET: () => {},
+    POST: isUserExist,
+    DELETE: () => {},
+    PUT: () => {},
+};
+
 const app = connect();
 
-
 export const createServer = (port = envConfig.SERVER_PORT) => {
-    // app.use(auth);
+
     app.use(
         async (req, res) => {
             const method = req.method as MethodType;
@@ -59,6 +64,8 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
                     if (method === 'POST') userRegistration(req, res);
                 } else if (url?.startsWith(LOGIN_URL)) {
                     if (method === 'POST') userLogin(req, res);
+                } else if (url?.startsWith(USER_URL)) {
+                    USER_TASKS[method](req, res);
                 } else {
                     throw new NotFoundError();
                 }
