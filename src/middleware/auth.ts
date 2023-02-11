@@ -15,22 +15,22 @@ export const auth = async (req: IRequest, res: ServerResponse, next: connect.Nex
         const token = req.headers['x-access-token'] as string;
 
         if (!token) {
-            sendResponse({
+            return sendResponse({
                 response: res,
                 statusCode: 403,
                 statusMessage: 'A token is required'
             })
-            return;
         }
 
         try {
             jwt.verify(token, envConfig.TOKEN_KEY, (err, decoded) => {
                 if (err) throw new InvalidToken(err.message);
+
+                return next();
             });
         } catch (err) {
             HandleError(req, res, err);
         }
     });
 
-    return next();
 }
