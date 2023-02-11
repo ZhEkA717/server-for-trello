@@ -5,7 +5,7 @@ import { IUser, IUserParams } from "./User.model";
 const dbUsers = getUserDB();
 
 export const getUser = (email: string): IUser | undefined => {
-    return dbUsers.find((user: IUser) => user.email === email);
+    return dbUsers.find((user: IUser) => user.email === email.toLowerCase());
 }
 
 export const createUser = (userParams: IUserParams): IUser => {
@@ -15,7 +15,7 @@ export const createUser = (userParams: IUserParams): IUser => {
         id: v4(),
         firstName,
         lastName,
-        email,
+        email: email.toLowerCase(),
         password
     };
     dbUsers.push(newUser);
