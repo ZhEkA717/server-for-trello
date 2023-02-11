@@ -11,14 +11,15 @@ export const getUser = (email: string): IUser | undefined => {
 export const getUserById = (id: string): IUser | undefined => dbUsers.find((user: IUser) => user.id === id);
 
 export const createUser = (userParams: IUserParams): IUser => {
-    const { firstName, lastName, email, password } = userParams;
+    const { firstName, lastName, email, password, accessLevel } = userParams;
 
     const newUser = {
         id: v4(),
         firstName,
         lastName,
         email: email.toLowerCase(),
-        password
+        password,
+        accessLevel
     };
     dbUsers.push(newUser);
 
