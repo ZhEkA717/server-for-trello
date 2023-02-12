@@ -41,7 +41,7 @@ const addAuthorizationAndAuthentication = () => {
 
     urls.forEach((url) => {
         app.use(url, auth);
-        app.use(url, accessWithLevel(allAuthUsers));
+        // app.use(url, accessWithLevel(allAuthUsers));
     })
 }
 
