@@ -5,7 +5,7 @@ import { envConfig } from '../../common/config';
 import { HandleError } from "../../Errors/HandlerError";
 import { IRequest } from '../../Server/server.interface';
 import { RouterCallbackFunc } from "../../Server/Server.types";
-import { commonJSONResponseHeaders, sendResponse } from '../../utils/network';
+import { commonJSONResponseHeaders, sendJSONResponse, sendResponse } from '../../utils/network';
 import { IUser, AccessLevel } from "./User.model";
 import { createUser, getUser } from "./User.service";
 
@@ -24,7 +24,7 @@ const generateToken = (user: IUser) => (
         },
         envConfig.TOKEN_KEY,
         {
-            expiresIn: '1d'
+            expiresIn: '1h'
         },
     )
 )
@@ -103,10 +103,11 @@ export const userLogin: RouterCallbackFunc = async (req: IRequest, res: ServerRe
 
             existedUser.token = generateToken(existedUser);
 
-            sendResponse({
+            sendJSONResponse({
                 response: res,
                 statusCode: 200,
-                statusMessage: JSON.stringify(existedUser),
+                statusMessage: 'ok',
+                payload: { ...existedUser, expiresIn: new Date(new Date().getTime() + 3600 * 1000 ) },
             })
         } catch (err) {
             HandleError(req, res, err);
