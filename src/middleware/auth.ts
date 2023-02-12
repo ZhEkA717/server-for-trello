@@ -16,7 +16,9 @@ const getUserFromDecodedToken = (jwt: UserTokenPayload): IUser | undefined => (
 );
 
 export const auth = async (req: IRequest, res: ServerResponse, next: connect.NextFunction) => {
+    if (req.method === 'OPTIONS') return next();
     let data = '';
+
     req.on('data', (chunk) => data += chunk);
     req.on('end', () => {
         const token = req.headers['x-access-token'] as string;
@@ -25,7 +27,7 @@ export const auth = async (req: IRequest, res: ServerResponse, next: connect.Nex
             return sendResponse({
                 response: res,
                 statusCode: 403,
-                statusMessage: 'A token is required'
+                statusMessage: 'A token is required',
             })
         }
 
@@ -34,6 +36,7 @@ export const auth = async (req: IRequest, res: ServerResponse, next: connect.Nex
                 if (err) throw new InvalidToken(err.message);
                 
                 req.user = getUserFromDecodedToken(decoded as UserTokenPayload);
+                req.bodyData = data;
                 return next();
             });
         } catch (err) {

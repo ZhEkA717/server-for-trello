@@ -1,4 +1,3 @@
-import http from 'http';
 import { envConfig } from '../common/config';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';

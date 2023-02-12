@@ -32,20 +32,19 @@ export const getAllColumsByID: RouterCallbackFunc = async (req, res) => {
 
 export const createColumn: RouterCallbackFunc = async (req, res) => {
     if (!req.url?.startsWith(COLUMN_URL)) throw new NotFoundError();
-    let data = '';
-    req.on('data', (chunk) => (data += chunk))
-        .on('end', async () => {
-        let columnData;
-        const boardId = req.url?.substring(`/${COLUMN_URL}`.length);
-        try {
-            columnData = JSON.parse(data);
-            const newColumn = await createNewColumn(columnData,boardId);
-            res.writeHead(200, commonJSONResponseHeaders);
-            res.end(JSON.stringify(newColumn));
-        } catch (err) {
-            HandleError(req, res, err);
-        }
-    })
+    if (!req.bodyData) throw new NotFoundError();
+
+    let data = req.bodyData;
+    let columnData;
+    const boardId = req.url?.substring(`/${COLUMN_URL}`.length);
+    try {
+        columnData = JSON.parse(data);
+        const newColumn = await createNewColumn(columnData,boardId);
+        res.writeHead(200, commonJSONResponseHeaders);
+        res.end(JSON.stringify(newColumn));
+    } catch (err) {
+        HandleError(req, res, err);
+    }
 }
 
 export const deleteColumn: RouterCallbackFunc = async (req, res) => {
@@ -61,39 +60,39 @@ export const deleteColumn: RouterCallbackFunc = async (req, res) => {
 }
 
 export const updateColumn: RouterCallbackFunc = async (req, res) => {
-    let data = '';
-    req.on('data', (chunk) => (data += chunk));
-    req.on('end', async () => {
-        let columnData;
-        try {
-            columnData = JSON.parse(data);
-            const url = req.url;
-            const columnId = url?.substring(`/${COLUMN_URL}`.length);
-            await updateColumnById(columnId as string, columnData);
-            res.writeHead(200, commonJSONResponseHeaders);
-            res.end(JSON.stringify(columnData));
-        } catch (err) {
-            HandleError(req, res, err);
-        }
-    })
+    if (!req.bodyData) throw new NotFoundError();
+
+    let data = req.bodyData;
+    let columnData;
+
+    try {
+        columnData = JSON.parse(data);
+        const url = req.url;
+        const columnId = url?.substring(`/${COLUMN_URL}`.length);
+        await updateColumnById(columnId as string, columnData);
+        res.writeHead(200, commonJSONResponseHeaders);
+        res.end(JSON.stringify(columnData));
+    } catch (err) {
+        HandleError(req, res, err);
+    }
 }
 
 export const moveColumnToBoard: RouterCallbackFunc = async (req, res) => {
-    let data = '';
-    req.on('data', (chunk) => (data += chunk));
-    req.on('end', async () => {
-        let columnData;
-        try {
-            columnData = JSON.parse(data);
-            const url = req.url;
-            const taskId = url?.substring(`/${COLUMN_URL_MOVE}`.length);
+    if (!req.bodyData) throw new NotFoundError();
 
-            moveColumnToNewPlace(taskId as string, columnData);
+    let data = req.bodyData;
+    let columnData;
 
-            res.writeHead(200, commonJSONResponseHeaders);
-            res.end(JSON.stringify(columnData));
-        } catch (err) {
-            HandleError(req, res, err);
-        }
-    })
+    try {
+        columnData = JSON.parse(data);
+        const url = req.url;
+        const taskId = url?.substring(`/${COLUMN_URL_MOVE}`.length);
+
+        moveColumnToNewPlace(taskId as string, columnData);
+
+        res.writeHead(200, commonJSONResponseHeaders);
+        res.end(JSON.stringify(columnData));
+    } catch (err) {
+        HandleError(req, res, err);
+    }
 };
