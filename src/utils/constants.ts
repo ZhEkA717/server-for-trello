@@ -1,5 +1,5 @@
 import { IBoard } from "../services/board/Board.model";
-import { IUser } from "../services/user/User.model";
+import { AccessLevel, IUser } from "../services/user/User.model";
 
 export const BOARD_URL: string = '/api/board';
 
@@ -65,7 +65,8 @@ const dataBaseUsers: IUser[] = [
         "email": "Petrovich@tesla.com",
         "password": "$2a$10$NTM4qFhQXNAuINEUgAciHend3tqXIBW6RIr1fgEoZRTXAgfS4O9ka",
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4ZTBiY2VmZC02YWY5LTQzODMtYTQ5MC0zYTNmNTg5N2ZjZmQiLCJlbWFpbCI6IlBldHJvdmljaEB0ZXNsYS5jb20iLCJpYXQiOjE2NzU5NDMzNTMsImV4cCI6MTY3NjAyOTc1M30.wd_gb2oRqgQuYBlMda75hHAdtREflhbxqR5o0p-dbl4",
-        "gender": "man"
+        "accessLevel": AccessLevel.Admin,
+        "gender": "man",
     },
 ];
 

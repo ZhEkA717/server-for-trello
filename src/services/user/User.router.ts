@@ -1,11 +1,20 @@
 import bcrypt from 'bcryptjs';
+import { ServerResponse } from 'http';
 import jwt from 'jsonwebtoken';
 import { envConfig } from '../../common/config';
 import { HandleError } from "../../Errors/HandlerError";
+import { IRequest } from '../../Server/server.interface';
 import { RouterCallbackFunc } from "../../Server/Server.types";
-import { commonJSONResponseHeaders, sendResponse } from '../../utils/network';
-import { IUser } from "./User.model";
+import { commonJSONResponseHeaders, sendJSONResponse, sendResponse } from '../../utils/network';
+import { IUser, AccessLevel } from "./User.model";
 import { createUser, getUser } from "./User.service";
+
+export interface UserTokenPayload {
+    userId: string;
+    email: string;
+    iat: number;
+    exp: number;
+}
 
 const generateToken = (user: IUser) => (
     jwt.sign(
@@ -15,7 +24,7 @@ const generateToken = (user: IUser) => (
         },
         envConfig.TOKEN_KEY,
         {
-            expiresIn: '1d'
+            expiresIn: '1h'
         },
     )
 )
@@ -49,6 +58,7 @@ export const userRegistration: RouterCallbackFunc = async (req, res) => {
                 lastName,
                 email,
                 password: encryptedPassword,
+                accessLevel: AccessLevel.User,
                 gender
             })
     
@@ -62,7 +72,7 @@ export const userRegistration: RouterCallbackFunc = async (req, res) => {
     });
 };
 
-export const userLogin: RouterCallbackFunc = async (req, res) => {
+export const userLogin: RouterCallbackFunc = async (req: IRequest, res: ServerResponse) => {
     let data = '';
     req.on('data', (chunk) => data += chunk);
     req.on('end', async () => {
@@ -85,7 +95,7 @@ export const userLogin: RouterCallbackFunc = async (req, res) => {
             ) {
                 sendResponse({
                     response: res,
-                    statusCode: 400,
+                    statusCode: 401,
                     statusMessage: 'Invalid credentials',
                 })
                 return;
@@ -93,10 +103,11 @@ export const userLogin: RouterCallbackFunc = async (req, res) => {
 
             existedUser.token = generateToken(existedUser);
 
-            sendResponse({
+            sendJSONResponse({
                 response: res,
                 statusCode: 200,
-                statusMessage: JSON.stringify(existedUser),
+                statusMessage: 'ok',
+                payload: { ...existedUser, expiresIn: new Date(new Date().getTime() + 3600 * 1000 ) },
             })
         } catch (err) {
             HandleError(req, res, err);

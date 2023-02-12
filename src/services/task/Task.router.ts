@@ -34,38 +34,36 @@ export const getAllTasksByIDS: RouterCallbackFunc = async (req, res) => {
 
 export const createTask: RouterCallbackFunc = async (req, res) => {
     if (!req.url?.startsWith(TASK_URL)) throw new NotFoundError();
-    let data = '';
-    req.on('data', (chunk) => (data += chunk))
-        .on('end', async () => {
-        let taskData;
-        if (!req.url) throw new NotFoundError();
+    if (!req.url) throw new NotFoundError();
+    if (!req.bodyData) throw new NotFoundError();
 
-        const urlArr: string[] = req.url.split('/');
-        const ids: string[] = urlArr.filter(validateUUID);
+    let taskData;
 
-        if (ids.length > 2 || ids.length < 1) throw new NotFoundError();
+    const urlArr: string[] = req.url.split('/');
+    const ids: string[] = urlArr.filter(validateUUID);
 
-        const [firstId, secondId] = ids;
+    if (ids.length > 2 || ids.length < 1) throw new NotFoundError();
 
-        const columnId = secondId ? secondId : firstId;
-        const boardId = secondId ? firstId : undefined;
+    const [firstId, secondId] = ids;
 
-        try {
-            taskData = JSON.parse(data);
+    const columnId = secondId ? secondId : firstId;
+    const boardId = secondId ? firstId : undefined;
 
-            let newTask;
-            if (boardId) {
-                newTask = await createNewTask(taskData, boardId, columnId);
-            } else {
-                newTask = await createNewTaskInColumn(taskData, columnId);
-            }
+    try {
+        taskData = JSON.parse(req.bodyData);
 
-            res.writeHead(200, commonJSONResponseHeaders);
-            res.end(JSON.stringify(newTask));
-        } catch (err) {
-            HandleError(req, res, err);
+        let newTask;
+        if (boardId) {
+            newTask = await createNewTask(taskData, boardId, columnId);
+        } else {
+            newTask = await createNewTaskInColumn(taskData, columnId);
         }
-    })
+
+        res.writeHead(200, commonJSONResponseHeaders);
+        res.end(JSON.stringify(newTask));
+    } catch (err) {
+        HandleError(req, res, err);
+    }
 }
 
 export const deleteTask: RouterCallbackFunc = async (req, res) => {
@@ -81,41 +79,39 @@ export const deleteTask: RouterCallbackFunc = async (req, res) => {
 }
 
 export const updateTask: RouterCallbackFunc = async (req, res) => {
-    let data = '';
-    req.on('data', (chunk) => (data += chunk));
-    req.on('end', async () => {
-        let taskData;
-        try {
-            taskData = JSON.parse(data);
-            const url = req.url;
-            const taskId = url?.substring(`/${TASK_URL}`.length);
-            await updateTaskById(taskId as string, taskData);
-            res.writeHead(200, commonJSONResponseHeaders);
-            res.end(JSON.stringify(taskData));
-        } catch (err) {
-            HandleError(req, res, err);
-        }
-    })
+    if (!req.bodyData) throw new NotFoundError();
+    let data = req.bodyData;
+
+    let taskData;
+    try {
+        taskData = JSON.parse(data);
+        const url = req.url;
+        const taskId = url?.substring(`/${TASK_URL}`.length);
+        await updateTaskById(taskId as string, taskData);
+        res.writeHead(200, commonJSONResponseHeaders);
+        res.end(JSON.stringify(taskData));
+    } catch (err) {
+        HandleError(req, res, err);
+    }
 }
 
 export const moveTaskToColumn: RouterCallbackFunc = async (req, res) => {
-    let data = '';
-    req.on('data', (chunk) => (data += chunk));
-    req.on('end', async () => {
-        let taskData;
-        try {
-            taskData = JSON.parse(data);
-            const url = req.url;
-            const taskId = url?.substring(`/${TASK_URL_MOVE}`.length);
+    if (!req.bodyData) throw new NotFoundError();
+    let data = req.bodyData;
 
-            moveTaskToNewColumn(taskId as string, taskData);
+    let taskData;
+    try {
+        taskData = JSON.parse(data);
+        const url = req.url;
+        const taskId = url?.substring(`/${TASK_URL_MOVE}`.length);
 
-            res.writeHead(200, commonJSONResponseHeaders);
-            res.end(JSON.stringify(taskData));
-        } catch (err) {
-            HandleError(req, res, err);
-        }
-    })
+        moveTaskToNewColumn(taskId as string, taskData);
+
+        res.writeHead(200, commonJSONResponseHeaders);
+        res.end(JSON.stringify(taskData));
+    } catch (err) {
+        HandleError(req, res, err);
+    }
 }
 
 

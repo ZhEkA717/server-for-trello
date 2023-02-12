@@ -5,18 +5,21 @@ import { IUser, IUserParams } from "./User.model";
 const dbUsers = getUserDB();
 
 export const getUser = (email: string): IUser | undefined => {
-    return dbUsers.find((user: IUser) => user.email === email);
+    return dbUsers.find((user: IUser) => user.email === email.toLowerCase());
 }
 
+export const getUserById = (id: string): IUser | undefined => dbUsers.find((user: IUser) => user.id === id);
+
 export const createUser = (userParams: IUserParams): IUser => {
-    const { firstName, lastName, email, password, gender } = userParams;
+    const { firstName, lastName, email, password, accessLevel, gender } = userParams;
 
     const newUser = {
         id: v4(),
         firstName,
         lastName,
-        email,
+        email: email.toLowerCase(),
         password,
+        accessLevel,
         gender
     };
     dbUsers.push(newUser);

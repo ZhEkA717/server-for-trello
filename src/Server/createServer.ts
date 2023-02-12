@@ -1,4 +1,3 @@
-import http from 'http';
 import { envConfig } from '../common/config';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
@@ -11,7 +10,9 @@ import { createColumn, deleteColumn, updateColumn, getAllColumsByID,getColumnByI
 import { createTask, deleteTask, updateTask, getAllTasksByIDS, getTaskByID, moveTaskToColumn } from '../services/task/Task.router';
 import { preflightRequest } from '../utils/network';
 import { userLogin, userRegistration } from '../services/user/User.router';
-// import { auth } from '../middleware/auth';
+import { auth } from '../middleware/auth';
+import { accessWithLevel } from '../middleware/authorization';
+import { AccessLevel } from '../services/user/User.model';
 
 const SERVER_BOARDS = {
     GET: getBoardByID,
@@ -34,9 +35,19 @@ const SERVER_TASKS = {
 
 const app = connect();
 
+const addAuthorizationAndAuthentication = () => {
+    const allAuthUsers: AccessLevel[] = [AccessLevel.User, AccessLevel.Admin];
+    const urls = [BOARD_URL, COLUMN_URL, TASK_URL];
+
+    urls.forEach((url) => {
+        app.use(url, auth);
+        // app.use(url, accessWithLevel(allAuthUsers));
+    })
+}
 
 export const createServer = (port = envConfig.SERVER_PORT) => {
-    // app.use(auth);
+    addAuthorizationAndAuthentication();
+
     app.use(
         async (req, res) => {
             const method = req.method as MethodType;
