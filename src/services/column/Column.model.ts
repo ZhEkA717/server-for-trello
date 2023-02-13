@@ -6,5 +6,9 @@ export interface IColumn {
             idTask: string;
             nameTask: string;
             descriptionTask: string;
+            checkLists:{
+                idCheckBox: string;
+                nameCheckBox: string;
+            }[]
         }[];
 };

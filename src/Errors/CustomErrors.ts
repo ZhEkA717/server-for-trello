@@ -12,6 +12,9 @@ export enum TaskValidationError {
     nameTask = 'name of task',
     descriptionTask = 'description of task',
 }
+export enum CheckboxValidationError {
+    nameCheckBox = 'name of task',
+}
 
 export class BaseError {
     message: string;
@@ -134,6 +137,19 @@ export class TaskBadRequestError extends BaseError {
                 break;
             case TaskValidationError.descriptionTask:
                 super(`${ERROR_MESSAGES.BAD_REQUEST}\n${TaskValidationError.descriptionTask} must be a string`, 400);
+                break;
+        }
+    }
+}
+
+export class CheckboxBadRequestError extends BaseError {
+    constructor(option: CheckboxValidationError | 'field') {
+        switch (option) {
+            case 'field':
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\nRequst.body does not contain required fields`, 400);
+                break;
+            case CheckboxValidationError.nameCheckBox:
+                super(`${ERROR_MESSAGES.BAD_REQUEST}\n${CheckboxValidationError.nameCheckBox} must be a string`, 400);
                 break;
         }
     }

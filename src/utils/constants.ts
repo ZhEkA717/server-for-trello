@@ -11,6 +11,9 @@ export const TASK_URL: string = '/api/task';
 export const TASK_URL_ID: string = '/api/task/id';
 export const TASK_URL_MOVE: string = '/api/task/move';
 
+export const CHECKBOX_URL: string = '/api/checkbox';
+export const CHECKBOX_URL_ID: string = '/api/checkbox/id';
+
 export const REGISTER_URL = '/api/register';
 export const LOGIN_URL = '/api/login';
 
@@ -30,12 +33,14 @@ let dataBaseBoards = [
                     {
                         nameTask: "create HTTP.CreateServer",
                         descriptionTask: "specify port 3000, create get, post-requests(URL discuss with team)",
-                        idTask: "89942407-f5ca-488f-9e4a-09b3e3e6f0b0"
+                        idTask: "89942407-f5ca-488f-9e4a-09b3e3e6f0b0",
+                        checkLists: []
                     },
                     {
-                        "nameTask": "updating.......",
-                        "descriptionTask": "updating.......",
-                        "idTask": "1ca9c510-7110-45b5-90dc-adf5adf5d72c"
+                        nameTask: "updating.......",
+                        descriptionTask: "updating.......",
+                        idTask: "1ca9c510-7110-45b5-90dc-adf5adf5d72c",
+                        checkLists: []
                     }
                 ]
             },
@@ -47,7 +52,17 @@ let dataBaseBoards = [
                     {
                         nameTask: "create repository",
                         descriptionTask: "create private repo, add collaboration, set up branch of deploy",
-                        idTask: "ef4d6c08-4984-454d-a30e-30f5efdb736c"
+                        idTask: "ef4d6c08-4984-454d-a30e-30f5efdb736c",
+                        checkLists: [
+                            {
+                                idCheckBox: "111",
+                                nameCheckBox: "new checkbox"
+                            },
+                            {
+                                idCheckBox: "2",
+                                nameCheckBox: "checbox"
+                            }
+                        ]
                     }
                 ]
             }
