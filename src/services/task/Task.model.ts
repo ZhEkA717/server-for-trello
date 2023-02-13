@@ -4,6 +4,7 @@ export interface ICreateTask {
     checkLists: {
         idCheckBox: string;
         nameCheckBox: string;
+        isChoose: boolean;
     }[]
 };
 

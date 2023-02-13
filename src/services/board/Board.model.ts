@@ -15,6 +15,7 @@ export interface IBoard {
             checkLists:{
                 idCheckBox:string;
                 nameCheckBox: string;
+                isChoose: boolean;
             }[]
         }[];
     }[];

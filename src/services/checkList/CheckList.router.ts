@@ -1,6 +1,4 @@
-import {searchTask,searchTasks } from "../task/Task.service";
 import { searchCheckbox, searchCheckLists, createNewCheckbox, deleteCheckboxByID, updateCheckboxById } from "./CheckList.service";
-import { validate as validateUUID } from 'uuid';
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { HandleError } from "../../Errors/HandlerError";
 import { CHECKBOX_URL, CHECKBOX_URL_ID } from "../../utils/constants";

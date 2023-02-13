@@ -23,6 +23,7 @@ export const searchCheckbox = (id:string) => {
             });
         })
     })
+    console.log(correctCheckbox);
     if (!correctCheckbox) throw new NotExistUserError(id);
     return correctCheckbox;
 }
@@ -114,6 +115,7 @@ export const updateCheckboxById = (id: string, checkbox: ICheckBox) => {
 
     dataBaseBoards[boardIDX].columns[columnIDX].tasks[taskIDX].checkLists[checboxIDX] = {
         ...currentUpdate,
-        nameCheckBox: checkbox.nameCheckBox
+        nameCheckBox: checkbox.nameCheckBox,
+        isChoose: checkbox.isChoose
     }
 };

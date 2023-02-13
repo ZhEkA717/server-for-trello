@@ -9,6 +9,7 @@ export interface IColumn {
             checkLists:{
                 idCheckBox: string;
                 nameCheckBox: string;
+                isChoose: boolean;
             }[]
         }[];
 };
