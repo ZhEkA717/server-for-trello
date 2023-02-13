@@ -34,7 +34,6 @@ export const getAllCheckBoxesByIDS: RouterCallbackFunc = async (req, res) => {
 
 export const createCheckbox: RouterCallbackFunc = async (req, res) => {
     if (!req.url?.startsWith(CHECKBOX_URL)) throw new NotFoundError();
-    console.log(req.bodyData);
     if (!req.bodyData) throw new NotFoundError();
 
     let data = req.bodyData;

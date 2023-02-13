@@ -10,7 +10,7 @@ import { getAllB } from '../../utils/constants';
 const dataBaseBoards = getAllB();
 
 export const searchCheckbox = (id:string) => {
-    // if (!validateUUID(id)) throw new InvalidUUIDError(id);
+    if (!validateUUID(id)) throw new InvalidUUIDError(id);
     let correctCheckbox;
     dataBaseBoards.forEach(board=>{
         board.columns.forEach(column=>{

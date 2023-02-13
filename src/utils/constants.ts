@@ -53,16 +53,7 @@ let dataBaseBoards = [
                         nameTask: "create repository",
                         descriptionTask: "create private repo, add collaboration, set up branch of deploy",
                         idTask: "ef4d6c08-4984-454d-a30e-30f5efdb736c",
-                        checkLists: [
-                            {
-                                idCheckBox: "111",
-                                nameCheckBox: "new checkbox"
-                            },
-                            {
-                                idCheckBox: "2",
-                                nameCheckBox: "checbox"
-                            }
-                        ]
+                        checkLists: []
                     }
                 ]
             }
