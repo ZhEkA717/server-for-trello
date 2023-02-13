@@ -4,10 +4,11 @@ import { NotFoundError } from '../Errors/CustomErrors';
 import { HandleError } from '../Errors/HandlerError';
 import connect from 'connect';
 
-import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, COLUMN_URL_MOVE, LOGIN_URL, REGISTER_URL, TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from '../utils/constants';
+import { BOARD_URL, COLUMN_URL,COLUMN_URL_ID, COLUMN_URL_MOVE, LOGIN_URL, REGISTER_URL, TASK_URL, TASK_URL_ID, TASK_URL_MOVE, CHECKBOX_URL, CHECKBOX_URL_ID } from '../utils/constants';
 import { createBoard,getBoardByID, getAllBoards, deleteBoard, updateBoard } from '../services/board/Board.router';
 import { createColumn, deleteColumn, updateColumn, getAllColumsByID,getColumnByID, moveColumnToBoard } from '../services/column/Column.router';
 import { createTask, deleteTask, updateTask, getAllTasksByIDS, getTaskByID, moveTaskToColumn } from '../services/task/Task.router';
+import { getAllCheckBoxesByIDS,getCheckBoxByID, createCheckbox, deleteCheckbox,updateCheckbox } from '../services/checkList/CheckList.router';
 import { preflightRequest } from '../utils/network';
 import { userLogin, userRegistration } from '../services/user/User.router';
 import { auth } from '../middleware/auth';
@@ -33,11 +34,18 @@ const SERVER_TASKS = {
     PUT: updateTask
 }
 
+const SERVER_CHECKLISTS = {
+    GET: getAllCheckBoxesByIDS,
+    POST: createCheckbox,
+    DELETE: deleteCheckbox,
+    PUT: updateCheckbox
+}
+
 const app = connect();
 
 const addAuthorizationAndAuthentication = () => {
     const allAuthUsers: AccessLevel[] = [AccessLevel.User, AccessLevel.Admin];
-    const urls = [BOARD_URL, COLUMN_URL, TASK_URL];
+    const urls = [BOARD_URL, COLUMN_URL, TASK_URL, CHECKBOX_URL];
 
     urls.forEach((url) => {
         app.use(url, auth);
@@ -66,6 +74,9 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
                     if (method === "GET" && url?.startsWith(TASK_URL_ID)) getTaskByID(req, res);
                     else if (method === "PUT" && url?.startsWith(TASK_URL_MOVE)) moveTaskToColumn(req, res);
                     else await SERVER_TASKS[method](req, res);
+                } else if (url?.startsWith(CHECKBOX_URL)){
+                    if (method === "GET" && url?.startsWith(CHECKBOX_URL_ID)) getCheckBoxByID(req, res);
+                    else await SERVER_CHECKLISTS[method](req, res);
                 } else if (url?.startsWith(REGISTER_URL)) {
                     if (method === 'POST') userRegistration(req, res);
                 } else if (url?.startsWith(LOGIN_URL)) {
