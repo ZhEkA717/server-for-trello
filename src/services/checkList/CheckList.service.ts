@@ -119,3 +119,15 @@ export const updateCheckboxById = (id: string, checkbox: ICheckBox) => {
         isChoose: checkbox.isChoose
     }
 };
+
+export const updateChecklistById = (taskId: string, checklist: ICheckBox[]) => {
+    dataBaseBoards.forEach(board=>{
+        board.columns.forEach(column=>{
+            column.tasks.forEach(task=>{
+                if(task.idTask === taskId){
+                    task.checkLists = checklist;
+                }
+            })
+        })
+    })
+};

@@ -13,6 +13,7 @@ export const TASK_URL_MOVE: string = '/api/task/move';
 
 export const CHECKBOX_URL: string = '/api/checkbox';
 export const CHECKBOX_URL_ID: string = '/api/checkbox/id';
+export const CHECKLIST_URL: string = '/api/checklist';
 
 export const REGISTER_URL = '/api/register';
 export const LOGIN_URL = '/api/login';
