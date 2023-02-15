@@ -13,6 +13,7 @@ export const TASK_URL_MOVE: string = '/api/task/move';
 
 export const CHECKBOX_URL: string = '/api/checkbox';
 export const CHECKBOX_URL_ID: string = '/api/checkbox/id';
+export const CHECKLIST_URL: string = '/api/checklist';
 
 export const REGISTER_URL = '/api/register';
 export const LOGIN_URL = '/api/login';
@@ -34,7 +35,23 @@ let dataBaseBoards = [
                         nameTask: "create HTTP.CreateServer",
                         descriptionTask: "specify port 3000, create get, post-requests(URL discuss with team)",
                         idTask: "89942407-f5ca-488f-9e4a-09b3e3e6f0b0",
-                        checkLists: []
+                        checkLists: [
+                            {
+                                "nameCheckBox": "testing in Postman",
+                                "isChoose": false,
+                                "idCheckBox": "d25fe3f5-6ef9-4c55-b823-9f90f4be3da2"
+                            },
+                            {
+                                "nameCheckBox": "create get, post, update, put requests",
+                                "isChoose": false,
+                                "idCheckBox": "7e330f79-8e89-4fc6-9eb0-6a46b7544ae3"
+                            },
+                            {
+                                "nameCheckBox": "discuss URL with team",
+                                "isChoose": false,
+                                "idCheckBox": "42a8750a-78b0-4130-b275-a4b5fe459dbf"
+                            },
+                        ]
                     },
                     {
                         nameTask: "updating.......",
