@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 import { getUserDB } from "../../utils/constants";
-import { IUser, IUserParams } from "./User.model";
+import { IUser, IUserParams, UserEditParams } from "./User.model";
 
 const dbUsers = getUserDB();
 
@@ -26,4 +26,10 @@ export const createUser = (userParams: IUserParams): IUser => {
     dbUsers.push(newUser);
 
     return newUser;
+}
+
+export const editUser = (id: string, newUserInfo: UserEditParams): void => {
+    const user: IUser | undefined = getUserById(id);
+
+    if (user) Object.assign(user, newUserInfo);
 }
