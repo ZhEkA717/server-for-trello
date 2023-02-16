@@ -13,14 +13,15 @@ export const getUserById = (id: string): IUser | undefined => dbUsers.find((user
 export const createUser = (userParams: IUserParams): IUser => {
     const { firstName, lastName, email, password, accessLevel, gender } = userParams;
 
-    const newUser = {
+    const newUser: IUser = {
         id: v4(),
         firstName,
         lastName,
         email: email.toLowerCase(),
         password,
         accessLevel,
-        gender
+        gender,
+        registrationDate: new Date()
     };
     dbUsers.push(newUser);
 

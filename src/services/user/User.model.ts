@@ -7,9 +7,10 @@ export interface IUser {
     token?: string;
     accessLevel: AccessLevel;
     gender: string;
+    registrationDate: Date
 }
 
-export type IUserParams = Omit<IUser, 'id' | 'token'>;
+export type IUserParams = Omit<IUser, 'id' | 'token' | 'registrationDate'>;
 
 export enum AccessLevel {
     "Admin",
