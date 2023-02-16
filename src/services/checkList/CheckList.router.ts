@@ -6,7 +6,6 @@ import { NotFoundError } from "../../Errors/CustomErrors";
 import { commonJSONResponseHeaders } from "../../utils/network";
 
 export const getCheckBoxByID: RouterCallbackFunc = async (req, res) => {
-    console.log('checkboxId');
     try {
         const url = req.url;
         const checkboxId = url?.substring(`/${CHECKBOX_URL_ID}`.length);
@@ -37,7 +36,6 @@ export const createCheckbox: RouterCallbackFunc = async (req, res) => {
     let data = req.bodyData;
     let checkboxData;
     const taskId = req.url?.substring(`/${CHECKBOX_URL}`.length);
-    console.log(taskId);
     try {
         checkboxData = JSON.parse(data);
         const newCheckbox = await createNewCheckbox(checkboxData,taskId);

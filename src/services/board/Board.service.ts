@@ -1,16 +1,24 @@
 import { v4, validate as validateUUID } from 'uuid';
 import { CrashDataBaseError, InvalidUUIDError, NotExistBoardError } from '../../Errors/CustomErrors';
 import { boardValidate } from '../../utils/board.validate';
-import { IBoard } from './Board.model';
+import { CreateBoard, IBoard } from './Board.model';
 import { getAllB } from '../../utils/constants';
 import { IColumn } from '../column/Column.model';
+import { IUser } from '../user/User.model';
 
-export const createNewBoard = (board: any): Promise<any> => {
+export const createNewBoard = (board: CreateBoard, owner: IUser): Promise<IBoard> => {
     return new Promise((resolve) => {
         const idBoard = v4();
-        const newBoard = { ...board, idBoard, columns:[] };
+        const newBoard: IBoard = { 
+            ...board,
+            idBoard,
+            columns:[],
+            ownerId: owner.id,
+        };
+
         const dataBase = getAllB();
         dataBase.push(newBoard);
+
         resolve(newBoard)
     })
 }
@@ -66,6 +74,9 @@ export const moveColumnInBoard = (
     const toBoard: IBoard | undefined = searchBoard(toBoardId);
 
     if (toBoard) toBoard.columns.splice(newPosition, 0, columnToMove);
-    
-    
+}
+
+export const getUserBoards = (owner: IUser): IBoard[] => {
+    const dataBase = getAllB();
+    return dataBase.filter((board: IBoard) => board.ownerId === owner.id);
 }

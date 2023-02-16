@@ -7,4 +7,9 @@ export interface IBoard {
     descriptionBoard: string;
     isChosen: boolean;
     columns: IColumn[];
+    ownerId: string;
 };
+
+export type CreateBoard = Pick<IBoard, 
+    'nameBoard' | 'dateBoard' | 'descriptionBoard' | 'isChosen'
+>
