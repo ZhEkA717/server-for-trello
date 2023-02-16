@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { ServerResponse } from 'http';
 import jwt from 'jsonwebtoken';
 import { envConfig } from '../../common/config';
-import { NotFoundError } from '../../Errors/CustomErrors';
+import { BadRequestError } from '../../Errors/CustomErrors';
 import { HandleError } from "../../Errors/HandlerError";
 import { IRequest } from '../../Server/server.interface';
 import { RouterCallbackFunc } from "../../Server/Server.types";
@@ -117,16 +117,14 @@ export const userLogin: RouterCallbackFunc = async (req: IRequest, res: ServerRe
 }
 
 export const updateUser: RouterCallbackFunc = (req: IRequest, res: ServerResponse) => {
-    if (!req.bodyData) throw new NotFoundError();
-    if (!req.user) throw new NotFoundError();
-
-    console.log(req.user, req.bodyData);
+    if (!req.bodyData) throw new BadRequestError('field');
+    if (!req.user) throw new BadRequestError('field');
 
     try {
         const boardData = JSON.parse(req.bodyData) as UserEditParams;
         editUser(req.user.id, boardData);
         res.writeHead(200, commonJSONResponseHeaders);
-        res.end();
+        res.end('Success');
     } catch (err) {
         HandleError(req, res, err);
     }

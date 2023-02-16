@@ -7,7 +7,7 @@ export interface IUser {
     token?: string;
     accessLevel: AccessLevel;
     gender: string;
-    registrationDate: Date
+    registrationDate: Date;
 }
 
 export type IUserParams = Omit<IUser, 'id' | 'token' | 'registrationDate'>;
