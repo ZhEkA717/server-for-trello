@@ -27,6 +27,7 @@ let dataBaseBoards = [
         descriptionBoard: "creating app trello",
         isChosen: true,
         idBoard: "9e67fcee-8b69-40cd-a335-5c506655cf9c",
+        ownerId: "8e0bcefd-6af9-4383-a490-3a3f5897fcfd",
         columns: [
             {
                 nameColumn: "need to do",
