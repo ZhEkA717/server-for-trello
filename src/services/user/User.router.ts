@@ -2,12 +2,13 @@ import bcrypt from 'bcryptjs';
 import { ServerResponse } from 'http';
 import jwt from 'jsonwebtoken';
 import { envConfig } from '../../common/config';
+import { BadRequestError } from '../../Errors/CustomErrors';
 import { HandleError } from "../../Errors/HandlerError";
 import { IRequest } from '../../Server/server.interface';
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { commonJSONResponseHeaders, sendJSONResponse, sendResponse } from '../../utils/network';
-import { IUser, AccessLevel } from "./User.model";
-import { createUser, getUser } from "./User.service";
+import { IUser, AccessLevel, UserEditParams } from "./User.model";
+import { createUser, editUser, getUser } from "./User.service";
 
 export interface UserTokenPayload {
     userId: string;
@@ -113,4 +114,18 @@ export const userLogin: RouterCallbackFunc = async (req: IRequest, res: ServerRe
             HandleError(req, res, err);
         }
     });
+}
+
+export const updateUser: RouterCallbackFunc = (req: IRequest, res: ServerResponse) => {
+    if (!req.bodyData) throw new BadRequestError('field');
+    if (!req.user) throw new BadRequestError('field');
+
+    try {
+        const boardData = JSON.parse(req.bodyData) as UserEditParams;
+        editUser(req.user.id, boardData);
+        res.writeHead(200, commonJSONResponseHeaders);
+        res.end('Success');
+    } catch (err) {
+        HandleError(req, res, err);
+    }
 }

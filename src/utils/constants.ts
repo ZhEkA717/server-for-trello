@@ -18,6 +18,8 @@ export const CHECKLIST_URL: string = '/api/checklist';
 export const REGISTER_URL = '/api/register';
 export const LOGIN_URL = '/api/login';
 
+export const USER_URL = '/api/user';
+
 let dataBaseBoards = [
     {
         nameBoard: "Trello",
@@ -25,6 +27,7 @@ let dataBaseBoards = [
         descriptionBoard: "creating app trello",
         isChosen: true,
         idBoard: "9e67fcee-8b69-40cd-a335-5c506655cf9c",
+        ownerId: "8e0bcefd-6af9-4383-a490-3a3f5897fcfd",
         columns: [
             {
                 nameColumn: "need to do",
@@ -90,6 +93,7 @@ const dataBaseUsers: IUser[] = [
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4ZTBiY2VmZC02YWY5LTQzODMtYTQ5MC0zYTNmNTg5N2ZjZmQiLCJlbWFpbCI6IlBldHJvdmljaEB0ZXNsYS5jb20iLCJpYXQiOjE2NzU5NDMzNTMsImV4cCI6MTY3NjAyOTc1M30.wd_gb2oRqgQuYBlMda75hHAdtREflhbxqR5o0p-dbl4",
         "accessLevel": AccessLevel.Admin,
         "gender": "man",
+        "registrationDate": new Date(),
     },
 ];
 

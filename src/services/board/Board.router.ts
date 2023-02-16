@@ -2,16 +2,18 @@ import { NotFoundError } from "../../Errors/CustomErrors";
 import { HandleError } from "../../Errors/HandlerError";
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { BOARD_URL } from "../../utils/constants";
-import { createNewBoard, removeBoard, updateBoardById, searchBoard } from "./Board.service";
-import { getAllB } from "../../utils/constants";
+import { createNewBoard, removeBoard, updateBoardById, searchBoard, getUserBoards } from "./Board.service";
 import { commonJSONResponseHeaders } from "../../utils/network";
+import { IBoard } from "./Board.model";
 
 export const getAllBoards: RouterCallbackFunc = (req, res) => {
+    if (!req.user) throw new NotFoundError();
+
     try {
-        const boards = getAllB();
+        const userBoards: IBoard[] = getUserBoards(req.user);
 
         res.writeHead(200, commonJSONResponseHeaders);
-        res.end(JSON.stringify(boards));
+        res.end(JSON.stringify(userBoards));
     } catch (err) {
         HandleError(req, res, err);
     }
@@ -32,13 +34,15 @@ export const getBoardByID: RouterCallbackFunc = async (req, res) => {
 export const createBoard: RouterCallbackFunc = async (req, res) => {
     if (req.url !== BOARD_URL) throw new NotFoundError();
     if (!req.bodyData) throw new NotFoundError();
+    if (!req.user) throw new NotFoundError();
 
     let data = req.bodyData;
     let boardData;
 
     try {
         boardData = JSON.parse(data);
-        const newBoard = await createNewBoard(boardData);
+        const newBoard = await createNewBoard(boardData, req.user);
+
         res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(newBoard));
     } catch (err) {
