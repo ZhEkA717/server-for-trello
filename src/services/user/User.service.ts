@@ -14,25 +14,10 @@ export const getUserProfileById = (userId: string): UserProfile | undefined => {
     const user = getUserById(userId);
 
     if (user) {
-        const { id,
-            firstName,
-            lastName,
-            email,
-            accessLevel,
-            gender,
-            registrationDate,
-        } = user;
-
-        return {
-            id,
-            firstName,
-            lastName,
-            email,
-            accessLevel,
-            gender,
-            registrationDate,
-        }
+        return getReturnedInfoFromUser(user);
     }
+
+    return undefined;
 }
 
 export const createUser = (userParams: IUserParams): IUser => {
@@ -53,8 +38,32 @@ export const createUser = (userParams: IUserParams): IUser => {
     return newUser;
 }
 
-export const editUser = (id: string, newUserInfo: UserEditParams): void => {
+export const editUser = (id: string, newUserInfo: UserEditParams): UserProfile | undefined => {
     const user: IUser | undefined = getUserById(id);
 
-    if (user) Object.assign(user, newUserInfo);
+    if (user) {
+        Object.assign(user, newUserInfo);
+        return getReturnedInfoFromUser(user);
+    }
+    
+    return undefined;
 }
+
+const getReturnedInfoFromUser = ({ id,
+    firstName,
+    lastName,
+    email,
+    accessLevel,
+    gender,
+    registrationDate,
+}: IUser): UserProfile => (
+    {
+        id,
+        firstName,
+        lastName,
+        email,
+        accessLevel,
+        gender,
+        registrationDate,
+    }
+);
