@@ -123,15 +123,14 @@ export const updateUser: RouterCallbackFunc = (req: IRequest, res: ServerRespons
     try {
         const boardData = JSON.parse(req.bodyData) as UserEditParams;
         const editedUser: UserProfile | undefined = editUser(req.user.id, boardData);
+        if (!editedUser) throw new NotExistUserError(req.user.id);
 
-        if (editedUser) {
-            sendJSONResponse({
-                response: res,
-                statusCode: 200,
-                statusMessage: 'Success',
-                payload: editedUser,
-            })
-        }
+        sendJSONResponse({
+            response: res,
+            statusCode: 200,
+            statusMessage: 'Success',
+            payload: editedUser,
+        })
     } catch (err) {
         HandleError(req, res, err);
     }
