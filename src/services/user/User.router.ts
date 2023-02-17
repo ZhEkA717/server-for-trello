@@ -2,13 +2,13 @@ import bcrypt from 'bcryptjs';
 import { ServerResponse } from 'http';
 import jwt from 'jsonwebtoken';
 import { envConfig } from '../../common/config';
-import { BadRequestError } from '../../Errors/CustomErrors';
+import { BadRequestError, NotExistUserError } from '../../Errors/CustomErrors';
 import { HandleError } from "../../Errors/HandlerError";
 import { IRequest } from '../../Server/server.interface';
 import { RouterCallbackFunc } from "../../Server/Server.types";
 import { commonJSONResponseHeaders, sendJSONResponse, sendResponse } from '../../utils/network';
-import { IUser, AccessLevel, UserEditParams } from "./User.model";
-import { createUser, editUser, getUser } from "./User.service";
+import { IUser, AccessLevel, UserEditParams, UserProfile } from "./User.model";
+import { createUser, editUser, getUser, getUserProfileById } from "./User.service";
 
 export interface UserTokenPayload {
     userId: string;
@@ -129,3 +129,21 @@ export const updateUser: RouterCallbackFunc = (req: IRequest, res: ServerRespons
         HandleError(req, res, err);
     }
 }
+
+export const getUserInfo: RouterCallbackFunc = (req: IRequest, res: ServerResponse) => {
+    if (!req.user) throw new BadRequestError('field');
+
+    try {
+        const userProfile: UserProfile | undefined = getUserProfileById(req.user.id);
+        if (!userProfile) throw new NotExistUserError(req.user.id);
+
+        sendJSONResponse({
+            response: res,
+            statusCode: 200,
+            statusMessage: 'Success',
+            payload: userProfile,
+        })
+    } catch (err) {
+        HandleError(req, res, err);
+    }
+};

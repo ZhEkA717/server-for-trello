@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 import { getUserDB } from "../../utils/constants";
-import { IUser, IUserParams, UserEditParams } from "./User.model";
+import { IUser, IUserParams, UserEditParams, UserProfile } from "./User.model";
 
 const dbUsers = getUserDB();
 
@@ -9,6 +9,31 @@ export const getUser = (email: string): IUser | undefined => {
 }
 
 export const getUserById = (id: string): IUser | undefined => dbUsers.find((user: IUser) => user.id === id);
+
+export const getUserProfileById = (userId: string): UserProfile | undefined => {
+    const user = getUserById(userId);
+
+    if (user) {
+        const { id,
+            firstName,
+            lastName,
+            email,
+            accessLevel,
+            gender,
+            registrationDate,
+        } = user;
+
+        return {
+            id,
+            firstName,
+            lastName,
+            email,
+            accessLevel,
+            gender,
+            registrationDate,
+        }
+    }
+}
 
 export const createUser = (userParams: IUserParams): IUser => {
     const { firstName, lastName, email, password, accessLevel, gender } = userParams;

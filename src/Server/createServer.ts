@@ -10,7 +10,7 @@ import { createColumn, deleteColumn, updateColumn, getAllColumsByID,getColumnByI
 import { createTask, deleteTask, updateTask, getAllTasksByIDS, getTaskByID, moveTaskToColumn } from '../services/task/Task.router';
 import { getAllCheckBoxesByIDS,getCheckBoxByID, createCheckbox, deleteCheckbox,updateCheckbox, updateChecklist } from '../services/checkList/CheckList.router';
 import { preflightRequest } from '../utils/network';
-import { updateUser, userLogin, userRegistration } from '../services/user/User.router';
+import { getUserInfo, updateUser, userLogin, userRegistration } from '../services/user/User.router';
 import { auth } from '../middleware/auth';
 import { accessWithLevel } from '../middleware/authorization';
 import { AccessLevel } from '../services/user/User.model';
@@ -39,6 +39,13 @@ const SERVER_CHECKLISTS = {
     POST: createCheckbox,
     DELETE: deleteCheckbox,
     PUT: updateCheckbox
+}
+
+const SERVER_USER = {
+    GET: getUserInfo,
+    POST: () => {},
+    DELETE: () => {},
+    PUT: updateUser,
 }
 
 const app = connect();
@@ -84,7 +91,7 @@ export const createServer = (port = envConfig.SERVER_PORT) => {
                 } else if (url?.startsWith(LOGIN_URL)) {
                     if (method === 'POST') userLogin(req, res);
                 } else if (url?.startsWith(USER_URL)) {
-                    if (method === 'PUT') updateUser(req, res);
+                    SERVER_USER[method](req, res);
                 } else {
                     throw new NotFoundError();
                 }

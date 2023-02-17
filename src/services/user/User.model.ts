@@ -14,6 +14,8 @@ export type IUserParams = Omit<IUser, 'id' | 'token' | 'registrationDate'>;
 
 export type UserEditParams = Partial<Pick<IUser, 'firstName' | 'lastName' | 'password' | 'gender'>>;
 
+export type UserProfile = Omit<IUser, 'password' | 'token'>;
+
 export enum AccessLevel {
     "Admin",
     "User",
