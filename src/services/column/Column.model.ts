@@ -8,3 +8,8 @@ export interface IColumn {
 };
 
 export type IColumnCreate = Pick<IColumn, 'nameColumn' | 'descriptionColumn'>;
+
+export type NewPlaceColumn = {
+    toColumnId: string;
+    newPosition: number;
+};

@@ -1,5 +1,5 @@
 import { IBoard } from '../board/Board.model'; 
-import { IColumn } from '../column/Column.model';
+import { IColumn, NewPlaceColumn } from '../column/Column.model';
 import { ICreateTask, ITask } from './Task.model';
 import { v4, validate as validateUUID } from 'uuid';
 import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../../Errors/CustomErrors';
@@ -138,10 +138,7 @@ export const updateTaskById = (id: string, task: ITask): void => {
 
 export const moveTaskToNewColumn = (
     taskId: string,
-    newPlaceData: {
-        toColumnId: string,
-        newPosition: number,
-    }
+    newPlaceData: NewPlaceColumn
 ): void => {
     const taskToMove: ITask = searchTask(taskId);
 
