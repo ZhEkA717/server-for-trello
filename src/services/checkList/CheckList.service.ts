@@ -1,6 +1,3 @@
-import { IBoard } from '../board/Board.model'; 
-import { IColumn } from '../column/Column.model';
-import { ICreateTask, ITask } from '../task/Task.model';
 import { ICreateCheckBox, ICheckBox } from './CheckList.model';
 import { v4, validate as validateUUID } from 'uuid';
 import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../../Errors/CustomErrors';
