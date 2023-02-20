@@ -1,5 +1,5 @@
 import { IBoard } from '../board/Board.model'; 
-import { IColumn } from '../column/Column.model';
+import { IColumn, NewPlaceColumn } from '../column/Column.model';
 import { ICreateTask, ITask } from './Task.model';
 import { v4, validate as validateUUID } from 'uuid';
 import { InvalidUUIDError, NotExistUserError, CrashDataBaseError } from '../../Errors/CustomErrors';
@@ -10,66 +10,78 @@ import { searchBoardByColumnID } from '../board/Board.service';
 
 const dataBaseBoards = getAllB();
 
-export const searchTask = (id:string) => {
+export const searchTask = (id: string) => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
-    let correctTask;
-    dataBaseBoards.forEach(board=>{
-        board.columns.forEach(column=>{
-            column.tasks.forEach((task)=>{
+
+    let correctTask: ITask | undefined;
+    dataBaseBoards.forEach(board => {
+        board.columns.forEach(column => {
+            column.tasks.forEach((task) => {
                 if(task.idTask === id) correctTask = task;
             });
         })
     })
+
     if (!correctTask) throw new NotExistUserError(id);
+
     return correctTask;
 }
 
-export const searchTasks = (idBoard:string, idColumn:string) => {
+export const searchTasks = (idBoard: string, idColumn: string): ITask[] | undefined => {
     if (!validateUUID(idBoard)) throw new InvalidUUIDError(idBoard);
     if (!validateUUID(idColumn)) throw new InvalidUUIDError(idColumn);
+
     return dataBaseBoards.find(board=>board.idBoard === idBoard)
         ?.columns.find(column=>column.idColumn === idColumn)
         ?.tasks;
 }
 
-const searchBoardWhichExistTask = (id:string) => {
-    let correctBoard:any; 
-    dataBaseBoards.forEach(board=>{
-        board.columns.forEach(column=>{
-          column.tasks.forEach(task=>{
-            if(task.idTask === id) correctBoard = board;
+const searchBoardWhichExistTask = (id: string): IBoard => {
+    let correctBoard: IBoard | undefined;
+
+    dataBaseBoards.forEach(board => {
+        board.columns.forEach(column => {
+          column.tasks.forEach(task => {
+            if (task.idTask === id) correctBoard = board;
           });
         })
     })
+
     if (!correctBoard) throw new NotExistUserError(id);
+
     return correctBoard;
 }
-const searchColumnWhichExistTask = (id: string, indexBoard:number) => {
+const searchColumnWhichExistTask = (id: string, indexBoard:number): IColumn => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
-    let correctColums:any; 
+
+    let correctColums: IColumn | undefined; 
     dataBaseBoards[indexBoard].columns.forEach(column=>{
         column.tasks.find(task=>{
             if(task.idTask === id) correctColums = column;
         });
     })
+
     if (!correctColums) throw new NotExistUserError(id);
+
     return correctColums;
 }
 
-export const createNewTask = (task: ICreateTask, idBoard: string|undefined, idColumn: string|undefined): Promise<any> => {
+export const createNewTask = (task: ICreateTask, idBoard: string, idColumn: string): Promise<ITask> => {
     return new Promise((resolve) => {
-        const board = dataBaseBoards.find(board=>board.idBoard === idBoard);
-        const column = board?.columns.find(column=>column.idColumn === idColumn);;
-        const idTask = v4();
-        const newTask = {
+        const board: IBoard | undefined = dataBaseBoards.find(board => board.idBoard === idBoard);
+        const column: IColumn | undefined = board?.columns.find(column => column.idColumn === idColumn);
+        const idTask: string = v4();
+        const newTask: ITask = {
             ...task,
             idTask,
         }
-        board?.columns.forEach(item=>{
+
+        board?.columns.forEach(item => {
             if(item.idColumn === column?.idColumn){
                 item.tasks.push(newTask)
             }
         });
+
         resolve(newTask);
     })
 }
@@ -82,8 +94,8 @@ export const createNewTaskInColumn = (task: ICreateTask, idColumn: string): Prom
             const column: IColumn | undefined = board.columns.find(column => column.idColumn === idColumn);
             if (column) {
 
-                const idTask = v4();
-                const newTask = {
+                const idTask: string = v4();
+                const newTask: ITask = {
                     ...task,
                     idTask,
                 }
@@ -100,35 +112,33 @@ export const createNewTaskInColumn = (task: ICreateTask, idColumn: string): Prom
     })
 }
 
-export const deleteTaskByIDS = (id:string) => {
-    const existingTask = searchTask(id);
-    const existingBoard = searchBoardWhichExistTask(id);
-    const indexBoard = dataBaseBoards.indexOf(existingBoard as IBoard);
-    const existingColumn = searchColumnWhichExistTask(id,indexBoard);
-    const indexColumn = existingBoard.columns.indexOf(existingColumn as IColumn);
-    const indexTask = existingColumn.tasks.indexOf(existingTask as ITask);
+export const deleteTaskByIDS = (id:string): void => {
+    const existingTask: ITask = searchTask(id);
+    const existingBoard: IBoard = searchBoardWhichExistTask(id);
+    const indexBoard: number = dataBaseBoards.indexOf(existingBoard);
+    const existingColumn: IColumn = searchColumnWhichExistTask(id, indexBoard);
+    const indexColumn: number = existingBoard.columns.indexOf(existingColumn);
+    const indexTask: number = existingColumn.tasks.indexOf(existingTask);
 
     dataBaseBoards[indexBoard].columns[indexColumn].tasks.splice(indexTask,1);
 };
 
-export const updateTaskById = (id: string, task: ITask) => {
+export const updateTaskById = (id: string, task: ITask): void => {
     taskValidate(task);
-    const existingTask = searchTask(id);
-    const existingBoard = searchBoardWhichExistTask(id);
-    const indexBoard = dataBaseBoards.indexOf(existingBoard as IBoard);
-    const existingColumn = searchColumnWhichExistTask(id,indexBoard);
-    const indexColumn = existingBoard.columns.indexOf(existingColumn as IColumn);
-    const indexTask = existingColumn.tasks.indexOf(existingTask as ITask);
-    const taskNeedUpdate = dataBaseBoards[indexBoard].columns[indexColumn].tasks[indexTask];
+    const existingTask: ITask = searchTask(id);
+    const existingBoard: IBoard = searchBoardWhichExistTask(id);
+    const indexBoard: number = dataBaseBoards.indexOf(existingBoard);
+    const existingColumn: IColumn = searchColumnWhichExistTask(id,indexBoard);
+    const indexColumn: number = existingBoard.columns.indexOf(existingColumn);
+    const indexTask: number = existingColumn.tasks.indexOf(existingTask);
+    const taskNeedUpdate: ITask = dataBaseBoards[indexBoard].columns[indexColumn].tasks[indexTask];
+
     dataBaseBoards[indexBoard].columns[indexColumn].tasks[indexTask] = {...taskNeedUpdate, ...task};
 };
 
 export const moveTaskToNewColumn = (
     taskId: string,
-    newPlaceData: {
-        toColumnId: string,
-        newPosition: number,
-    }
+    newPlaceData: NewPlaceColumn
 ): void => {
     const taskToMove: ITask = searchTask(taskId);
 
