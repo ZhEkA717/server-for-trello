@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TaskBadRequestError = exports.ColumnBadRequestError = exports.BoardBadRequestError = exports.BadRequestError = exports.CrashDataBaseError = exports.NotExistBoardError = exports.NotExistUserError = exports.InvalidUUIDError = exports.ServerInternalError = exports.InvalidToken = exports.NotFoundError = exports.BaseError = exports.TaskValidationError = exports.ColumnValidationError = exports.BoardValidationError = void 0;
+exports.CheckboxBadRequestError = exports.TaskBadRequestError = exports.ColumnBadRequestError = exports.BoardBadRequestError = exports.BadRequestError = exports.CrashDataBaseError = exports.NotExistBoardError = exports.NotExistUserError = exports.InvalidUUIDError = exports.ServerInternalError = exports.InvalidToken = exports.NotFoundError = exports.BaseError = exports.CheckboxValidationError = exports.TaskValidationError = exports.ColumnValidationError = exports.BoardValidationError = void 0;
 var BoardValidationError;
 (function (BoardValidationError) {
     BoardValidationError["nameBoard"] = "name of board";
@@ -16,6 +16,10 @@ var TaskValidationError;
     TaskValidationError["nameTask"] = "name of task";
     TaskValidationError["descriptionTask"] = "description of task";
 })(TaskValidationError = exports.TaskValidationError || (exports.TaskValidationError = {}));
+var CheckboxValidationError;
+(function (CheckboxValidationError) {
+    CheckboxValidationError["nameCheckBox"] = "name of task";
+})(CheckboxValidationError = exports.CheckboxValidationError || (exports.CheckboxValidationError = {}));
 class BaseError {
     constructor(message, code = 500) {
         this.message = message;
@@ -137,3 +141,16 @@ class TaskBadRequestError extends BaseError {
     }
 }
 exports.TaskBadRequestError = TaskBadRequestError;
+class CheckboxBadRequestError extends BaseError {
+    constructor(option) {
+        switch (option) {
+            case 'field':
+                super(`${"Bad Request" /* ERROR_MESSAGES.BAD_REQUEST */}\nRequst.body does not contain required fields`, 400);
+                break;
+            case CheckboxValidationError.nameCheckBox:
+                super(`${"Bad Request" /* ERROR_MESSAGES.BAD_REQUEST */}\n${CheckboxValidationError.nameCheckBox} must be a string`, 400);
+                break;
+        }
+    }
+}
+exports.CheckboxBadRequestError = CheckboxBadRequestError;

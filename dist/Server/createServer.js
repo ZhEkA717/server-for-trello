@@ -21,9 +21,11 @@ const constants_1 = require("../utils/constants");
 const Board_router_1 = require("../services/board/Board.router");
 const Column_router_1 = require("../services/column/Column.router");
 const Task_router_1 = require("../services/task/Task.router");
+const CheckList_router_1 = require("../services/checkList/CheckList.router");
 const network_1 = require("../utils/network");
 const User_router_1 = require("../services/user/User.router");
-// import { auth } from '../middleware/auth';
+const auth_1 = require("../middleware/auth");
+const User_model_1 = require("../services/user/User.model");
 const SERVER_BOARDS = {
     GET: Board_router_1.getBoardByID,
     POST: Board_router_1.createBoard,
@@ -42,9 +44,29 @@ const SERVER_TASKS = {
     DELETE: Task_router_1.deleteTask,
     PUT: Task_router_1.updateTask
 };
+const SERVER_CHECKLISTS = {
+    GET: CheckList_router_1.getAllCheckBoxesByIDS,
+    POST: CheckList_router_1.createCheckbox,
+    DELETE: CheckList_router_1.deleteCheckbox,
+    PUT: CheckList_router_1.updateCheckbox
+};
+const SERVER_USER = {
+    GET: User_router_1.getUserInfo,
+    POST: () => { },
+    DELETE: () => { },
+    PUT: User_router_1.updateUser,
+};
 const app = (0, connect_1.default)();
+const addAuthorizationAndAuthentication = () => {
+    const allAuthUsers = [User_model_1.AccessLevel.User, User_model_1.AccessLevel.Admin];
+    const urls = [constants_1.BOARD_URL, constants_1.COLUMN_URL, constants_1.TASK_URL, constants_1.CHECKBOX_URL, constants_1.CHECKLIST_URL, constants_1.USER_URL];
+    urls.forEach((url) => {
+        app.use(url, auth_1.auth);
+        // app.use(url, accessWithLevel(allAuthUsers));
+    });
+};
 const createServer = (port = config_1.envConfig.SERVER_PORT) => {
-    // app.use(auth);
+    addAuthorizationAndAuthentication();
     app.use((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const method = req.method;
         const url = req.url;
@@ -73,6 +95,15 @@ const createServer = (port = config_1.envConfig.SERVER_PORT) => {
                 else
                     yield SERVER_TASKS[method](req, res);
             }
+            else if (method === 'PUT' && (url === null || url === void 0 ? void 0 : url.startsWith(constants_1.CHECKLIST_URL))) {
+                (0, CheckList_router_1.updateChecklist)(req, res);
+            }
+            else if (url === null || url === void 0 ? void 0 : url.startsWith(constants_1.CHECKBOX_URL)) {
+                if (method === "GET" && (url === null || url === void 0 ? void 0 : url.startsWith(constants_1.CHECKBOX_URL_ID)))
+                    (0, CheckList_router_1.getCheckBoxByID)(req, res);
+                else
+                    yield SERVER_CHECKLISTS[method](req, res);
+            }
             else if (url === null || url === void 0 ? void 0 : url.startsWith(constants_1.REGISTER_URL)) {
                 if (method === 'POST')
                     (0, User_router_1.userRegistration)(req, res);
@@ -80,6 +111,9 @@ const createServer = (port = config_1.envConfig.SERVER_PORT) => {
             else if (url === null || url === void 0 ? void 0 : url.startsWith(constants_1.LOGIN_URL)) {
                 if (method === 'POST')
                     (0, User_router_1.userLogin)(req, res);
+            }
+            else if (url === null || url === void 0 ? void 0 : url.startsWith(constants_1.USER_URL)) {
+                SERVER_USER[method](req, res);
             }
             else {
                 throw new CustomErrors_1.NotFoundError();

@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.moveColumnInBoard = exports.updateBoardById = exports.removeBoard = exports.searchBoardByColumnID = exports.searchBoard = exports.createNewBoard = void 0;
+exports.getUserBoards = exports.moveColumnInBoard = exports.updateBoardById = exports.removeBoard = exports.searchBoardByColumnID = exports.searchBoard = exports.createNewBoard = void 0;
 const uuid_1 = require("uuid");
 const CustomErrors_1 = require("../../Errors/CustomErrors");
 const board_validate_1 = require("../../utils/board.validate");
 const constants_1 = require("../../utils/constants");
-const createNewBoard = (board) => {
+const createNewBoard = (board, owner) => {
     return new Promise((resolve) => {
         const idBoard = (0, uuid_1.v4)();
-        const newBoard = Object.assign(Object.assign({}, board), { idBoard, columns: [] });
+        const newBoard = Object.assign(Object.assign({}, board), { idBoard, columns: [], ownerId: owner.id });
         const dataBase = (0, constants_1.getAllB)();
         dataBase.push(newBoard);
         resolve(newBoard);
@@ -61,3 +61,8 @@ const moveColumnInBoard = (columnToMove, newPlaceData) => {
         toBoard.columns.splice(newPosition, 0, columnToMove);
 };
 exports.moveColumnInBoard = moveColumnInBoard;
+const getUserBoards = (owner) => {
+    const dataBase = (0, constants_1.getAllB)();
+    return dataBase.filter((board) => board.ownerId === owner.id);
+};
+exports.getUserBoards = getUserBoards;

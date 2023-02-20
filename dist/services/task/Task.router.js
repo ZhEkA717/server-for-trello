@@ -33,6 +33,8 @@ const getAllTasksByIDS = (req, res) => __awaiter(void 0, void 0, void 0, functio
     try {
         const url = req.url;
         const urlArr = url === null || url === void 0 ? void 0 : url.split('/');
+        if (!urlArr)
+            throw new CustomErrors_1.NotFoundError();
         const boardId = urlArr[urlArr.length - 2];
         const columnId = urlArr[urlArr.length - 1];
         const tasks = (0, Task_service_1.searchTasks)(boardId, columnId);
@@ -48,35 +50,33 @@ const createTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     var _a;
     if (!((_a = req.url) === null || _a === void 0 ? void 0 : _a.startsWith(constants_1.TASK_URL)))
         throw new CustomErrors_1.NotFoundError();
-    let data = '';
-    req.on('data', (chunk) => (data += chunk))
-        .on('end', () => __awaiter(void 0, void 0, void 0, function* () {
-        let taskData;
-        if (!req.url)
-            throw new CustomErrors_1.NotFoundError();
-        const urlArr = req.url.split('/');
-        const ids = urlArr.filter(uuid_1.validate);
-        if (ids.length > 2 || ids.length < 1)
-            throw new CustomErrors_1.NotFoundError();
-        const [firstId, secondId] = ids;
-        const columnId = secondId ? secondId : firstId;
-        const boardId = secondId ? firstId : undefined;
-        try {
-            taskData = JSON.parse(data);
-            let newTask;
-            if (boardId) {
-                newTask = yield (0, Task_service_1.createNewTask)(taskData, boardId, columnId);
-            }
-            else {
-                newTask = yield (0, Task_service_1.createNewTaskInColumn)(taskData, columnId);
-            }
-            res.writeHead(200, network_1.commonJSONResponseHeaders);
-            res.end(JSON.stringify(newTask));
+    if (!req.url)
+        throw new CustomErrors_1.NotFoundError();
+    if (!req.bodyData)
+        throw new CustomErrors_1.NotFoundError();
+    let taskData;
+    const urlArr = req.url.split('/');
+    const ids = urlArr.filter(uuid_1.validate);
+    if (ids.length > 2 || ids.length < 1)
+        throw new CustomErrors_1.NotFoundError();
+    const [firstId, secondId] = ids;
+    const columnId = secondId ? secondId : firstId;
+    const boardId = secondId ? firstId : undefined;
+    try {
+        taskData = JSON.parse(req.bodyData);
+        let newTask;
+        if (boardId) {
+            newTask = yield (0, Task_service_1.createNewTask)(taskData, boardId, columnId);
         }
-        catch (err) {
-            (0, HandlerError_1.HandleError)(req, res, err);
+        else {
+            newTask = yield (0, Task_service_1.createNewTaskInColumn)(taskData, columnId);
         }
-    }));
+        res.writeHead(200, network_1.commonJSONResponseHeaders);
+        res.end(JSON.stringify(newTask));
+    }
+    catch (err) {
+        (0, HandlerError_1.HandleError)(req, res, err);
+    }
 });
 exports.createTask = createTask;
 const deleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -93,40 +93,40 @@ const deleteTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.deleteTask = deleteTask;
 const updateTask = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let data = '';
-    req.on('data', (chunk) => (data += chunk));
-    req.on('end', () => __awaiter(void 0, void 0, void 0, function* () {
-        let taskData;
-        try {
-            taskData = JSON.parse(data);
-            const url = req.url;
-            const taskId = url === null || url === void 0 ? void 0 : url.substring(`/${constants_1.TASK_URL}`.length);
-            yield (0, Task_service_1.updateTaskById)(taskId, taskData);
-            res.writeHead(200, network_1.commonJSONResponseHeaders);
-            res.end(JSON.stringify(taskData));
-        }
-        catch (err) {
-            (0, HandlerError_1.HandleError)(req, res, err);
-        }
-    }));
+    if (!req.bodyData)
+        throw new CustomErrors_1.NotFoundError();
+    let data = req.bodyData;
+    try {
+        const taskData = JSON.parse(data);
+        const url = req.url;
+        if (!url)
+            throw new CustomErrors_1.NotFoundError();
+        const taskId = url.substring(`/${constants_1.TASK_URL}`.length);
+        yield (0, Task_service_1.updateTaskById)(taskId, taskData);
+        res.writeHead(200, network_1.commonJSONResponseHeaders);
+        res.end(JSON.stringify(taskData));
+    }
+    catch (err) {
+        (0, HandlerError_1.HandleError)(req, res, err);
+    }
 });
 exports.updateTask = updateTask;
 const moveTaskToColumn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let data = '';
-    req.on('data', (chunk) => (data += chunk));
-    req.on('end', () => __awaiter(void 0, void 0, void 0, function* () {
-        let taskData;
-        try {
-            taskData = JSON.parse(data);
-            const url = req.url;
-            const taskId = url === null || url === void 0 ? void 0 : url.substring(`/${constants_1.TASK_URL_MOVE}`.length);
-            (0, Task_service_1.moveTaskToNewColumn)(taskId, taskData);
-            res.writeHead(200, network_1.commonJSONResponseHeaders);
-            res.end(JSON.stringify(taskData));
-        }
-        catch (err) {
-            (0, HandlerError_1.HandleError)(req, res, err);
-        }
-    }));
+    if (!req.bodyData)
+        throw new CustomErrors_1.NotFoundError();
+    let data = req.bodyData;
+    try {
+        const taskData = JSON.parse(data);
+        const url = req.url;
+        if (!url)
+            throw new CustomErrors_1.NotFoundError();
+        const taskId = url.substring(`/${constants_1.TASK_URL_MOVE}`.length);
+        (0, Task_service_1.moveTaskToNewColumn)(taskId, taskData);
+        res.writeHead(200, network_1.commonJSONResponseHeaders);
+        res.end(JSON.stringify(taskData));
+    }
+    catch (err) {
+        (0, HandlerError_1.HandleError)(req, res, err);
+    }
 });
 exports.moveTaskToColumn = moveTaskToColumn;

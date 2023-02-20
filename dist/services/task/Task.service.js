@@ -66,7 +66,6 @@ const createNewTask = (task, idBoard, idColumn) => {
     return new Promise((resolve) => {
         const board = dataBaseBoards.find(board => board.idBoard === idBoard);
         const column = board === null || board === void 0 ? void 0 : board.columns.find(column => column.idColumn === idColumn);
-        ;
         const idTask = (0, uuid_1.v4)();
         const newTask = Object.assign(Object.assign({}, task), { idTask });
         board === null || board === void 0 ? void 0 : board.columns.forEach(item => {
