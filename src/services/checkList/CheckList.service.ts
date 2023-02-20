@@ -9,9 +9,10 @@ import { getAllB } from '../../utils/constants';
 
 const dataBaseBoards = getAllB();
 
-export const searchCheckbox = (id:string) => {
+export const searchCheckbox = (id: string): ICheckBox => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
-    let correctCheckbox;
+
+    let correctCheckbox: ICheckBox | undefined;
     dataBaseBoards.forEach(board=>{
         board.columns.forEach(column=>{
             column.tasks.forEach(task=>{
@@ -23,14 +24,16 @@ export const searchCheckbox = (id:string) => {
             });
         })
     })
-    console.log(correctCheckbox);
+
     if (!correctCheckbox) throw new NotExistUserError(id);
+
     return correctCheckbox;
 }
 
-export const searchCheckLists = (idTask:string) => {
+export const searchCheckLists = (idTask:string): ICheckBox[] | undefined => {
     if (!validateUUID(idTask)) throw new InvalidUUIDError(idTask);
-    let checkLists;
+
+    let checkLists: ICheckBox[] | undefined;
     dataBaseBoards.forEach(board=>{
         board.columns.forEach(column=>{
             column.tasks.forEach(task=>{
@@ -40,13 +43,14 @@ export const searchCheckLists = (idTask:string) => {
             })
         })
     })
+
     return checkLists;
 }
 
-export const createNewCheckbox = (checkbox: ICreateCheckBox, idTask: string): Promise<any> => {
+export const createNewCheckbox = (checkbox: ICreateCheckBox, idTask: string): Promise<ICheckBox> => {
     return new Promise((resolve) => {
-        const idCheckBox = v4();
-        const newCheckbox = {
+        const idCheckBox: string = v4();
+        const newCheckbox: ICheckBox = {
             ...checkbox,
             idCheckBox,
         }
@@ -65,11 +69,11 @@ export const createNewCheckbox = (checkbox: ICreateCheckBox, idTask: string): Pr
     })
 }
 
-export const deleteCheckboxByID = (id: string) => {
-    let boardIDX:any,
-        columnIDX:any,
-        taskIDX:any,
-        checboxIDX:any;
+export const deleteCheckboxByID = (id: string): void => {
+    let boardIDX: number | undefined;
+    let columnIDX: number | undefined;
+    let taskIDX: number | undefined;
+    let checboxIDX: number | undefined;
 
     dataBaseBoards.forEach((board, boardIndex)=>{
         board.columns.forEach((column, columnIndex)=>{
@@ -86,17 +90,19 @@ export const deleteCheckboxByID = (id: string) => {
         })
     })
 
-    dataBaseBoards[boardIDX].columns[columnIDX].tasks[taskIDX].checkLists.splice(checboxIDX,1);
+    if (boardIDX && columnIDX && taskIDX && checboxIDX) {   
+        dataBaseBoards[boardIDX].columns[columnIDX].tasks[taskIDX].checkLists.splice(checboxIDX, 1);
+    }
 };
 
-export const updateCheckboxById = (id: string, checkbox: ICheckBox) => {
+export const updateCheckboxById = (id: string, checkbox: ICheckBox): void => {
     checboxValidate(checkbox);
     const currentUpdate: ICheckBox = searchCheckbox(id);
 
-    let boardIDX: any,
-        columnIDX: any,
-        taskIDX: any,
-        checboxIDX: any;
+    let boardIDX: number | undefined;
+    let columnIDX: number | undefined;
+    let taskIDX: number | undefined;
+    let checboxIDX: number | undefined;
 
     dataBaseBoards.forEach((board, boardIndex) => {
         board.columns.forEach((column, columnIndex) => {
@@ -113,14 +119,16 @@ export const updateCheckboxById = (id: string, checkbox: ICheckBox) => {
         })
     })
 
-    dataBaseBoards[boardIDX].columns[columnIDX].tasks[taskIDX].checkLists[checboxIDX] = {
-        ...currentUpdate,
-        nameCheckBox: checkbox.nameCheckBox,
-        isChoose: checkbox.isChoose
+    if (boardIDX && columnIDX && taskIDX && checboxIDX) {
+        dataBaseBoards[boardIDX].columns[columnIDX].tasks[taskIDX].checkLists[checboxIDX] = {
+            ...currentUpdate,
+            nameCheckBox: checkbox.nameCheckBox,
+            isChoose: checkbox.isChoose
+        }
     }
 };
 
-export const updateChecklistById = (taskId: string, checklist: ICheckBox[]) => {
+export const updateChecklistById = (taskId: string, checklist: ICheckBox[]): void => {
     dataBaseBoards.forEach(board=>{
         board.columns.forEach(column=>{
             column.tasks.forEach(task=>{
