@@ -4,6 +4,7 @@ import { HandleError } from "../../Errors/HandlerError";
 import { COLUMN_URL, COLUMN_URL_ID, COLUMN_URL_MOVE } from "../../utils/constants";
 import { NotFoundError } from "../../Errors/CustomErrors";
 import { commonJSONResponseHeaders } from "../../utils/network";
+import { IColumnCreate } from "./Column.model";
 
 
 export const getColumnByID: RouterCallbackFunc = async (req, res) => {
@@ -35,11 +36,11 @@ export const createColumn: RouterCallbackFunc = async (req, res) => {
     if (!req.bodyData) throw new NotFoundError();
 
     let data = req.bodyData;
-    let columnData;
-    const boardId = req.url?.substring(`/${COLUMN_URL}`.length);
+    let columnData: IColumnCreate;
+    const boardId: string = req.url?.substring(`/${COLUMN_URL}`.length);
     try {
         columnData = JSON.parse(data);
-        const newColumn = await createNewColumn(columnData,boardId);
+        const newColumn = await createNewColumn(columnData, boardId);
         res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(newColumn));
     } catch (err) {

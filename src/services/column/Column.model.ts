@@ -6,3 +6,5 @@ export interface IColumn {
         descriptionColumn: string;
         tasks: ITask[];
 };
+
+export type IColumnCreate = Pick<IColumn, 'nameColumn' | 'descriptionColumn'>;
