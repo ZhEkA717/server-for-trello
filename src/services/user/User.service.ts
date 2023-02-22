@@ -1,14 +1,32 @@
-import { v4 } from "uuid";
-import { getUserDB } from "../../utils/constants";
-import { IUser, IUserParams, UserEditParams, UserProfile } from "./User.model";
+import { v4 } from 'uuid';
+import { getUserDB } from '../../utils/constants';
+import { IUser, IUserParams, UserEditParams, UserProfile } from './User.model';
 
 const dbUsers = getUserDB();
 
-export const getUser = (email: string): IUser | undefined => {
-    return dbUsers.find((user: IUser) => user.email === email.toLowerCase());
-}
+const getReturnedInfoFromUser = ({
+    id,
+    firstName,
+    lastName,
+    email,
+    accessLevel,
+    gender,
+    registrationDate,
+}: IUser): UserProfile => ({
+    id,
+    firstName,
+    lastName,
+    email,
+    accessLevel,
+    gender,
+    registrationDate,
+});
 
-export const getUserById = (id: string): IUser | undefined => dbUsers.find((user: IUser) => user.id === id);
+export const getUser = (email: string): IUser | undefined =>
+    dbUsers.find((user: IUser) => user.email === email.toLowerCase());
+
+export const getUserById = (id: string): IUser | undefined =>
+    dbUsers.find((user: IUser) => user.id === id);
 
 export const getUserProfileById = (userId: string): UserProfile | undefined => {
     const user = getUserById(userId);
@@ -18,7 +36,7 @@ export const getUserProfileById = (userId: string): UserProfile | undefined => {
     }
 
     return undefined;
-}
+};
 
 export const createUser = (userParams: IUserParams): IUser => {
     const { firstName, lastName, email, password, accessLevel, gender } = userParams;
@@ -31,12 +49,12 @@ export const createUser = (userParams: IUserParams): IUser => {
         password,
         accessLevel,
         gender,
-        registrationDate: new Date()
+        registrationDate: new Date(),
     };
     dbUsers.push(newUser);
 
     return newUser;
-}
+};
 
 export const editUser = (id: string, newUserInfo: UserEditParams): UserProfile | undefined => {
     const user: IUser | undefined = getUserById(id);
@@ -45,25 +63,6 @@ export const editUser = (id: string, newUserInfo: UserEditParams): UserProfile |
         Object.assign(user, newUserInfo);
         return getReturnedInfoFromUser(user);
     }
-    
-    return undefined;
-}
 
-const getReturnedInfoFromUser = ({ id,
-    firstName,
-    lastName,
-    email,
-    accessLevel,
-    gender,
-    registrationDate,
-}: IUser): UserProfile => (
-    {
-        id,
-        firstName,
-        lastName,
-        email,
-        accessLevel,
-        gender,
-        registrationDate,
-    }
-);
+    return undefined;
+};

@@ -3,12 +3,12 @@ import { ServerResponse } from 'http';
 import jwt from 'jsonwebtoken';
 import { envConfig } from '../../common/config';
 import { BadRequestError, NotExistUserError } from '../../Errors/CustomErrors';
-import { HandleError } from "../../Errors/HandlerError";
-import { IRequest } from '../../Server/server.interface';
-import { RouterCallbackFunc } from "../../Server/Server.types";
+import { HandleError } from '../../Errors/HandlerError';
+import { IRequest } from '../../Server/Server.interface';
+import { RouterCallbackFunc } from '../../Server/Server.types';
 import { commonJSONResponseHeaders, sendJSONResponse, sendResponse } from '../../utils/network';
-import { IUser, AccessLevel, UserEditParams, UserProfile } from "./User.model";
-import { createUser, editUser, getUser, getUserProfileById } from "./User.service";
+import { IUser, AccessLevel, UserEditParams, UserProfile } from './User.model';
+import { createUser, editUser, getUser, getUserProfileById } from './User.service';
 
 export interface UserTokenPayload {
     userId: string;
@@ -17,7 +17,7 @@ export interface UserTokenPayload {
     exp: number;
 }
 
-const generateToken = (user: IUser) => (
+const generateToken = (user: IUser) =>
     jwt.sign(
         {
             userId: user.id,
@@ -25,14 +25,15 @@ const generateToken = (user: IUser) => (
         },
         envConfig.TOKEN_KEY,
         {
-            expiresIn: '1h'
+            expiresIn: '1h',
         },
-    )
-)
+    );
 
 export const userRegistration: RouterCallbackFunc = async (req, res) => {
     let data = '';
-    req.on('data', (chunk) => data += chunk);
+    req.on('data', (chunk) => {
+        data += chunk;
+    });
     req.on('end', async () => {
         try {
             const { firstName, lastName, email, password, gender } = JSON.parse(data);
@@ -43,28 +44,28 @@ export const userRegistration: RouterCallbackFunc = async (req, res) => {
                 res.end(STATUS_MESSAGE);
                 return;
             }
-    
+
             const isUserExist: IUser | undefined = getUser(email);
             if (isUserExist) {
                 const STATUS_MESSAGE = 'The User already exist';
-                res.writeHead(409, STATUS_MESSAGE)
+                res.writeHead(409, STATUS_MESSAGE);
                 res.end(STATUS_MESSAGE);
                 return;
             }
-    
+
             const encryptedPassword = await bcrypt.hash(password, 10);
-          
+
             const user: IUser = createUser({
                 firstName,
                 lastName,
                 email,
                 password: encryptedPassword,
                 accessLevel: AccessLevel.User,
-                gender
-            })
-    
+                gender,
+            });
+
             user.token = generateToken(user);
-    
+
             res.writeHead(201, commonJSONResponseHeaders);
             res.end(JSON.stringify(user));
         } catch (err) {
@@ -75,13 +76,15 @@ export const userRegistration: RouterCallbackFunc = async (req, res) => {
 
 export const userLogin: RouterCallbackFunc = async (req: IRequest, res: ServerResponse) => {
     let data = '';
-    req.on('data', (chunk) => data += chunk);
+    req.on('data', (chunk) => {
+        data += chunk;
+    });
     req.on('end', async () => {
         try {
             const { email, password } = JSON.parse(data);
             if (!(email && password)) {
                 const STATUS_MESSAGE = 'All fields are required';
-                sendResponse({ 
+                sendResponse({
                     response: res,
                     statusCode: 400,
                     statusMessage: STATUS_MESSAGE,
@@ -90,15 +93,12 @@ export const userLogin: RouterCallbackFunc = async (req: IRequest, res: ServerRe
             }
 
             const existedUser: IUser | undefined = getUser(email);
-            if (
-                !existedUser ||
-                !(await bcrypt.compare(password, existedUser.password))
-            ) {
+            if (!existedUser || !(await bcrypt.compare(password, existedUser.password))) {
                 sendResponse({
                     response: res,
                     statusCode: 401,
                     statusMessage: 'Invalid credentials',
-                })
+                });
                 return;
             }
 
@@ -108,13 +108,16 @@ export const userLogin: RouterCallbackFunc = async (req: IRequest, res: ServerRe
                 response: res,
                 statusCode: 200,
                 statusMessage: 'ok',
-                payload: { ...existedUser, expiresIn: new Date(new Date().getTime() + 3600 * 1000 ) },
-            })
+                payload: {
+                    ...existedUser,
+                    expiresIn: new Date(new Date().getTime() + 3600 * 1000),
+                },
+            });
         } catch (err) {
             HandleError(req, res, err);
         }
     });
-}
+};
 
 export const updateUser: RouterCallbackFunc = (req: IRequest, res: ServerResponse) => {
     if (!req.bodyData) throw new BadRequestError('field');
@@ -130,11 +133,11 @@ export const updateUser: RouterCallbackFunc = (req: IRequest, res: ServerRespons
             statusCode: 200,
             statusMessage: 'Success',
             payload: editedUser,
-        })
+        });
     } catch (err) {
         HandleError(req, res, err);
     }
-}
+};
 
 export const getUserInfo: RouterCallbackFunc = (req: IRequest, res: ServerResponse) => {
     if (!req.user) throw new BadRequestError('field');
@@ -148,7 +151,7 @@ export const getUserInfo: RouterCallbackFunc = (req: IRequest, res: ServerRespon
             statusCode: 200,
             statusMessage: 'Success',
             payload: userProfile,
-        })
+        });
     } catch (err) {
         HandleError(req, res, err);
     }
