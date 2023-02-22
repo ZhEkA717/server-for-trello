@@ -1,7 +1,7 @@
 export interface ICreateCheckBox {
     nameCheckBox: string;
-    isChoose: boolean
-};
+    isChoose: boolean;
+}
 
 export interface ICheckBox extends ICreateCheckBox {
     idCheckBox: string;
