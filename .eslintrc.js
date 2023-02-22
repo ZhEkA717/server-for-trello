@@ -6,8 +6,8 @@ module.exports = {
     extends: [
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
-        'airbnb',
         'airbnb-base',
+        'airbnb-typescript/base',
         'prettier',
         'plugin:node/recommended',
     ],
@@ -16,6 +16,7 @@ module.exports = {
     parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
+        project: ['./tsconfig.json', './tsconfig.eslint.json'],
     },
     plugins: ['@typescript-eslint', 'prettier'],
     rules: {
@@ -37,5 +38,7 @@ module.exports = {
         'import/extensions': 'off',
         'no-param-reassign': ['error', { props: false }],
         'import/prefer-default-export': 'off',
+        'no-shadow': 'off',
+        '@typescript-eslint/no-shadow': ['error', { ignoreTypeValueShadow: true }],
     },
 };
