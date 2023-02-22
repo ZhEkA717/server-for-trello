@@ -2,7 +2,7 @@ import { RouterCallbackFunc } from '../Server/Server.types';
 import { BaseError, InvalidToken, NotFoundError, ServerInternalError } from './CustomErrors';
 import { ErrorMessages } from './Error.messages';
 
-const HandleError: RouterCallbackFunc = (req, res, err) => {
+const HandleError: RouterCallbackFunc = (_req, res, err) => {
     if (err instanceof BaseError) {
         res.statusCode = err.code;
         res.end(err.message);
