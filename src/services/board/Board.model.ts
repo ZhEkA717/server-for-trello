@@ -1,4 +1,4 @@
-import { IColumn } from "../column/Column.model";
+import { IColumn } from '../column/Column.model';
 
 export interface IBoard {
     idBoard: string;
@@ -8,8 +8,6 @@ export interface IBoard {
     isChosen: boolean;
     columns: IColumn[];
     ownerId: string;
-};
+}
 
-export type CreateBoard = Pick<IBoard, 
-    'nameBoard' | 'dateBoard' | 'descriptionBoard' | 'isChosen'
->
+export type CreateBoard = Pick<IBoard, 'nameBoard' | 'dateBoard' | 'descriptionBoard' | 'isChosen'>;
