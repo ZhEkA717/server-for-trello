@@ -17,12 +17,13 @@ export enum CheckboxValidationError {
     nameCheckBox = 'name of task',
 }
 
-export class BaseError {
+export class BaseError extends Error {
     message: string;
 
     code: number;
 
     constructor(message: string, code = 500) {
+        super(message);
         this.message = message;
         this.code = code;
     }
