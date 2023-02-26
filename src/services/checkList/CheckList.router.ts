@@ -9,16 +9,22 @@ import {
 import { RouterCallbackFunc } from '../../Server/Server.types';
 import { HandleError } from '../../Errors/HandlerError';
 import { CHECKBOX_URL, CHECKBOX_URL_ID, CHECKLIST_URL } from '../../utils/constants';
-import { NotFoundError } from '../../Errors/CustomErrors';
+import { NotFoundError, RequiredParametersNotProvided } from '../../Errors/CustomErrors';
 import { commonJSONResponseHeaders } from '../../utils/network';
+import { ICheckBox, ICreateCheckBox } from './CheckList.model';
 
 export const getCheckBoxByID: RouterCallbackFunc = async (req, res) => {
     try {
         const { url } = req;
-        const checkboxId = url?.substring(`/${CHECKBOX_URL_ID}`.length);
-        const currentCheckbox = searchCheckbox(checkboxId as string);
-        res.writeHead(200, commonJSONResponseHeaders);
-        res.end(JSON.stringify(currentCheckbox));
+        const checkboxId: string | undefined = url?.substring(`/${CHECKBOX_URL_ID}`.length);
+
+        if (checkboxId) {
+            const currentCheckbox = searchCheckbox(checkboxId);
+            res.writeHead(200, commonJSONResponseHeaders);
+            res.end(JSON.stringify(currentCheckbox));
+        } else {
+            throw new RequiredParametersNotProvided('Checkbox ID not provided');
+        }
     } catch (err) {
         HandleError(req, res, err);
     }
@@ -27,10 +33,15 @@ export const getCheckBoxByID: RouterCallbackFunc = async (req, res) => {
 export const getAllCheckBoxesByIDS: RouterCallbackFunc = async (req, res) => {
     try {
         const { url } = req;
-        const taskId = url?.substring(`/${CHECKBOX_URL}`.length);
-        const checkLists = searchCheckLists(taskId as string);
-        res.writeHead(200, commonJSONResponseHeaders);
-        res.end(JSON.stringify(checkLists));
+        const taskId: string | undefined = url?.substring(`/${CHECKBOX_URL}`.length);
+
+        if (taskId) {
+            const checkLists = searchCheckLists(taskId);
+            res.writeHead(200, commonJSONResponseHeaders);
+            res.end(JSON.stringify(checkLists));
+        } else {
+            throw new RequiredParametersNotProvided('Task ID not provided');
+        }
     } catch (err) {
         HandleError(req, res, err);
     }
@@ -40,14 +51,17 @@ export const createCheckbox: RouterCallbackFunc = async (req, res) => {
     if (!req.url?.startsWith(CHECKBOX_URL)) throw new NotFoundError();
     if (!req.bodyData) throw new NotFoundError();
 
-    const data = req.bodyData;
-    let checkboxData;
     const taskId = req.url?.substring(`/${CHECKBOX_URL}`.length);
+
     try {
-        checkboxData = JSON.parse(data);
-        const newCheckbox = await createNewCheckbox(checkboxData, taskId);
-        res.writeHead(200, commonJSONResponseHeaders);
-        res.end(JSON.stringify(newCheckbox));
+        if (taskId) {
+            const checkboxData: ICreateCheckBox = JSON.parse(req.bodyData);
+            const newCheckbox = await createNewCheckbox(checkboxData, taskId);
+            res.writeHead(200, commonJSONResponseHeaders);
+            res.end(JSON.stringify(newCheckbox));
+        } else {
+            throw new RequiredParametersNotProvided('Task ID not provided');
+        }
     } catch (err) {
         HandleError(req, res, err);
     }
@@ -56,28 +70,35 @@ export const createCheckbox: RouterCallbackFunc = async (req, res) => {
 export const deleteCheckbox: RouterCallbackFunc = async (req, res) => {
     try {
         const { url } = req;
-        const checkboxId = url?.substring(`/${CHECKBOX_URL}`.length);
-        await deleteCheckboxByID(checkboxId as string);
-        res.writeHead(204, commonJSONResponseHeaders);
-        res.end();
+        const checkboxId: string | undefined = url?.substring(`/${CHECKBOX_URL}`.length);
+
+        if (checkboxId) {
+            await deleteCheckboxByID(checkboxId);
+            res.writeHead(204, commonJSONResponseHeaders);
+            res.end();
+        } else {
+            throw new RequiredParametersNotProvided('Checkbox ID not provided');
+        }
     } catch (err) {
         HandleError(req, res, err);
     }
 };
 
-export const updateCheckbox: RouterCallbackFunc = async (req, res) => {
+export const updateCheckbox: RouterCallbackFunc = async (req: IRequest, res: ServerResponse) => {
     if (!req.bodyData) throw new NotFoundError();
 
-    const data = req.bodyData;
-    let checkboxData;
-
     try {
-        checkboxData = JSON.parse(data);
+        const checkboxData: ICheckBox = JSON.parse(req.bodyData);
         const { url } = req;
         const checkboxId = url?.substring(`/${CHECKBOX_URL}`.length);
-        await updateCheckboxById(checkboxId as string, checkboxData);
-        res.writeHead(200, commonJSONResponseHeaders);
-        res.end(JSON.stringify(checkboxData));
+
+        if (checkboxId) {
+            await updateCheckboxById(checkboxId, checkboxData);
+            res.writeHead(200, commonJSONResponseHeaders);
+            res.end(JSON.stringify(checkboxData));
+        } else {
+            throw new RequiredParametersNotProvided('Checkbox ID not provided');
+        }
     } catch (err) {
         HandleError(req, res, err);
     }
@@ -86,16 +107,18 @@ export const updateCheckbox: RouterCallbackFunc = async (req, res) => {
 export const updateChecklist: RouterCallbackFunc = async (req, res) => {
     if (!req.bodyData) throw new NotFoundError();
 
-    const data = req.bodyData;
-    let checklistData;
-
     try {
-        checklistData = JSON.parse(data);
+        const checklistData: ICheckBox[] = JSON.parse(req.bodyData);
         const { url } = req;
         const taskId = url?.substring(`/${CHECKLIST_URL}`.length);
-        await updateChecklistById(taskId as string, checklistData);
-        res.writeHead(200, commonJSONResponseHeaders);
-        res.end(JSON.stringify(checklistData));
+
+        if (taskId) {
+            await updateChecklistById(taskId, checklistData);
+            res.writeHead(200, commonJSONResponseHeaders);
+            res.end(JSON.stringify(checklistData));
+        } else {
+            throw new RequiredParametersNotProvided('Task ID not provided');
+        }
     } catch (err) {
         HandleError(req, res, err);
     }

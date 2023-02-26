@@ -1,10 +1,11 @@
 import { v4, validate as validateUUID } from 'uuid';
 import { ICreateCheckBox, ICheckBox } from './CheckList.model';
-import { InvalidUUIDError, NotExistUserError } from '../../Errors/CustomErrors';
+import { ElementTypes, InvalidUUIDError, NotExistError } from '../../Errors/CustomErrors';
 import { checboxValidate } from '../../utils/checkbox.validate';
 import { getAllB } from '../../utils/constants';
+import { IBoard } from '../board/Board.model';
 
-const dataBaseBoards = getAllB();
+const dataBaseBoards: IBoard[] = getAllB();
 
 export const searchCheckbox = (id: string): ICheckBox => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
@@ -22,12 +23,12 @@ export const searchCheckbox = (id: string): ICheckBox => {
         });
     });
 
-    if (!correctCheckbox) throw new NotExistUserError(id);
+    if (!correctCheckbox) throw new NotExistError(ElementTypes.CHECKBOX, id);
 
     return correctCheckbox;
 };
 
-export const searchCheckLists = (idTask: string): ICheckBox[] | undefined => {
+export const searchCheckLists = (idTask: string): ICheckBox[] => {
     if (!validateUUID(idTask)) throw new InvalidUUIDError(idTask);
 
     let checkLists: ICheckBox[] | undefined;
@@ -40,6 +41,8 @@ export const searchCheckLists = (idTask: string): ICheckBox[] | undefined => {
             });
         });
     });
+
+    if (!checkLists) throw new NotExistError(ElementTypes.CHECKLIST, idTask);
 
     return checkLists;
 };
