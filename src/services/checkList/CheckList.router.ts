@@ -1,3 +1,4 @@
+import { ServerResponse } from 'http';
 import {
     searchCheckbox,
     searchCheckLists,
@@ -12,6 +13,7 @@ import { CHECKBOX_URL, CHECKBOX_URL_ID, CHECKLIST_URL } from '../../utils/consta
 import { NotFoundError, RequiredParametersNotProvided } from '../../Errors/CustomErrors';
 import { commonJSONResponseHeaders } from '../../utils/network';
 import { ICheckBox, ICreateCheckBox } from './CheckList.model';
+import { IRequest } from '../../Server/Server.interface';
 
 export const getCheckBoxByID: RouterCallbackFunc = async (req, res) => {
     try {
