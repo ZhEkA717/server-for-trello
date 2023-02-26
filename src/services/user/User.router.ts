@@ -7,7 +7,14 @@ import { HandleError } from '../../Errors/HandlerError';
 import { IRequest } from '../../Server/Server.interface';
 import { RouterCallbackFunc } from '../../Server/Server.types';
 import { commonJSONResponseHeaders, sendJSONResponse, sendResponse } from '../../utils/network';
-import { IUser, AccessLevel, UserEditParams, UserProfile } from './User.model';
+import {
+    IUser,
+    AccessLevel,
+    UserEditParams,
+    UserProfile,
+    UserRegistration,
+    UserLogin,
+} from './User.model';
 import { createUser, editUser, getUser, getUserProfileById } from './User.service';
 
 export interface UserTokenPayload {
@@ -17,7 +24,7 @@ export interface UserTokenPayload {
     exp: number;
 }
 
-const generateToken = (user: IUser) =>
+const generateToken = (user: IUser): string =>
     jwt.sign(
         {
             userId: user.id,
@@ -29,14 +36,15 @@ const generateToken = (user: IUser) =>
         },
     );
 
-export const userRegistration: RouterCallbackFunc = async (req, res) => {
+export const userRegistration: RouterCallbackFunc = async (req, res): Promise<void> => {
     let data = '';
     req.on('data', (chunk) => {
         data += chunk;
     });
     req.on('end', async () => {
         try {
-            const { firstName, lastName, email, password, gender } = JSON.parse(data);
+            const { firstName, lastName, email, password, gender }: UserRegistration =
+                JSON.parse(data);
 
             if (!(email && password && firstName && lastName && gender)) {
                 const STATUS_MESSAGE = 'All fields are required';
@@ -53,7 +61,7 @@ export const userRegistration: RouterCallbackFunc = async (req, res) => {
                 return;
             }
 
-            const encryptedPassword = await bcrypt.hash(password, 10);
+            const encryptedPassword: string = await bcrypt.hash(password, 10);
 
             const user: IUser = createUser({
                 firstName,
@@ -74,14 +82,17 @@ export const userRegistration: RouterCallbackFunc = async (req, res) => {
     });
 };
 
-export const userLogin: RouterCallbackFunc = async (req: IRequest, res: ServerResponse) => {
+export const userLogin: RouterCallbackFunc = async (
+    req: IRequest,
+    res: ServerResponse,
+): Promise<void> => {
     let data = '';
     req.on('data', (chunk) => {
         data += chunk;
     });
     req.on('end', async () => {
         try {
-            const { email, password } = JSON.parse(data);
+            const { email, password }: UserLogin = JSON.parse(data);
             if (!(email && password)) {
                 const STATUS_MESSAGE = 'All fields are required';
                 sendResponse({
@@ -119,12 +130,12 @@ export const userLogin: RouterCallbackFunc = async (req: IRequest, res: ServerRe
     });
 };
 
-export const updateUser: RouterCallbackFunc = (req: IRequest, res: ServerResponse) => {
+export const updateUser: RouterCallbackFunc = (req: IRequest, res: ServerResponse): void => {
     if (!req.bodyData) throw new BadRequestError('field');
     if (!req.user) throw new BadRequestError('field');
 
     try {
-        const boardData = JSON.parse(req.bodyData) as UserEditParams;
+        const boardData: UserEditParams = JSON.parse(req.bodyData);
         const editedUser: UserProfile | undefined = editUser(req.user.id, boardData);
         if (!editedUser) throw new NotExistUserError(req.user.id);
 
@@ -139,7 +150,7 @@ export const updateUser: RouterCallbackFunc = (req: IRequest, res: ServerRespons
     }
 };
 
-export const getUserInfo: RouterCallbackFunc = (req: IRequest, res: ServerResponse) => {
+export const getUserInfo: RouterCallbackFunc = (req: IRequest, res: ServerResponse): void => {
     if (!req.user) throw new BadRequestError('field');
 
     try {
