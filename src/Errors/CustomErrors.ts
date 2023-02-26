@@ -8,6 +8,14 @@ enum ErrorCodes {
     'SERVER_ERROR' = 500,
 }
 
+export enum ElementTypes {
+    'BOARD' = 'Board',
+    'COLUMN' = 'Column',
+    'TASK' = 'Task',
+    'CHECKBOX' = 'Checkbox',
+    'CHECKLIST' = 'Checklist for task',
+}
+
 export enum BoardValidationError {
     nameBoard = 'name of board',
     descriptionBoard = 'description of board',
@@ -79,6 +87,12 @@ export class NotExistUserError extends BaseError {
 export class NotExistBoardError extends BaseError {
     constructor(id: string) {
         super(`Board with BoardID = ${id} is not found`, ErrorCodes.NOT_FOUND);
+    }
+}
+
+export class NotExistError extends BaseError {
+    constructor(type: ElementTypes, id: string) {
+        super(`${type} with ID = ${id} is not found`, ErrorCodes.NOT_FOUND);
     }
 }
 
