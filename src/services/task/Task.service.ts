@@ -2,15 +2,15 @@ import { v4, validate as validateUUID } from 'uuid';
 import { IBoard } from '../board/Board.model';
 import { IColumn, NewPlaceColumn } from '../column/Column.model';
 import { ICreateTask, ITask } from './Task.model';
-import { InvalidUUIDError, NotExistUserError } from '../../Errors/CustomErrors';
+import { InvalidUUIDError, NotExistUserError, NotFoundError } from '../../Errors/CustomErrors';
 import { taskValidate } from '../../utils/task.validate';
 import { getAllB } from '../../utils/constants';
 import { moveTaskInColumn } from '../column/Column.service';
 import { searchBoardByColumnID } from '../board/Board.service';
 
-const dataBaseBoards = getAllB();
+const dataBaseBoards: IBoard[] = getAllB();
 
-export const searchTask = (id: string) => {
+export const searchTask = (id: string): ITask => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
 
     let correctTask: ITask | undefined;
@@ -51,6 +51,7 @@ const searchBoardWhichExistTask = (id: string): IBoard => {
 
     return correctBoard;
 };
+
 const searchColumnWhichExistTask = (id: string, indexBoard: number): IColumn => {
     if (!validateUUID(id)) throw new InvalidUUIDError(id);
 
@@ -123,21 +124,33 @@ export const deleteTaskByIDS = (id: string): void => {
     const existingTask: ITask = searchTask(id);
     const existingBoard: IBoard = searchBoardWhichExistTask(id);
     const indexBoard: number = dataBaseBoards.indexOf(existingBoard);
+    if (indexBoard === -1) throw new NotFoundError('Board not found');
+
     const existingColumn: IColumn = searchColumnWhichExistTask(id, indexBoard);
     const indexColumn: number = existingBoard.columns.indexOf(existingColumn);
+    if (indexColumn === -1) throw new NotFoundError('Column not found');
+
     const indexTask: number = existingColumn.tasks.indexOf(existingTask);
+    if (indexTask === -1) throw new NotFoundError('Task not found');
 
     dataBaseBoards[indexBoard].columns[indexColumn].tasks.splice(indexTask, 1);
 };
 
 export const updateTaskById = (id: string, task: ITask): void => {
     taskValidate(task);
+
     const existingTask: ITask = searchTask(id);
     const existingBoard: IBoard = searchBoardWhichExistTask(id);
     const indexBoard: number = dataBaseBoards.indexOf(existingBoard);
+    if (indexBoard === -1) throw new NotFoundError('Board not found');
+
     const existingColumn: IColumn = searchColumnWhichExistTask(id, indexBoard);
     const indexColumn: number = existingBoard.columns.indexOf(existingColumn);
+    if (indexColumn === -1) throw new NotFoundError('Column not found');
+
     const indexTask: number = existingColumn.tasks.indexOf(existingTask);
+    if (indexTask === -1) throw new NotFoundError('Task not found');
+
     const taskNeedUpdate: ITask = dataBaseBoards[indexBoard].columns[indexColumn].tasks[indexTask];
 
     dataBaseBoards[indexBoard].columns[indexColumn].tasks[indexTask] = {
