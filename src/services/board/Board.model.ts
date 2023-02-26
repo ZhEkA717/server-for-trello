@@ -11,3 +11,8 @@ export interface IBoard {
 }
 
 export type CreateBoard = Pick<IBoard, 'nameBoard' | 'dateBoard' | 'descriptionBoard' | 'isChosen'>;
+
+export type NewColumnPlace = {
+    toBoardId: string;
+    newPosition: number;
+};
