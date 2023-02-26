@@ -3,4 +3,5 @@ export const enum ErrorMessages {
     NOT_FOUND = 'Route Not Found',
     SERVER_INTERNAL = 'Server Internal Error',
     INVALID_TOKEN = 'Invalid token',
+    PARAMETERS_NOT_PROVIDED = 'Required parameters not provided',
 }
