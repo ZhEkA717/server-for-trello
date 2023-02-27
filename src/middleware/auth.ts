@@ -15,7 +15,7 @@ const getUserFromDecodedToken = (jwtToken: UserTokenPayload): IUser | undefined 
     getUserById(jwtToken.userId);
 
 export const auth = async (req: IRequest, res: ServerResponse, next: connect.NextFunction) => {
-    if (req.method === 'OPTIONS') next();
+    if (req.method === 'OPTIONS') return next();
     let data = '';
 
     req.on('data', (chunk) => {
@@ -25,23 +25,23 @@ export const auth = async (req: IRequest, res: ServerResponse, next: connect.Nex
         const token = req.headers['x-access-token'] as string;
 
         if (!token) {
-            sendResponse({
+            return sendResponse({
                 response: res,
                 statusCode: 403,
                 statusMessage: 'A token is required',
             });
-        } else {
-            try {
-                jwt.verify(token, envConfig.TOKEN_KEY, (err, decoded) => {
-                    if (err) throw new InvalidToken(err.message);
+        }
 
-                    req.user = getUserFromDecodedToken(decoded as UserTokenPayload);
-                    req.bodyData = data;
-                    return next();
-                });
-            } catch (err) {
-                HandleError(req, res, err);
-            }
+        try {
+            jwt.verify(token, envConfig.TOKEN_KEY, (err, decoded) => {
+                if (err) throw new InvalidToken(err.message);
+
+                req.user = getUserFromDecodedToken(decoded as UserTokenPayload);
+                req.bodyData = data;
+                return next();
+            });
+        } catch (err) {
+            HandleError(req, res, err);
         }
     });
 };

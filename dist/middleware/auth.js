@@ -22,7 +22,7 @@ const User_service_1 = require("../services/user/User.service");
 const getUserFromDecodedToken = (jwtToken) => (0, User_service_1.getUserById)(jwtToken.userId);
 const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (req.method === 'OPTIONS')
-        next();
+        return next();
     let data = '';
     req.on('data', (chunk) => {
         data += chunk;
@@ -30,25 +30,23 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
     req.on('end', () => {
         const token = req.headers['x-access-token'];
         if (!token) {
-            (0, network_1.sendResponse)({
+            return (0, network_1.sendResponse)({
                 response: res,
                 statusCode: 403,
                 statusMessage: 'A token is required',
             });
         }
-        else {
-            try {
-                jsonwebtoken_1.default.verify(token, config_1.envConfig.TOKEN_KEY, (err, decoded) => {
-                    if (err)
-                        throw new CustomErrors_1.InvalidToken(err.message);
-                    req.user = getUserFromDecodedToken(decoded);
-                    req.bodyData = data;
-                    return next();
-                });
-            }
-            catch (err) {
-                (0, HandlerError_1.HandleError)(req, res, err);
-            }
+        try {
+            jsonwebtoken_1.default.verify(token, config_1.envConfig.TOKEN_KEY, (err, decoded) => {
+                if (err)
+                    throw new CustomErrors_1.InvalidToken(err.message);
+                req.user = getUserFromDecodedToken(decoded);
+                req.bodyData = data;
+                return next();
+            });
+        }
+        catch (err) {
+            (0, HandlerError_1.HandleError)(req, res, err);
         }
     });
 });
