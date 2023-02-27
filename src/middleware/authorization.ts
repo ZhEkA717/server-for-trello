@@ -1,37 +1,34 @@
 import connect from 'connect';
-import { ServerResponse } from "http";
-import { IRequest } from "../Server/server.interface";
+import { ServerResponse } from 'http';
+import { IRequest } from '../Server/Server.interface';
 import { AccessLevel } from '../services/user/User.model';
 import { sendResponse } from '../utils/network';
-
-export const accessWithLevel = (accessLevel: AccessLevel[]) => (
-    req: IRequest,
-    res: ServerResponse,
-    next: connect.NextFunction
-) => (
-    hasAccess(req, res, next, accessLevel)
-);
 
 const hasAccess = (
     req: IRequest,
     res: ServerResponse,
     next: connect.NextFunction,
-    requireAccessLevel: AccessLevel[]
+    requireAccessLevel: AccessLevel[],
 ): void => {
-    let hasAccess = false;
+    let access = false;
     if (req.user) {
-        hasAccess = requireAccessLevel.includes(req.user.accessLevel);
+        access = requireAccessLevel.includes(req.user.accessLevel);
     } else {
-        hasAccess = requireAccessLevel.includes(AccessLevel.Anonymous);
+        access = requireAccessLevel.includes(AccessLevel.Anonymous);
     }
 
-    if (hasAccess) {
+    if (access) {
         next();
     } else {
         sendResponse({
             response: res,
             statusCode: 401,
-            statusMessage: "Access denied",
-        })
+            statusMessage: 'Access denied',
+        });
     }
-}
+};
+
+export const accessWithLevel =
+    (accessLevel: AccessLevel[]) =>
+    (req: IRequest, res: ServerResponse, next: connect.NextFunction) =>
+        hasAccess(req, res, next, accessLevel);

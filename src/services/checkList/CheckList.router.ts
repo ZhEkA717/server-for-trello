@@ -1,13 +1,20 @@
-import { searchCheckbox, searchCheckLists, createNewCheckbox, deleteCheckboxByID, updateCheckboxById, updateChecklistById } from "./CheckList.service";
-import { RouterCallbackFunc } from "../../Server/Server.types";
-import { HandleError } from "../../Errors/HandlerError";
-import { CHECKBOX_URL, CHECKBOX_URL_ID, CHECKLIST_URL } from "../../utils/constants";
-import { NotFoundError } from "../../Errors/CustomErrors";
-import { commonJSONResponseHeaders } from "../../utils/network";
+import {
+    searchCheckbox,
+    searchCheckLists,
+    createNewCheckbox,
+    deleteCheckboxByID,
+    updateCheckboxById,
+    updateChecklistById,
+} from './CheckList.service';
+import { RouterCallbackFunc } from '../../Server/Server.types';
+import { HandleError } from '../../Errors/HandlerError';
+import { CHECKBOX_URL, CHECKBOX_URL_ID, CHECKLIST_URL } from '../../utils/constants';
+import { NotFoundError } from '../../Errors/CustomErrors';
+import { commonJSONResponseHeaders } from '../../utils/network';
 
 export const getCheckBoxByID: RouterCallbackFunc = async (req, res) => {
     try {
-        const url = req.url;
+        const { url } = req;
         const checkboxId = url?.substring(`/${CHECKBOX_URL_ID}`.length);
         const currentCheckbox = searchCheckbox(checkboxId as string);
         res.writeHead(200, commonJSONResponseHeaders);
@@ -15,40 +22,40 @@ export const getCheckBoxByID: RouterCallbackFunc = async (req, res) => {
     } catch (err) {
         HandleError(req, res, err);
     }
-}
+};
 
 export const getAllCheckBoxesByIDS: RouterCallbackFunc = async (req, res) => {
-        try {
-            const url = req.url;
-            const taskId = url?.substring(`/${CHECKBOX_URL}`.length);
-            const checkLists = searchCheckLists(taskId as string);
-            res.writeHead(200, commonJSONResponseHeaders);
-            res.end(JSON.stringify(checkLists));
-        } catch (err) {
-            HandleError(req, res, err);
-        }
+    try {
+        const { url } = req;
+        const taskId = url?.substring(`/${CHECKBOX_URL}`.length);
+        const checkLists = searchCheckLists(taskId as string);
+        res.writeHead(200, commonJSONResponseHeaders);
+        res.end(JSON.stringify(checkLists));
+    } catch (err) {
+        HandleError(req, res, err);
+    }
 };
 
 export const createCheckbox: RouterCallbackFunc = async (req, res) => {
     if (!req.url?.startsWith(CHECKBOX_URL)) throw new NotFoundError();
     if (!req.bodyData) throw new NotFoundError();
 
-    let data = req.bodyData;
+    const data = req.bodyData;
     let checkboxData;
     const taskId = req.url?.substring(`/${CHECKBOX_URL}`.length);
     try {
         checkboxData = JSON.parse(data);
-        const newCheckbox = await createNewCheckbox(checkboxData,taskId);
+        const newCheckbox = await createNewCheckbox(checkboxData, taskId);
         res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(newCheckbox));
     } catch (err) {
         HandleError(req, res, err);
     }
-}
+};
 
 export const deleteCheckbox: RouterCallbackFunc = async (req, res) => {
     try {
-        const url = req.url;
+        const { url } = req;
         const checkboxId = url?.substring(`/${CHECKBOX_URL}`.length);
         await deleteCheckboxByID(checkboxId as string);
         res.writeHead(204, commonJSONResponseHeaders);
@@ -56,17 +63,17 @@ export const deleteCheckbox: RouterCallbackFunc = async (req, res) => {
     } catch (err) {
         HandleError(req, res, err);
     }
-}
+};
 
 export const updateCheckbox: RouterCallbackFunc = async (req, res) => {
     if (!req.bodyData) throw new NotFoundError();
 
-    let data = req.bodyData;
+    const data = req.bodyData;
     let checkboxData;
 
     try {
         checkboxData = JSON.parse(data);
-        const url = req.url;
+        const { url } = req;
         const checkboxId = url?.substring(`/${CHECKBOX_URL}`.length);
         await updateCheckboxById(checkboxId as string, checkboxData);
         res.writeHead(200, commonJSONResponseHeaders);
@@ -74,17 +81,17 @@ export const updateCheckbox: RouterCallbackFunc = async (req, res) => {
     } catch (err) {
         HandleError(req, res, err);
     }
-}
+};
 
 export const updateChecklist: RouterCallbackFunc = async (req, res) => {
     if (!req.bodyData) throw new NotFoundError();
 
-    let data = req.bodyData;
+    const data = req.bodyData;
     let checklistData;
 
     try {
         checklistData = JSON.parse(data);
-        const url = req.url;
+        const { url } = req;
         const taskId = url?.substring(`/${CHECKLIST_URL}`.length);
         await updateChecklistById(taskId as string, checklistData);
         res.writeHead(200, commonJSONResponseHeaders);
@@ -92,4 +99,4 @@ export const updateChecklist: RouterCallbackFunc = async (req, res) => {
     } catch (err) {
         HandleError(req, res, err);
     }
-}
+};
