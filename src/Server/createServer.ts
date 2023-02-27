@@ -1,4 +1,5 @@
 import connect from 'connect';
+import { Sequelize } from 'sequelize';
 import { envConfig } from '../common/config';
 import { MethodType } from './Server.types';
 import { NotFoundError } from '../Errors/CustomErrors';
@@ -53,8 +54,6 @@ import {
 import { preflightRequest } from '../utils/network';
 import { getUserInfo, updateUser, userLogin, userRegistration } from '../services/user/User.router';
 import { auth } from '../middleware/auth';
-import { accessWithLevel } from '../middleware/authorization';
-import { AccessLevel } from '../services/user/User.model';
 
 const SERVER_BOARDS = {
     GET: getBoardByID,
@@ -92,17 +91,26 @@ const SERVER_USER = {
 const app = connect();
 
 const addAuthorizationAndAuthentication = () => {
-    const allAuthUsers: AccessLevel[] = [AccessLevel.User, AccessLevel.Admin];
     const urls = [BOARD_URL, COLUMN_URL, TASK_URL, CHECKBOX_URL, CHECKLIST_URL, USER_URL];
 
     urls.forEach((url) => {
         app.use(url, auth);
-        // app.use(url, accessWithLevel(allAuthUsers));
     });
+};
+
+const connectToDB = async () => {
+    const sequelize = new Sequelize();
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
 };
 
 export const createServer = (port = envConfig.SERVER_PORT) => {
     addAuthorizationAndAuthentication();
+    connectToDB();
 
     app.use(async (req, res) => {
         const method = req.method as MethodType;
