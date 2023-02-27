@@ -11,7 +11,7 @@ import {
 import { RouterCallbackFunc } from '../../Server/Server.types';
 import { HandleError } from '../../Errors/HandlerError';
 import { TASK_URL, TASK_URL_ID, TASK_URL_MOVE } from '../../utils/constants';
-import { NotFoundError } from '../../Errors/CustomErrors';
+import { NotFoundError, RequiredParametersNotProvided } from '../../Errors/CustomErrors';
 import { commonJSONResponseHeaders } from '../../utils/network';
 import { ICreateTask, ITask } from './Task.model';
 import { NewPlaceColumn } from '../column/Column.model';
@@ -19,7 +19,10 @@ import { NewPlaceColumn } from '../column/Column.model';
 export const getTaskByID: RouterCallbackFunc = async (req, res) => {
     try {
         const { url } = req;
-        const taskId = url?.substring(`/${TASK_URL_ID}`.length);
+        const taskId: string | undefined = url?.substring(`/${TASK_URL_ID}`.length);
+
+        if (!taskId) throw new RequiredParametersNotProvided('Task ID not provided');
+
         const currentTask = searchTask(taskId as string);
         res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(currentTask));
@@ -33,11 +36,14 @@ export const getAllTasksByIDS: RouterCallbackFunc = async (req, res) => {
         const { url } = req;
         const urlArr: string[] | undefined = url?.split('/');
 
-        if (!urlArr) throw new NotFoundError();
+        if (!urlArr || urlArr.length > 2 || urlArr.length < 1)
+            throw new RequiredParametersNotProvided('Required IDs not provided');
 
         const boardId: string = urlArr[urlArr.length - 2];
         const columnId: string = urlArr[urlArr.length - 1];
         const tasks: ITask[] | undefined = searchTasks(boardId, columnId);
+
+        if (!tasks) throw new NotFoundError('Tasks not found');
 
         res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(tasks));
@@ -47,24 +53,22 @@ export const getAllTasksByIDS: RouterCallbackFunc = async (req, res) => {
 };
 
 export const createTask: RouterCallbackFunc = async (req, res) => {
-    if (!req.url?.startsWith(TASK_URL)) throw new NotFoundError();
-    if (!req.url) throw new NotFoundError();
-    if (!req.bodyData) throw new NotFoundError();
-
-    let taskData: ICreateTask;
-
-    const urlArr: string[] = req.url.split('/');
-    const ids: string[] = urlArr.filter(validateUUID);
-
-    if (ids.length > 2 || ids.length < 1) throw new NotFoundError();
-
-    const [firstId, secondId] = ids;
-
-    const columnId = secondId || firstId;
-    const boardId = secondId ? firstId : undefined;
-
     try {
-        taskData = JSON.parse(req.bodyData);
+        if (!req.url?.startsWith(TASK_URL)) throw new NotFoundError();
+        if (!req.url) throw new NotFoundError();
+        if (!req.bodyData) throw new NotFoundError();
+
+        const urlArr: string[] = req.url.split('/');
+        const ids: string[] = urlArr.filter(validateUUID);
+
+        if (ids.length > 2 || ids.length < 1) throw new NotFoundError();
+
+        const [firstId, secondId] = ids;
+
+        const columnId = secondId || firstId;
+        const boardId = secondId ? firstId : undefined;
+
+        const taskData: ICreateTask = JSON.parse(req.bodyData);
 
         let newTask: ITask;
         if (boardId) {
@@ -83,8 +87,11 @@ export const createTask: RouterCallbackFunc = async (req, res) => {
 export const deleteTask: RouterCallbackFunc = async (req, res) => {
     try {
         const { url } = req;
-        const taskId = url?.substring(`/${TASK_URL}`.length);
-        await deleteTaskByIDS(taskId as string);
+
+        const taskId: string | undefined = url?.substring(`/${TASK_URL}`.length);
+        if (!taskId) throw new RequiredParametersNotProvided('Task ID not provided');
+
+        await deleteTaskByIDS(taskId);
         res.writeHead(204, commonJSONResponseHeaders);
         res.end();
     } catch (err) {
@@ -93,15 +100,16 @@ export const deleteTask: RouterCallbackFunc = async (req, res) => {
 };
 
 export const updateTask: RouterCallbackFunc = async (req, res) => {
-    if (!req.bodyData) throw new NotFoundError();
-    const data = req.bodyData;
-
     try {
-        const taskData: ITask = JSON.parse(data);
-        const { url } = req;
-        if (!url) throw new NotFoundError();
+        if (!req.bodyData) throw new NotFoundError();
+        const data = req.bodyData;
 
-        const taskId: string = url.substring(`/${TASK_URL}`.length);
+        const { url } = req;
+
+        const taskId: string | undefined = url?.substring(`/${TASK_URL}`.length);
+        if (!taskId) throw new RequiredParametersNotProvided('Task ID not provided');
+
+        const taskData: ITask = JSON.parse(data);
         await updateTaskById(taskId, taskData);
 
         res.writeHead(200, commonJSONResponseHeaders);
@@ -112,16 +120,16 @@ export const updateTask: RouterCallbackFunc = async (req, res) => {
 };
 
 export const moveTaskToColumn: RouterCallbackFunc = async (req, res) => {
-    if (!req.bodyData) throw new NotFoundError();
-    const data = req.bodyData;
-
     try {
-        const taskData: NewPlaceColumn = JSON.parse(data);
+        if (!req.bodyData) throw new NotFoundError();
+        const data = req.bodyData;
+
         const { url } = req;
-        if (!url) throw new NotFoundError();
 
-        const taskId = url.substring(`/${TASK_URL_MOVE}`.length);
+        const taskId: string | undefined = url?.substring(`/${TASK_URL_MOVE}`.length);
+        if (!taskId) throw new RequiredParametersNotProvided('Task ID not provided');
 
+        const taskData: NewPlaceColumn = JSON.parse(data);
         moveTaskToNewColumn(taskId, taskData);
 
         res.writeHead(200, commonJSONResponseHeaders);

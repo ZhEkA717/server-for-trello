@@ -1,5 +1,5 @@
 export interface IUser {
-    id: string
+    id: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -16,8 +16,15 @@ export type UserEditParams = Partial<Pick<IUser, 'firstName' | 'lastName' | 'pas
 
 export type UserProfile = Omit<IUser, 'password' | 'token'>;
 
+export type UserRegistration = Pick<
+    IUser,
+    'firstName' | 'lastName' | 'email' | 'password' | 'gender'
+>;
+
+export type UserLogin = Pick<IUser, 'email' | 'password'>;
+
 export enum AccessLevel {
-    "Admin",
-    "User",
-    "Anonymous"
+    'Admin',
+    'User',
+    'Anonymous',
 }

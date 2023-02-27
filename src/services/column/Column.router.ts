@@ -9,15 +9,19 @@ import {
 import { RouterCallbackFunc } from '../../Server/Server.types';
 import { HandleError } from '../../Errors/HandlerError';
 import { COLUMN_URL, COLUMN_URL_ID, COLUMN_URL_MOVE } from '../../utils/constants';
-import { NotFoundError } from '../../Errors/CustomErrors';
+import { NotFoundError, RequiredParametersNotProvided } from '../../Errors/CustomErrors';
 import { commonJSONResponseHeaders } from '../../utils/network';
-import { IColumnCreate } from './Column.model';
+import { IColumn, IColumnCreate } from './Column.model';
+import { NewColumnPlace } from '../board/Board.model';
 
 export const getColumnByID: RouterCallbackFunc = async (req, res) => {
     try {
         const { url } = req;
-        const columnId = url?.substring(`/${COLUMN_URL_ID}`.length);
-        const currentCollumn = searchColumn(columnId as string);
+        const columnId: string | undefined = url?.substring(`/${COLUMN_URL_ID}`.length);
+        if (!columnId) throw new RequiredParametersNotProvided('Column ID not provided');
+
+        const currentCollumn = searchColumn(columnId);
+
         res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(currentCollumn));
     } catch (err) {
@@ -28,8 +32,11 @@ export const getColumnByID: RouterCallbackFunc = async (req, res) => {
 export const getAllColumsByID: RouterCallbackFunc = async (req, res) => {
     try {
         const { url } = req;
-        const boardId = url?.substring(`/${COLUMN_URL}`.length);
-        const columns = searchColumns(boardId as string);
+        const boardId: string | undefined = url?.substring(`/${COLUMN_URL}`.length);
+        if (!boardId) throw new RequiredParametersNotProvided('Board ID not provided');
+
+        const columns = searchColumns(boardId);
+
         res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(columns));
     } catch (err) {
@@ -38,15 +45,16 @@ export const getAllColumsByID: RouterCallbackFunc = async (req, res) => {
 };
 
 export const createColumn: RouterCallbackFunc = async (req, res) => {
-    if (!req.url?.startsWith(COLUMN_URL)) throw new NotFoundError();
-    if (!req.bodyData) throw new NotFoundError();
-
-    const data = req.bodyData;
-    let columnData: IColumnCreate;
-    const boardId: string = req.url?.substring(`/${COLUMN_URL}`.length);
     try {
-        columnData = JSON.parse(data);
-        const newColumn = await createNewColumn(columnData, boardId);
+        if (!req.url?.startsWith(COLUMN_URL)) throw new NotFoundError();
+        if (!req.bodyData) throw new NotFoundError();
+
+        const boardId: string = req.url.substring(`/${COLUMN_URL}`.length);
+        if (!boardId) throw new RequiredParametersNotProvided('Board ID not provided');
+
+        const columnData: IColumnCreate = JSON.parse(req.bodyData);
+        const newColumn: IColumn = await createNewColumn(columnData, boardId);
+
         res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(newColumn));
     } catch (err) {
@@ -57,8 +65,11 @@ export const createColumn: RouterCallbackFunc = async (req, res) => {
 export const deleteColumn: RouterCallbackFunc = async (req, res) => {
     try {
         const { url } = req;
-        const columnId = url?.substring(`/${COLUMN_URL}`.length);
-        await deleteColumnByID(columnId as string);
+        const columnId: string | undefined = url?.substring(`/${COLUMN_URL}`.length);
+        if (!columnId) throw new RequiredParametersNotProvided('Column ID not provided');
+
+        await deleteColumnByID(columnId);
+
         res.writeHead(204, commonJSONResponseHeaders);
         res.end();
     } catch (err) {
@@ -67,16 +78,16 @@ export const deleteColumn: RouterCallbackFunc = async (req, res) => {
 };
 
 export const updateColumn: RouterCallbackFunc = async (req, res) => {
-    if (!req.bodyData) throw new NotFoundError();
-
-    const data = req.bodyData;
-    let columnData;
-
     try {
-        columnData = JSON.parse(data);
+        if (!req.bodyData) throw new NotFoundError();
+
         const { url } = req;
-        const columnId = url?.substring(`/${COLUMN_URL}`.length);
-        await updateColumnById(columnId as string, columnData);
+        const columnId: string | undefined = url?.substring(`/${COLUMN_URL}`.length);
+        if (!columnId) throw new RequiredParametersNotProvided('Column ID not provided');
+
+        const columnData: IColumn = JSON.parse(req.bodyData);
+        await updateColumnById(columnId, columnData);
+
         res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(columnData));
     } catch (err) {
@@ -85,17 +96,15 @@ export const updateColumn: RouterCallbackFunc = async (req, res) => {
 };
 
 export const moveColumnToBoard: RouterCallbackFunc = async (req, res) => {
-    if (!req.bodyData) throw new NotFoundError();
-
-    const data = req.bodyData;
-    let columnData;
-
     try {
-        columnData = JSON.parse(data);
-        const { url } = req;
-        const taskId = url?.substring(`/${COLUMN_URL_MOVE}`.length);
+        if (!req.bodyData) throw new NotFoundError();
 
-        moveColumnToNewPlace(taskId as string, columnData);
+        const { url } = req;
+        const columnId: string | undefined = url?.substring(`/${COLUMN_URL_MOVE}`.length);
+        if (!columnId) throw new RequiredParametersNotProvided('Task ID not provided');
+
+        const columnData: NewColumnPlace = JSON.parse(req.bodyData);
+        moveColumnToNewPlace(columnId, columnData);
 
         res.writeHead(200, commonJSONResponseHeaders);
         res.end(JSON.stringify(columnData));

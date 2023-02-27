@@ -9,10 +9,10 @@ const HandleError: RouterCallbackFunc = (_req, res, err) => {
     } else if (err instanceof SyntaxError) {
         res.statusCode = 400;
         res.end(`
-        There is a SyntaxError
-        There are the possible reasons:
-        1)Unexpected token } in JSON -> Remove last comma
-        2)Wrong comma in hobbies, replace single quotes with double quotes`);
+            There is a SyntaxError
+            There are the possible reason:
+            Unexpected token } in JSON -> Remove last comma
+        `);
     } else if (err instanceof NotFoundError) {
         res.statusCode = err.code;
         res.end(ErrorMessages.NOT_FOUND);
