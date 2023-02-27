@@ -1,6 +1,7 @@
-# server-for-trello
+# Welcome to RSClone Trello API
+> API for the RSClone Trello project by Rolling Scopes School's RS Clone
 
-Приложение представляет из себя простейший CRUD API для работы с объектами Board, имеющими формат
+Приложение представляет из себя CRUD API для работы с объектами Board, имеющими формат
 
 ### Board
 ```
