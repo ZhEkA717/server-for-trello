@@ -5,10 +5,13 @@
 
 ### Board
 ```
-idBoard — уникальный идентфикатор доски (string, uuid)
-nameBoard — имя доски (string, required)
-descriptionBoard — описание доски (number, required)
-columns — список колонок доски (array of strings or empty array, required)
+- idBoard — уникальный идентфикатор доски (string, uuid)
+- nameBoard — имя доски (string, required)
+- descriptionBoard — описание доски (number, required)
+- columns — список колонок доски (array of strings or empty array, required)
+- dateBoard - дата создания доски
+- isChosen - индикатор добавления в избранное
+- ownerId - id пользователя-владельца доски
 ```
 ### Column
 ```
@@ -22,6 +25,25 @@ columns — список колонок доски (array of strings or empty ar
 - idTask — уникальный идентфикатор задачи (string, uuid)
 - nameTask — имя задачи (string, required)
 - descriptionTask — описание задачи (number, required)
+- checkLists - список подзадач
+```
+### User
+```
+- id - уникальный идентфикатор
+- firstName - имя
+- lastName - фамилия
+- email - электронная почта
+- password - пароль
+- token - токен
+- accessLevel - уровень доступа
+- gender - пол
+- registrationDate - дата регистрации
+```
+### Checkbox
+```
+- idCheckBox - уникальный идентфикатор подзадачи
+- nameCheckBox - текст подзадачи
+- isChoose - индикатор выполнения
 ```
 
 
@@ -30,14 +52,18 @@ columns — список колонок доски (array of strings or empty ar
 - **GET** `/api/board` получить все доски;
 - **GET** `/api/board/${boardID}` получить доску по id;
 - **POST** `/api/board` создать доску и добавить в database;
-- **PUT** `/api/board/{boardID}` обновить доску по айди;
+- **PUT** `/api/board/${boardID}` обновить доску по айди;
 - **DELETE** `/api/board/${boardID}` удаляет доску по id;
+
+
 ### Column
 - **GET** `/api/column/${boardID}` получить все колонки в доске по айди доски;
 - **GET** `/api/column/id/${columnID}` получить колонку по айди;
 - **POST** `/api/column/${boardID}` создать колонку в доске с айди;
-- **PUT** `/api/column/{columnID}` обновить колонку по айди;
-- **DELETE** `/api/column/${columnID}` удаляет колонку по idж
+- **PUT** `/api/column/${columnID}` обновить колонку по айди;
+- **DELETE** `/api/column/${columnID}` удаляет колонку по id;
+
+
 ### Task
 - **GET** `/api/task/${boardID}/${columnID}` получить все задачи в доске в колонке по айди доски и колонки;
 - **GET** `/api/task/id/${taskID}` получить задачу по id;
@@ -46,6 +72,21 @@ columns — список колонок доски (array of strings or empty ar
 - **PUT** `/api/task/${taskID}` обновить задачу по айди;
 - **PUT** `/api/task/move/${taskID}` переместить задачу в новую колонку;
 - **DELETE** `/api/task/${taskID}` удаляет задачу по id;
+
+### User
+- **POST** `/api/register` регистрация нового пользователя;
+- **POST** `/api/login` вход пользователя;
+- **GET** `/api/user` получить данные о текущем пользователе;
+- **PUT** `/api/user` обновить данные текущего пользователе;
+
+### Checklist
+- **GET** `/api/checkbox/id/${checkboxID}` получить данные о подзадаче по id;
+- **GET** `/api/checkbox/${taksID}` получить все подзадачи по id задачи;
+- **POST** `/api/checkbox/${taksID}` создать подзадачу в задаче с id;
+- **DELETE** `/api/checkbox/${checkboxID}` удалить подзадачу по id;
+- **PUT** `/api/checkbox/${checkboxID}` обновить подзадачу по id;
+- **PUT** `/api/checkbox/${taksID}` обновить список подзадач в задаче с id;
+
 
 ### Board
 ---
@@ -470,7 +511,7 @@ Update whole checklist
 
 - URL
 
-    /api/checklist
+    /api/checklist/:id
 
 - Method
 
